@@ -266,8 +266,7 @@ The category of locally convex topological vector spaces $sans("LCTVS")_𝕜$ is
   is finite. Thus $f$ is locally integrable.
 ]
 
-== Space of Continuous Functions with Compact Support
-For any open subsets $U$ of $bb(R)^d$, The inclusion map $iota:C^(oo)_c (U) arrow.hook C^(0)_c (U)$ is a continuous injection whose image is dense in $C^(0)_c (U)$. So the transpose map $iota^*:C^(0)_c (U)' -> C^(oo)_c (U)'$ is also a continuous injection.
+
 
 == Spaces of Test Functions
 
@@ -336,35 +335,6 @@ is the open ball centered at $f$ with radius $epsilon$ with respect to the semin
     Furthermore, $C^2 (K)$ is a Hilbert space.
   + If $C^(oo)(K)eq.not {0}$, then $C^k (K)$ is not normable. 
  
-]
-
-#theorem[Riesz–Markov–Kakutani Representation Theorem][
-Let $X$ be a locally compact Hausdorff space and $T$ is a positive linear functional on $C_c^0 (X)$, the space of continuous functions with compact support on $X$. Then there exists a unique positive Borel measure $mu$ on $(X,cal(B)(X),mu)$ such that 
-  + for all $f in C_c^0 (X)$,#h(1fr)
-    $
-    T(f) = integral_X f dif mu
-    $
-  
-  + $mu(K)<oo$ for all compact subsets $K$ of $X$.
-
-  + If $B$ is an open subset of $X$, or $B$ is a Borel set with $mu(B)<oo$, then
-    $
-    mu(B) = sup{ mu(K) mid(|) K "is compact and" K subset.eq B}.
-    $
-
-  + If $B$ is a Borel set, then
-    $
-    mu(B) = inf{ mu(U) mid(|) U "is open and" B subset.eq U}.
-    $
-  If all open sets in $X$ are $σ$-compact, then the measure $mu$ is a Radon measure.
-
-]
-#remark[
-  $RR^d$ is $sigma$-compact. So any positive linear functional  $T in C_c^0 (RR^d)^*$ can be represented as 
-  $
-    T(f) = integral_(RR^d) f dif mu
-  $
-  for some Radon measure $mu$ on $RR^d$.
 ]
 
 #definition[Space of Test Functions $C^(oo)_c (U)$][
@@ -492,6 +462,44 @@ Let $X$ be a locally compact Hausdorff space and $T$ is a positive linear functi
 
   + For every $f in C^(oo)_c (U)$, the sequence $(T_n (f))_(i=1)^(oo)$ converges to $T(f)$ in $bb(k)$.
 ]
+
+
+== Space of Continuous Functions with Compact Support
+For any open subsets $U$ of $bb(R)^d$, The inclusion map $iota:C^(oo)_c (U) arrow.hook C^(0)_c (U)$ is a continuous injection whose image is dense in $C^(0)_c (U)$. So the transpose map $iota^*:C^(0)_c (U)' -> C^(oo)_c (U)'$ is also a continuous injection.
+
+
+#theorem[Riesz–Markov–Kakutani Representation Theorem][
+Let $X$ be a locally compact Hausdorff space and $T$ is a positive linear functional on $C_c^0 (X)$, the space of continuous functions with compact support on $X$. Then there exists a unique positive Borel measure $mu$ on $(X,cal(B)(X),mu)$ such that 
+  + for all $f in C_c^0 (X)$,#h(1fr)
+    $
+    T(f) = integral_X f dif mu
+    $
+  
+  + $mu(K)<oo$ for all compact subsets $K$ of $X$.
+
+  + If $B$ is an open subset of $X$, or $B$ is a Borel set with $mu(B)<oo$, then
+    $
+    mu(B) = sup{ mu(K) mid(|) K "is compact and" K subset.eq B}.
+    $
+
+  + If $B$ is a Borel set, then
+    $
+    mu(B) = inf{ mu(U) mid(|) U "is open and" B subset.eq U}.
+    $
+  If all open sets in $X$ are $σ$-compact, then the measure $mu$ is a Radon measure.
+
+]
+#remark[
+  $RR^d$ is $sigma$-compact. So any positive linear functional  $T in C_c^0 (RR^d)^*$ can be represented as 
+  $
+    T(f) = integral_(RR^d) f dif mu
+  $
+  for some Radon measure $mu$ on $RR^d$.
+]
+
+
+By the Riesz–Markov–Kakutani representation theorem, the space  $C_c^0 (X)'$ can be identified with the space of Radon measures on $X$. 
+
 
 
 #pagebreak()
