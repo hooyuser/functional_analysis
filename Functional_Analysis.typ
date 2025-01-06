@@ -119,14 +119,42 @@ The category of locally convex topological vector spaces $sans("LCTVS")_𝕜$ is
     X &--> bb(k) \
     x & arrow.long.bar b(x,y)
   $
-  is continuous.
+  is continuous. The weak topology on $X$ is denoted by $tau(X,Y,b)$.
 
   Similarly, the #strong[weak topology on $Y$] is the weakest topology on $Y$ such that for any $x in X$, the functional
   $
     Y &--> bb(k) \
     y & arrow.long.bar b(x,y)
   $
-  is continuous.
+  is continuous. The weak topology on $Y$ is denoted by $tau(Y,X,b)$.
+]
+
+#proposition[][
+  Let $(X,Y,b)$ be a dual pairing. Then $(X,tau(X,Y,b))$ is a locally convex TVS and the weak topology on $X$ is determined by a family of seminorms $(p_y)_(y in Y)$ where
+  $
+    p_y: X &--> RR \
+    x & arrow.long.bar |b(x,y)|.
+  $
+]
+#proof[
+  First we show that for any $y in Y$, $p_y$ is a seminorm. 
+
+  + Triangle inequality. For any $x_1, x_2 in X$, we have 
+    $
+    p_y(x_1+x_2)=abs(b(x_1 +  x_2, y)) = abs(b(x_1, y) +  b(x_2, y)) <= |b(x_1, y)| + abs(b(x_2, y)) = p_y (x_1) + p_y (x_2).
+    $
+
+  + Absolute homogeneity. For any $x in X$ and $lambda in 𝕜$, we have
+    $
+    p_y (lambda x) = abs(b(lambda x, y)) = abs(lambda b(x, y)) = abs(lambda) abs(b(x, y)) = abs(lambda) p_y (x).
+    $
+
+  + Nonnegativity. For any $x in X$, we have
+    $
+    p_y (x) = abs(b(x, y)) >= 0.
+    $
+
+  Then we show that the weak topology on $X$ is determined by the family of seminorms $(p_y)_(y in Y)$. 
 ]
 
 #definition[Continuous Dual Space][
