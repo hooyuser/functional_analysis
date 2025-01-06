@@ -35,7 +35,10 @@ jobs:
           echo "$(pwd)" >> $GITHUB_PATH
 
       - name: Check Fonts with Typfont
-        run: ./typfont check -l "hooyuser/Font_Library" -g 
+        run: |
+          export CLICOLOR=1
+          export CLICOLOR_FORCE=1
+          ./typfont check -l "hooyuser/Font_Library" -g 
       
       - name: Compile Typst document
         run: |
