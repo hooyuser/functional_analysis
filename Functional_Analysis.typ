@@ -267,7 +267,7 @@ The category of locally convex topological vector spaces $sans("LCTVS")_𝕜$ is
 ]
 
 == Space of Continuous Functions with Compact Support
-For any open subsets $U$ of $bb(R)^d$, The inclusion map $C^0_c (U) arrow.hook C^(oo)_c (U)$ is a continuous injection whose image is dense in $C^(oo)_c (U)$.
+For any open subsets $U$ of $bb(R)^d$, The inclusion map $iota:C^(oo)_c (U) arrow.hook C^(0)_c (U)$ is a continuous injection whose image is dense in $C^(0)_c (U)$. So the transpose map $iota^*:C^(0)_c (U)' -> C^(oo)_c (U)'$ is also a continuous injection.
 
 == Spaces of Test Functions
 
