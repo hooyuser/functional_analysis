@@ -266,7 +266,8 @@ The category of locally convex topological vector spaces $sans("LCTVS")_𝕜$ is
   is finite. Thus $f$ is locally integrable.
 ]
 
-
+== Space of Continuous Functions with Compact Support
+For any open subsets $U$ of $bb(R)^d$, The inclusion map $C^0_c (U) arrow.hook C^(oo)_c (U)$ is a continuous injection. 
 
 == Spaces of Test Functions
 
