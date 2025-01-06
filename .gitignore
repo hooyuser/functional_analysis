@@ -2,5 +2,4 @@
 .DS_Store
 fonts/
 .gitattributes
-font_config.toml
 typfont
