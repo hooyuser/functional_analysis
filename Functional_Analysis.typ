@@ -505,6 +505,7 @@ $
   T_f (g) = integral_X g f dif x,quad forall g in C_c^(oo) (X).
 $
 
+If $f$ and $g$ are locally integrable functions on $X$, then $T_f=T_g$ if and only if $f=g$ almost everywhere.
 
 
 #pagebreak()
