@@ -5,7 +5,6 @@ on:
     branches:
       - main
     paths-ignore:
-      - '.github/**'
       - '.gitignore'
       - '**.md'
 
@@ -14,6 +13,7 @@ env:
 
 jobs:
   build_typst:
+    if: "!contains(github.event.head_commit.message, '[skip-ci]')"
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -28,17 +28,24 @@ jobs:
         run: |
           git clone https://github.com/hooyuser/typst_math_notes.git $HOME/.local/share/typst/packages/local/math-notes
 
-      - name: Download Typfont from Repo A Release
+      - name: Download Typfont from the Release File of Repo typst_font_manager 
         run: |
           curl -L -o typfont https://github.com/hooyuser/typst_font_manager/releases/latest/download/typfont_linux
           chmod +x typfont
           echo "$(pwd)" >> $GITHUB_PATH
+
+      - name: Cache Fonts
+        uses: actions/cache@v4
+        with:
+          path: fonts
+          key: ${{ runner.os }}-typst-fonts-${{ hashFiles('**/typfont') }}
+          restore-keys: |
+            ${{ runner.os }}-typst-fonts-
           
       - name: Check Fonts with Typfont
         run: |
           export CLICOLOR=1
           export CLICOLOR_FORCE=1
-          
           ./typfont update -l "hooyuser/Font_Library" -g 
           ./typfont check -l "hooyuser/Font_Library" -g 
       
