@@ -28,24 +28,19 @@ jobs:
         run: |
           git clone https://github.com/hooyuser/typst_math_notes.git $HOME/.local/share/typst/packages/local/math-notes
 
-      # - name: Download Typfont from Repo A Release
-      #   run: |
-      #     curl -L -o typfont https://github.com/hooyuser/typst_font_manager/releases/latest/download/typfont_linux
-      #     chmod +x typfont
-      #     echo "$(pwd)" >> $GITHUB_PATH
-
-      - name: Install typst font manager
+      - name: Download Typfont from Repo A Release
         run: |
-          brew install cargo-binstall
-          cargo binstall typst_font_manager --no-confirm
+          curl -L -o typfont https://github.com/hooyuser/typst_font_manager/releases/latest/download/typfont_linux
+          chmod +x typfont
+          echo "$(pwd)" >> $GITHUB_PATH
           
       - name: Check Fonts with Typfont
         run: |
           export CLICOLOR=1
           export CLICOLOR_FORCE=1
           
-          typfont update -l "hooyuser/Font_Library" -g 
-          typfont check -l "hooyuser/Font_Library" -g 
+          ./typfont update -l "hooyuser/Font_Library" -g 
+          ./typfont check -l "hooyuser/Font_Library" -g 
       
       - name: Compile Typst document
         run: |
