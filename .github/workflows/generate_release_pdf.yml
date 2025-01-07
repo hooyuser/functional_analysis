@@ -5,7 +5,6 @@ on:
     branches:
       - main
     paths-ignore:
-      - '.github/**'
       - '.gitignore'
       - '**.md'
 
@@ -14,6 +13,7 @@ env:
 
 jobs:
   build_typst:
+    if: "!contains(github.event.head_commit.message, '[skip-ci]')"
     runs-on: ubuntu-latest
     permissions:
       contents: write
