@@ -500,6 +500,8 @@ Let $X$ be a locally compact Hausdorff space and $T$ is a positive linear functi
 
 By the Riesz–Markov–Kakutani representation theorem, the space  $C_c^0 (X)'$ can be identified with the space of Radon measures on $X$. 
 
+One particularly important class of Radon measures are those that are induced locally integrable functions.
+
 
 
 #pagebreak()
