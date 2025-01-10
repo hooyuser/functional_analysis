@@ -1,7 +1,7 @@
 
 #import "@preview/fletcher:0.5.1" as fletcher: diagram, node, edge
 #import "@preview/cetz:0.3.1"
-#import "@local/math-notes:0.1.0": *
+#import "@local/math-notes:0.2.0": *
 #import "@preview/xarrow:0.3.1": xarrow
 
 #show: math_notes.with(title: [Functional Analysis])
