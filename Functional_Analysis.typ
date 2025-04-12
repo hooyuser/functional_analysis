@@ -1,16 +1,39 @@
 
-#import "@preview/fletcher:0.5.4" as fletcher: diagram, node, edge
-#import "@preview/cetz:0.3.1"
-#import "@local/math-notes:0.2.0": *
+#import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
+#import "@preview/cetz:0.3.4"
+#import "@local/math-notes:0.3.0": *
 #import "@preview/xarrow:0.3.1": xarrow
 
 #show: math_notes.with(title: [Functional Analysis])
 
 
+#let enum_numbering = (..it) => {
+  counter("enum").update(it.pos())
+  numbering("(i)", ..it)
+}
+
+#let enum_label_mark = metadata("enumeration_label")
+
+#show ref: it => {
+  let el = it.element
+  if el == enum_label_mark {
+    let loc = el.location()
+    link(loc, numbering("(i)", ..counter("enum").at(loc)))
+  } else {
+    it
+  }
+}
+
+#let enum-label(label) = [#enum_label_mark#label]
+
+
 #let injlim = $limits(limits(lim)_(xarrow(#v(-50em), width: #1.8em)))$
 #let projlim = $limits(limits(lim)_(xarrow(sym:arrow.l.long, #v(-50em), width: #1.8em)))$
 
+#let topdual(X) = $#X^(')$
+#let kk = $bb(k)$
 
+#let Grp = $sans("Grp")$
 
 = Topological Vector Spaces <topological-vector-spaces>
 == Basic notions
@@ -41,12 +64,6 @@ We often write TVS for topological vector space.
   is a $k$-linear isomorphism. Then we can use $phi$ to define a topology on $V$ such that $U subset.eq V$ is open if and only if $phi(U)$ is open in $product_(i in I) 𝕜$. Then $V$ is a topological vector space.
 ]
 
-#definition[Balanced Set][
-  Suppose $𝕜 = RR "or" CC$. Let $X$ be a topological $𝕜$-vector space. A subset $A$ of $X$ is said to be #strong[balanced] if for every scalar $lambda in 𝕜$ with $|lambda| <= 1$, we have
-  $
-    lambda A = {lambda x mid(|) x in A} subset.eq A.
-  $
-]
 
 #definition[Absorb][
   Suppose $𝕜 = RR "or" CC$. Let $X$ be a topological $𝕜$-vector space and $A$, $B$ be two subsets of $X$. We say $A$ #strong[absorb] $B$ if there exists a real number $r>0$ such that for any scalar $lambda  in 𝕜$ with $|lambda| > r$, we have
@@ -57,14 +74,24 @@ We often write TVS for topological vector space.
 
 #definition[Absorbing Set][
   A subset $A$ of a vector space $V$ is called an #strong[absorbing set] if $A$ absorbs ${x}$ for every $x in V$. That is, for every $x in V$, there exists a real number $r>0$ such that for any scalar $lambda in 𝕜$ with $|lambda| > r$, we have $x in lambda A$.
-
 ]
+
 
 #definition[von Neumann Bounded Set][
   Suppose $𝕜 = RR "or" CC$. Let $X$ be a topological $𝕜$-vector space. A subset $S$ of $X$ is called a #strong[von Neumann bounded set] if $S$ is absorbed by every neighborhood of $0$.
-]
+]<von-neumann-bounded-set>
 
-A locally convex topological vector space has a bounded neighborhood of 0 if and only if its topology can be defined by a single seminorm.
+
+=== Locally Convex Topological Vector Spaces
+
+#definition[Balanced Set][
+  Suppose $𝕜 = RR "or" CC$. Let $X$ be a topological $𝕜$-vector space. A subset $A$ of $X$ is said to be #strong[balanced] if for every scalar $lambda in 𝕜$ with $|lambda| <= 1$, we have
+  $
+    lambda A = {lambda x mid(|) x in A} subset.eq A.
+  $
+]<balanced-set>
+
+
 
 #definition[Bounded Linear Operator][
   Let $X$ and $Y$ be topological vector spaces over $𝕜 = bb(R) upright("or") bb(C)$. A #strong[bounded linear operator] from $X$ to $Y$ is a linear map $T:X -> Y$ that maps von Neumann bounded subsets of $X$ to von Neumann bounded subsets of $Y$.
@@ -72,12 +99,54 @@ A locally convex topological vector space has a bounded neighborhood of 0 if and
 
 
 #definition[Locally Convex Topological Vector Space][
-  A topological vector space is called #strong[locally convex ] if it has a neighborhood basis at $0$ consisting of balanced convex sets.
+  A topological vector space is called #strong[locally convex] if it has a neighborhood basis at $0$ consisting of balanced convex sets.
 ]
-The category of locally convex topological vector spaces $sans("LCTVS")_𝕜$ is the full subcategory of $sans("TVS")_𝕜$ consisting of locally convex topological vector spaces.
+#remark[
+  The category of locally convex topological vector spaces $sans("LCTVS")_𝕜$ is the full subcategory of $sans("TVS")_𝕜$ consisting of locally convex topological vector spaces.
+]
 #proposition[][
-  Suppose that $V$ is a topological vector space. If $cal(B)$ is a collection of convex, balanced, and absorbing subsets of $V$, then the set of all positive scalar multiples of finite intersections of sets in $cal(B)$ forms a neighborhood basis at $0$. Thus $cal(B)$ defines a topology $tau$ on $V$. Furthermore, $(V, tau)$ is a locally convex topological vector space.
+  Suppose that $V$ is a topological vector space. If $cal(B)$ is a collection of convex, #link(<balanced-set>)[balanced], and absorbing subsets of $V$, then the set of all positive scalar multiples of finite intersections of sets in $cal(B)$ forms a neighborhood basis at $0$. Thus $cal(B)$ defines a topology $tau$ on $V$. Furthermore, $(V, tau)$ is a locally convex topological vector space.
 ]<topology-of-locally-convex-tvs-determined-by-neighborhood-basis>
+
+#definition[Seminorm][
+  Given a vector space $X$ over $𝕜 = bb(R) upright("or") bb(C)$. A *seminorm* on $X$ is a mapping $p : X arrow.r bb(R)$ which satisfies the following conditions:
+
+  + (absolute homogeneity): $forall x in X ,  forall lambda in 𝕜$, $p(lambda x)= abs(lambda) p(x)$,
+
+  + (triangle inequality): $forall x , y in X$, $p(x + y) lt.eq p(x) + p(y)$.
+]
+
+#remark[
+  We can show nonnegativity: $forall x in X$, $p(x) gt.eq 0$ and $p(x)=0$.
+]
+
+#definition[Seminorm-induced Topology][
+  Let $X$ be a vector space and $p:X -> RR$ be a seminorm on $X$. The #strong[seminorm-induced topology] on $X$ is the topology induced by the canonical pseudometric
+  $
+    d(x,y) = p(x-y) ,quad forall x,y in X.
+  $
+]
+
+
+
+
+#definition[Seminormable space][
+  A topological vector space is called #strong[seminormable] if the topology of the space is induced from a single seminorm.
+]
+
+
+
+A locally convex topological vector space has a bounded neighborhood of 0 if and only if its topology can be defined by a single seminorm.
+
+#proposition[Properties of Seminormable Spaces][
+  + A locally convex TVS is seminormable if and only if 0 has a #link(<von-neumann-bounded-set>)[bounded] neighborhood.
+
+  + Any locally convex TVS with topology induced by a finite family of seminorms is seminormable.
+
+  + If a Hausdorff locally convex TVS is seminormable, and the topology is induced from a single seminorm $p$, then $p$ is a norm.
+]
+
+=== Fréchet Space
 
 #definition[Fréchet Space][
   A #strong[Fréchet space] is a complete metrizable locally convex TVS.
@@ -85,18 +154,6 @@ The category of locally convex topological vector spaces $sans("LCTVS")_𝕜$ is
 
 #proposition[][
   A locally convex TVS is a Fréchet space if and only if it is metrizable by a complete translation-invariant metric.
-]
-
-#definition[Seminormable space][
-  A topological vector space is called #strong[seminormable] if the topology of the space is induced from a single seminorm.
-]
-
-#proposition[Properties of Seminormable Spaces][
-  + A locally convex TVS is seminormable if and only if 0 has a bounded neighborhood.
-
-  + Any locally convex TVS with topology induced by a finite family of seminorms is seminormable.
-
-  + If a Hausdorff locally convex TVS is seminormable, and the topology is induced from a single seminorm $p$, then $p$ is a norm.
 ]
 
 == Continuous Dual Space
@@ -129,13 +186,13 @@ The category of locally convex topological vector spaces $sans("LCTVS")_𝕜$ is
   is continuous. The weak topology on $Y$ is denoted by $tau(Y,X,b)$.
 ]
 
-#proposition[][
-  Let $(X,Y,b)$ be a dual pairing. Then $(X,tau(X,Y,b))$ is a locally convex TVS and the weak topology on $X$ is determined by a family of seminorms $(p_y)_(y in Y)$ where
+#proposition[Weak Topology can be Induced by a Family of Seminorms][
+  Let $(X,Y,b)$ be a dual pairing. Then $(X,tau(X,Y,b))$ is a locally convex TVS and the weak topology on $X$ is determined by a family of seminorms $(p_y)_(y in Y)$ defined by
   $
     p_y: X &--> RR \
     x & arrow.long.bar |b(x,y)|.
   $
-]
+]<weak-topology-can-be-induced-by-a-family-of-seminorms>
 #proof[
   First we show that for any $y in Y$, $p_y$ is a seminorm.
 
@@ -158,33 +215,61 @@ The category of locally convex topological vector spaces $sans("LCTVS")_𝕜$ is
 ]
 
 #definition[Continuous Dual Space][
-  Suppose $𝕜 = RR "or" CC$. Let $X$ be a topological $𝕜$-vector space. The #strong[continuous dual space] of $X$ is the set of all continuous linear functionals $X-> bb(k)$.
-]
+  Suppose $kk = RR "or" CC$. Let $X$ be a topological $kk$-vector space. The #strong[continuous dual space] or *topological dual space* of $X$ is the set of all continuous linear functionals $X-> bb(k)$, denoted by $topdual(X)$.
+]<continuous-dual-space>
 
 #definition[Weak and Weak$zws^*$ Topologies][
-  Let $X$ be a topological vector space over a field $𝕜$. Then $(X',X, angle.l dot, dot angle.r)$ where
+  Let $X$ be a topological vector space over a field $𝕜= RR "or" CC$. Then $(X',X, angle.l dot, dot angle.r)$ where
   $
     angle.l dot, dot angle.r : X' times X &-> 𝕜 \
-    (T,f) & arrow.long.bar angle.l T, f angle.r = T(f)
+    (f,x) & arrow.long.bar angle.l f, x angle.r = f(x)
   $
   is called the *canonical pairing* of $X$.
 
-  The *weak topology on $X$* is the weakest topology on $X$ such that for any $T in X'$, the functional $T:X -> bb(k)$ is continuous. More explicitly, the weak topology on $X$ is the topology generated by the collection of sets
-  $
-    {T^(-1)(U) in 2^X mid(|) U "is open in" bb(k) "and" T in X'},
-  $
+  - The *weak$zws^*$ topology on $X'$* is $tau(X',X,angle.l dot, dot angle.r)$, which is the weakest topology on $X'$ such that for any $x in X$, the functional
+    $
+      angle.l dot, x angle.r:X' &--> kk\
+      f &arrow.long.bar f(x)
+    $
+    is continuous. That is, the weak$zws^*$ topology is the initial topology on $X'$ with respect to $(angle.l dot, x angle.r)_(x in X)$, i.e. the pointwise convergence topology on $X'$.
 
-  The *weak$zws^*$ topology on $X'$* is the weakest topology on $X'$ such that for any $x in X$, the functional
-  $
-    angle.l dot, x angle.r:X' &--> bb(k)\
-    T &arrow.long.bar T(x)
-  $
-  is continuous. More explicitly, the weak$zws^*$ topology on $X$ is the topology generated by the collection of sets
-  $
-    {angle.l dot, x angle.r^(-1)(U) in 2^X' mid(|) U "is open in" bb(k) "and" x in X}.
-  $
+    More explicitly, the weak$zws^*$ topology on $X'$ is the topology generated by the collection of sets
+    $
+      {angle.l dot, x angle.r^(-1)(U) in 2^X' mid(|) U "is open in" kk "and" x in X}.
+    $
 
+  - The *weak topology on $X'$* is $tau(X',X'',angle.l dot, dot angle.r)$, which is the weakest topology on $X'$ such that for any $v in X''$, the functional
+    $
+      angle.l v, dot angle.r:X' &--> bb(k)\
+      f &arrow.long.bar v(f)
+    $
+    is continuous.
+
+    More explicitly, the weak topology on $X'$ is the topology generated by the collection of sets
+    $
+      {angle.l v, dot angle.r^(-1)(U) in 2^X' mid(|) U "is open in" bb(k) "and" v in X''}.
+    $
+]<weak-topology-and-weak-star-topology>
+
+#proposition[Equivalent Characterization of Weak$zws^*$ Topology][
+  Let $X$ be a topological vector space over a field $𝕜$. Then the following topologies on $X'$ coincide
+
+  #set enum(numbering: enum_numbering)
+
+  + #enum-label(<weak-topology-characterization:weak-topology>) The #link(<weak-topology-and-weak-star-topology>)[weak$zws^*$ topology] on $X'$.
+
+  + #enum-label(<weak-topology-characterization:product-topology>) The subspace topology induced by $kk^X$ which is endowed with product topology.
+
+  + #enum-label(<weak-topology-characterization:seminorm>) The topology induced by a family of seminorms $(op("ev")_x)_(x in X)$ defined by
+    $
+      op("ev")_x: X' &--> kk \
+      f & arrow.long.bar abs(f(x)).
+    $
+]<weak-topology-characterization>
+#proof[
+  The equality of @weak-topology-characterization:weak-topology and @weak-topology-characterization:product-topology follows the equivalent characterization of pointwise convergence topology. The equality of @weak-topology-characterization:weak-topology and @weak-topology-characterization:seminorm follows from @weak-topology-can-be-induced-by-a-family-of-seminorms.
 ]
+
 
 #definition[Weak Convergence][
   Let $X$ be a topological vector space over a field $𝕜$. A net $(x_lambda)$ *converges weakly* to an element $x in X$ if $(x_lambda)$ converges to $x$ in the weak topology of $X$.
@@ -219,12 +304,12 @@ The category of locally convex topological vector spaces $sans("LCTVS")_𝕜$ is
   for all bounded subsets $A$ of $X$.
 ]
 
-#definition[Weak Topology on the Dual Space][
-  Suppose $𝕜 = RR "or" CC$. Let $X$ be a topological $𝕜$-vector space. The #strong[weak topology] on the continuous dual space $X'$ of $X$ is the topology generated by the family of seminorms
-  $
-    norm(f)_x = |f(x)|
-  $
-  for all $x in X$.
+
+#proposition[Weak$zws^*$ Topology is Hausdorff][
+  Let $X$ be a topological vector space over $𝕜= RR "or" CC$. The weak$zws^*$ topology on $X'$ is Tychonoff, and accordingly Hausdorff.
+]<hausdorffness-of-weak-star-topology>
+#proof[
+  By @weak-topology-characterization, the weak$zws^*$ topology is the subspace topology induced by $kk^X$ which is endowed with product topology. The property of being Tychonoff is preserved under taking product topology and subspace topology. Since the topology on $kk$ is Tychonoff, the weak$zws^*$ topology on $X'$ is also Tychonoff, and accordingly Hausdorff.
 ]
 
 == Locally Integrable Functions
@@ -281,12 +366,7 @@ $
 is the open ball centered at $f$ with radius $epsilon$ with respect to the seminorm $p_i$.
 
 
-#definition[Seminorm-induced Topology][
-  Let $X$ be a vector space and $p:X -> RR$ be a seminorm on $X$. The #strong[seminorm-induced topology] on $X$ is the topology induced by the canonical pseudometric
-  $
-    d(x,y) = p(x-y) ,quad forall x,y in X.
-  $
-]
+
 
 #definition[Spaces of $C^k$-differentiable Functions on Open Sets][
   Let $U$ be an non-empty open subset of $bb(R)^d$. Suppose $k in ZZ_(>=0)union {oo}$. The #strong[space of $C^k$-continuous functions] $C^k (U)$ is the topological vector space consisting of all $k$-times continuously differentiable functions on $U$. For any non-empty compact subset of $K$ of $U$, any integer $m in ZZ$ with $0<=m<=k$ and any multi-index $alpha in ZZ_(>=0)^n$ with length $|alpha|<=m$, we can define seminorms
@@ -343,7 +423,7 @@ is the open ball centered at $f$ with radius $epsilon$ with respect to the semin
   + For any $K_(j_1) , K_(j_2) in cal(K)$, there exists a compact subset $K_(j_3) in cal(K)$ such that $K_(j_1) union K_(j_2) subset.eq K_(j_3)$.
   For any $K in cal(K)$, endow $C^(oo) (K)$ with the subspace topology induced by the topology on $C^(oo) (U)$. Then
   $
-    {V subset.eq C^(oo)_c (U) mid(|) V "is convex," V sect C^(oo) (K) "is a neighborhood of" 0 "in" C^(oo) (K) "for all" K in cal(K)} ,
+    {V subset.eq C^(oo)_c (U) mid(|) V "is convex," V inter C^(oo) (K) "is a neighborhood of" 0 "in" C^(oo) (K) "for all" K in cal(K)} ,
   $
   is a collection of convex, balanced, and absorbing subsets of $C^(oo)_c (U)$, which defines a topology on $C^(oo)_c (U)$ according to @topology-of-locally-convex-tvs-determined-by-neighborhood-basis, called the *canonical LF-topology*.
 ]
@@ -564,6 +644,65 @@ If $f$ and $g$ are locally integrable functions on $X$, then $T_f=T_g$ if and on
 #proof[
   The topology induced by the norm $bar.v.double dot.op bar.v.double_Y$ on $Y$ is the same as the subspace topology induced by the norm $bar.v.double dot.op bar.v.double$ on $X$.
 ]
+
+#definition[Absolute Convergence][
+  A series $limits(sum)_(n=1)^(oo) x_n$ in a normed space $X$ is said to be *absolutely convergent* if the series $limits(sum)_(n=1)^(oo) ||x_n||$ converges in $bb(R)$.
+]
+
+#proposition[Properties of $d(x,S)$][
+  Let $X$ be a normed space over $𝕜 = bb(R) upright("or") bb(C)$. Suppose $S subset.eq X$ is a subset of $X$ and $x in X$. Let
+  $
+    d(x, S)= inf_(y in S) ||x-y||
+  $
+  be the distance from $x$ to $S$.
+
+  + Translation Invariance: $d(x, S + y) = d(x - y, S)$ for all $x, y in X$.
+
+  + Convexity: if $S$ is convex, then $x|-> d(x,S)$ is convex.
+
+  + If and only if $S$ is a linear subspace of $X$, $x|-> d(x,S)$ is a seminorm on $X$. That is,
+    - Absolute homogeneity: $d(lambda x, S) = |lambda| d(x, S)$ for all $x in X$ and $lambda in 𝕜$.
+
+    - Subadditivity: $d(x+y, S) <= d(x, S) + d(y, S)$ for all $x, y in X$.
+]
+
+#definition[Quotient Norm][
+  Let $X$ be a normed space and $N$ be a closed linear subspace of $X$. The *quotient norm* on the quotient space $X\/N$ is defined as
+  $
+    norm(x+N)_(X\/N) = inf_(z in N) norm(x-z)=d(x,N)
+  $
+  And $(X\/N , norm(x+N)_(X\/N))$ is a normed space, called the *quotient normed space*.
+]<quotient_norm>
+#remark[
+  First we show that the quotient norm is well-defined. Given $x_1, x_2 in X$ such that $x_1 + N = x_2 + N$, we have $x_1 - x_2 in N$. Therefore,
+  $
+    norm(x_1 + N)_(X\/N) = inf_(z in N) norm(x_1 - z)= inf_(z in N) norm(x_2+x_1 -x_2- z) = inf_(z' in N) norm(x_2 - z') = norm(x_2 + N)_(X\/N).
+  $
+  For any $x in X$, we have $norm(x+N)_(X\/N) <= norm(x-0) = norm(x)$. So the quotient norm is finite.
+
+  + (positive definiteness): for any $x in X $, since $N$ is a closed,
+    $
+      norm(x+N)_(X\/N) = 0 <==> d(x,N) = 0 <==> x in N <==> x+N = N.
+    $
+
+  + (absolute homogeneity): for any $x in X$, $lambda in 𝕜^(times)$,
+    $
+      norm(lambda (x+N))_(X\/N) = inf_(z in N) norm(lambda x - lambda z) = |lambda| inf_(z in N) norm(x - z) = |lambda| norm(x+N)_(X\/N).
+    $
+
+  + (triangle inequality): for any $x_1, x_2 in X$,
+    $
+      norm(x_1 + x_2 + N)_(X\/N) &= inf_(z in N) norm(x_1 + x_2 - z) \
+      &= inf_(z_1,z_2 in N) norm(x_1 + x_2 - (z_1+z_2))\
+      &<= inf_(z_1,z_2 in N) norm(x_1 - z_1) + norm(x_2 - z_2) \
+      & = inf_(z_1 in N) norm(x_1 - z_1) + inf_(z_2 in N) norm(x_2 - z_2)\
+      & = norm(x_1 + N)_(X\/N) + norm(x_2 + N)_(X\/N).
+    $
+]
+
+
+
+
 === Bounded Linear Operators <bounded-linear-operators>
 #definition[Bounded Linear Operator][
   Let $(X,bar.v.double dot.op bar.v.double_X)$ and $(Y,bar.v.double dot.op bar.v.double_Y)$ be normed spaces over $𝕜 = RR upright("or") CC$ and $T:X -> Y$ be a linear map. We say $T$ is a #strong[bounded linear operator] if $T$ is a bounded linear operator between topological vector spaces $X$ and $Y$.
@@ -583,32 +722,56 @@ If $f$ and $g$ are locally integrable functions on $X$, then $T_f=T_g$ if and on
   + $T$ is continuous.
 ]
 
-
-Let $T:X -> Y$ be a bounded linear operator between normed spaces $(X,bar.v.double dot.op bar.v.double_X)$ and $(Y,bar.v.double dot.op bar.v.double_Y)$. We use $B(X,Y)$ to denote the vector space of all bounded linear operators from $X$ to $Y$.
-
-
 #definition[Operator Norm][
   Let $T:X -> Y$ be a bounded linear operator between normed spaces $(X,bar.v.double dot.op bar.v.double_X)$ and $(Y,bar.v.double dot.op bar.v.double_Y)$. The #strong[operator norm] of $T$ is defined as
   $
-    norm(T)_(B(X,Y)) = inf lr({ c>=0  : norm(T x)_Y <= c norm(x)_X " for all" x in X}).
+    norm(T)_(op("op")) = inf lr({ c>=0  : norm(T x)_Y <= c norm(x)_X " for all" x in X}).
   $
-  It is a norm on the vector space $B(X,Y)$.
-]
+]<operator_norm>
 
 #proposition[Equivalent Definition of Operator Norm][
   Let $T:X -> Y$ be a bounded linear operator between normed spaces $(X,bar.v.double dot.op bar.v.double_X)$ and $(Y,bar.v.double dot.op bar.v.double_Y)$. Then the operator norm of $T$ can be equivalently defined as
   $
-    norm(T) &= inf lr({ c>=0  : norm(T x)_Y <= c norm(x)_X " for all" x in X})\
+    norm(T)_(op("op")) &= inf lr({ c>=0  : norm(T x)_Y <= c norm(x)_X " for all" x in X})\
     & = sup lr({ norm(T x)_Y : x in X "and" norm(x)_X <= 1})\
     & = sup lr({ norm(T x)_Y : x in X "and" norm(x)_X < 1})\
     & = sup lr({ norm(T x)_Y : x in X "and" norm(x)_X in {0, 1}})\
   $
   Furthermore, if we assume $dim X>=1$, then we have
   $
-    norm(T) &= sup lr({ norm(T x)_Y : x in X "and" norm(x)_X = 1})\
+    norm(T)_(op("op")) &= sup lr({ norm(T x)_Y : x in X "and" norm(x)_X = 1})\
     &= sup lr({ norm(T x)_Y/norm(x)_X : x in X  "and" x eq.not 0}).
   $
 ]
+
+#example[Spaces of Bounded Linear Operators $B(X,Y)$][
+  Let $(X,bar.v.double dot.op bar.v.double_X)$ and $(Y,bar.v.double dot.op bar.v.double_Y)$ be normed spaces over $𝕜 = RR upright("or") CC$. Let $B(X,Y)$ be the set of all bounded linear operator from $X$ to $Y$. Then $B(X,Y)$ is a normed space with the #link(<operator_norm>)[operator norm]
+  $
+    norm(T)_(op("op")) = sup_(x in X \ norm(x)_X<=1) norm(T x)_Y .
+  $
+  - $B(X,Y)$ is a #link(<banach-space>)[Banach space] if and only if $Y$ is a Banach space.
+
+  - If $X=Y$, then $B(X, X)$ is a Banach algebra under composition.
+
+  - If $X$ is a Hilbert space, then $B(X, X)$ is a $C^*$-algebra.
+]
+
+=== Continous Dual Space <continuous-dual-space>
+
+#definition[Strong Dual Space][
+  Let $(X,bar.v.double dot.op bar.v.double)$ be a normed space over $𝕜 = RR upright("or") CC$. The #strong[strong dual space] of $X$ is the Banach space $X'=B(X,𝕜)$ with the operator norm
+  $
+    norm(f)_(op("op")) = sup_(norm(x)<=1 ) |f(x)|, quad forall f in X'.
+  $
+]
+#theorem[Banach-Alaoglu Theorem][
+  Let $(X,bar.v.double dot.op bar.v.double)$ be a normed space over $𝕜 = bb(R) upright("or") bb(C)$. Then the closed unit ball
+  $
+    overline(B)_1 = {f in X' : ||f||_(op("op"))= sup_(norm(x)<=1) abs(f(x)) <= 1}
+  $
+  is compact in $X'$ with respect to the the weak topology.
+]<banach-alaoglu-theorem>
+
 
 #pagebreak()
 
@@ -616,7 +779,7 @@ Let $T:X -> Y$ be a bounded linear operator between normed spaces $(X,bar.v.doub
 == Basic Notions
 #definition[Banach Space][
   A normed space is called a #strong[Banach space] if it is a complete metric space with respect to the metric induced by the norm.
-]
+]<banach-space>
 
 #proposition[Closed Subspace of Banach Space forms Banach Space][
   Let $lr((X , bar.v.double dot.op bar.v.double))$ be a Banach space and $Y$ be a linear subspace of $X$. Then $lr((Y , bar.v.double dot.op bar.v.double_Y))$ is a Banach space if and only if $Y$ is closed in $X$.
@@ -719,6 +882,55 @@ For classical functional analysis, we mainly focus on the following two types of
 ) $
 ] <ellp-spaces>
 
+
+#proposition[Absolutely Convergent Series is Unconditionally Convergent][
+  Let $X$ be a Banach space and $(x_k)_(k=1)^n$ be a sequence in $X$. If the series $limits(sum)_(k=1)^(oo) x_k$ is absolutely convergent, then it is unconditionally convergent.
+]
+#proof[
+  If the series $limits(sum)_(k=1)^(oo) x_k$ is absolutely convergent, then the series $limits(sum)_(k=1)^(oo) ||x_k||$ is convergent in $bb(R)$. Since convergence in $bb(R)$ is Cauchy sequence, the sequence of partial sums $S_n=limits(sum)_(k=1)^(n) ||x_k||$ is a Cauchy sequence. Therefore, for any $epsilon > 0$, there exists $N in ZZ_(>=0)$ such that for all $n >= m > N$,
+  $
+    |S_n - S_m| < epsilon.
+  $
+  Let $T_n=limits(sum)_(k=1)^(n) x_k$. Then for any $epsilon > 0$, there exists $N in ZZ_(>=0)$ such that for all $n >= m > N$,
+  $
+    norm(T_n - T_m) = norm(limits(sum)_(k=m+1)^n x_k) <= sum_(k=m+1)^n norm(x_k) =|S_n - S_m|< epsilon.
+  $
+  This means the sequence $(T_n)_(n=1)^(oo)$ is a Cauchy sequence. Since $X$ is a Banach space, $(T_n)_(n=1)^(oo)$ is convergent.
+
+  To show the series $limits(sum)_(k=1)^(oo) x_k$ is unconditionally convergent, we need to show that for any bijection $sigma: ZZ_(>=1)-->^(tilde) ZZ_(>=1)$, the series $limits(sum)_(k=1)^(oo^(#v(1.3em))) x_(sigma(k))$ is convergent and its limit is the same as the limit of the original series. // Hack: #v(1.3em) is used to adjust the vertical spacing between oo and the exponent.
+
+  Given $epsilon > 0$, there exists $N in ZZ_(>=1)$ such that for all $n > N$, we have
+  $
+    sum_(k=N+1)^oo norm(x_k) < epsilon / 2
+  $
+  and
+  $
+    norm(limits(sum)_(k=1)^(N) x_(k) - limits(sum)_(k=1)^(oo) x_k) < epsilon / 2.
+  $
+  Suppose $M$ is an integer such that ${1, 2, dots, N} subset.eq {sigma(1), sigma(2), dots, sigma(M)}$. Then
+  $
+    norm(limits(sum)_(k=1)^(M) x_(sigma(k)) - limits(sum)_(k=1)^(N) x_k) &=norm(sum_(k in {sigma(1), dots, sigma(M)}-{1,  dots, N}) x_k) \
+    &<= sum_(k in {sigma(1), dots, sigma(M)}-{1, dots, N}) norm(x_k)\
+    & <= sum_(k=N+1)^oo norm(x_k) \
+    & < epsilon / 2.
+  $
+  Note for any $n > M$, we still have ${1, 2, dots, N} subset.eq {sigma(1), sigma(2), dots, sigma(n)}$. Therefore, for any $n > M$, we have
+  $
+    norm(limits(sum)_(k=1)^(n) x_(sigma(k)) - limits(sum)_(k=1)^(oo) x_k) <= norm(limits(sum)_(k=1)^(n) x_(sigma(k)) - limits(sum)_(k=1)^(N) x_k)+ norm(limits(sum)_(k=1)^(N) x_k - limits(sum)_(k=1)^(oo) x_k) < epsilon / 2 + epsilon / 2 = epsilon.
+  $
+  This proves the series $limits(sum)_(k=1)^(oo) x_(sigma(k))$ is convergent and its limit is the same as the limit of the original series.
+]
+
+#proposition[Comparison Test for Series][
+  Let $X$ be a Banach space and $(x_k)_(k=1)^(oo)$ be a sequence in $X$. If there exists a sequence $(a_k)_(k=1)^(oo)$ of nonnegative real numbers such that
+  $
+    norm(x_k) <= a_k, quad forall k in ZZ_(>=1),
+  $
+  and the series $limits(sum)_(k=1)^(oo) a_k$ converges, then the series $limits(sum)_(k=1)^(oo) x_k$ is absolutely convergent.
+]<Banach-spaces-comparison-test>
+#proof[
+  Applying the comparison test for series of nonnegative real numbers, we see $limits(sum)_(k=1)^(oo) norm(x_k)$ is convergent. Therefore, the series $limits(sum)_(k=1)^(oo) x_k$ is absolutely convergent.
+]
 == Main Theorems
 
 #theorem[Open Mapping Theorem][
@@ -810,21 +1022,65 @@ For classical functional analysis, we mainly focus on the following two types of
     norm(x y) lt.eq norm(x) norm(y) ,quad forall x , y in A .
   $
 ]
-
-#definition[Unital Banach Algebra][
-  A Banach algebra $A$ is called a #strong[unital Banach algebra] if $A$ as an algebra has a multiplication unit element $1_A$ and $||1_A|| = 1$.
+#remark[
+  When we mention a Banach algebra without specifying the scalar field $𝕜$, we implicitly assume $𝕜=CC$. If a more general field is considered, we explicitly state that $A$ is a $𝕜$-Banach algebra or a Banach algebra over $𝕜$.
 ]
 
+#definition[Banach Algebra Homomorphism][
+  Let $A$ and $B$ be $𝕜$-Banach algebras. A #strong[Banach algebra homomorphism] from $A$ to $B$ is a $𝕜$-linear map $T:A -> B$ such that
+
+  + $T(x y) = T(x) T(y)$ for all $x , y in A$,
+
+  + $T$ is continuous.
+]
+
+
+#definition[Unital Banach Algebra][
+  A $𝕜$-Banach algebra $A$ is called a #strong[unital Banach algebra] if $A$ as an algebra has a multiplication unit element $1_A$ and $||1_A|| = 1$.
+]
+
+#definition[Unital Banach Algebra Homomorphism][
+  Let $A$ and $B$ be unital $𝕜$-Banach algebras. A #strong[unital Banach algebra homomorphism] from $A$ to $B$ is a $𝕜$-linear map $T:A -> B$ such that
+  + $T(x y) = T(x) T(y)$ for all $x , y in A$,
+
+  + $T(1_A) = 1_B$,
+
+  + $T$ is continuous.
+]
+
+
 #definition[Commutative Banach Algebra][
-  A Banach algebra $A$ is called a #strong[commutative Banach algebra] if $A$ as an algebra is commutative.
+  A $𝕜$-Banach algebra $A$ is called a #strong[commutative Banach algebra] if $A$ as an algebra is commutative.
 ]
 
 #definition[Sub Banach Algebra][
-  Let $A$ be a Banach algebra. A #strong[sub Banach algebra] of $A$ is a subspace $B$ of $A$ that is also a Banach algebra with respect to the norm inherited from $A$.
+  Let $A$ be a $𝕜$-Banach algebra. A #strong[sub Banach algebra] of $A$ is a subspace $B$ of $A$ that is also a Banach algebra with respect to the norm inherited from $A$.
+]
+
+#definition[Quotient Banach Algebra][
+  Let $(A, bar.v.double dot.op bar.v.double_A)$ be a $𝕜$-Banach algebra and $N$ be a closed ideal of $A$. Suppose
+  $(A\/N, bar.v.double dot.op bar.v.double_(A\/N))$ is the quotient algebra equipped with #link(<quotient_norm>)[quotient norm]. Then $(A\/N, bar.v.double dot.op bar.v.double_(A\/N))$ is a $𝕜$-Banach algebra, called the *quotient Banach algebra* of $A$ by $N$.
+]
+#remark[
+  For any $x,y in A$, we have
+  $
+    norm(x y + N)_(A\/N) &= inf_(z in N) norm(z-x y ) \
+    &= inf_( z' + x y in N) norm(z')\
+    &=inf_( z' in -x y +N) norm(z')\
+    &=inf_( -z' in x y +N) norm(-z')\
+    &=inf_( z in x y +N) norm(z)\
+    &=inf_(u in x+N\ v in y+N) norm(u v) \
+    &<= inf_(u in x+N\ v in y+N) norm(u) norm(v) \
+    &= inf_(u in x+N) norm(u) inf_(v in y+N) norm(v) \
+    &= norm(x+N)_(A\/N) norm(y+N)_(A\/N).
+  $
 ]
 
 #example[Bounded Linear Operators as Banach Algebra][
-  Let $X$ be a Banach space. The set of all bounded linear operators on $X$ is a Banach algebra with respect to the operator norm.
+  Let $(X,bar.v.double dot.op bar.v.double)$ be a Banach space over $𝕜$. The set of all bounded linear operators on $X$ is a Banach algebra $B(X)$ with respect to the operator norm
+  $
+    norm(T)_(B(X)) = sup lr({norm(T x) : x in X "and" norm(x) <= 1}).
+  $
 ]
 
 
@@ -834,7 +1090,174 @@ For classical functional analysis, we mainly focus on the following two types of
   $
     (f * h)(x) = integral_G f(y) h(y^(-1) x) dif mu(y).
   $
+  $L^1(G, mu)$ is a unital Banach algebra if and only if $G$ is discrete.
 ]
+#proof[
+  If $G$ is discrete, then the Haar measure $mu$ is counting measure up to a constant. In this case, define the point-mass $delta_(1_G):G->CC$ as
+  $
+    delta_(1_G) (x) = cases(
+    1 & "if" x = 1_G,\
+    0 & "if" x eq.not 1_G.
+  )
+  $
+  Then for any $f in L^1(G, mu)$ and $x in G$, we have
+  $
+    (f * delta_(1_G))(x) &= integral_G f(y) delta_(1_G)(y^(-1) x) dif mu(y) \
+    & = sum_(y in G) f(y) delta_(1_G)(y^(-1) x) \
+    & = sum_(y in G) f(y) bold(1)_(y = x) \
+    & = f(x)
+  $
+  and
+  $
+    (delta_(1_G) * f)(x) &= integral_G delta_(1_G)(y) f(y^(-1) x) dif mu(y) \
+    & = sum_(y in G) delta_(1_G)(y) f(y^(-1) x) \
+    & = sum_(y in G) bold(1)_(y = 1_G) f(y^(-1) x) \
+    & = f(x).
+  $
+  This means $delta_(1_G)$ is the unity of $L^1(G, mu)$.
+]
+
+#lemma[Invertibility of $1-x$][
+  Let $(A, bar.v.double dot.op bar.v.double)$ be a unital $𝕜$-Banach algebra and $x in A$. If $norm(x)<1$, then $x$ is invertible and
+  $
+    (1_A - x)^(-1) = sum_(n=0)^(oo) x^n.
+  $
+]<Banach-spaces-invertibility-1-x>
+#proof[
+  From $norm(x)<1$ we have
+  $
+    sum_(n=0)^(oo) norm(x)^n = 1 / (1-norm(x)) < oo.
+  $
+  For any $n in ZZ_(>=0)$, we have $norm(x^n) <= norm(x)^n$. Thus by #link(<Banach-spaces-comparison-test>)[comparison test for series], the series $limits(sum)_(n=0)^(oo) x^n$ is absolutely convergent. Note
+  $
+    lim_(n arrow.r oo) norm(x^n) <= lim_(n arrow.r oo) norm(x)^n = 0 ==> lim_(n arrow.r oo) x^n = 0.
+  $
+  So we have
+  $
+    (1_A - x) (sum_(n=0)^(oo) x^n) = lim_(n arrow.r oo) (1_A - x) (sum_(k=0)^(n) x^k) = lim_(n arrow.r oo) (1_A - x^(n+1)) = 1_A,
+  $
+  which proves the lemma.
+]
+#corollary[Neumann Series][
+  Let $A$ be a unital $𝕜$-Banach algebra and $x in A$.
+
+  + Suppose $lambda in CC$ and $abs(lambda)>norm(x)$. Then $lambda 1_A - x$ is invertible and
+    $
+      (lambda 1_A - x)^(-1) = sum_(n=0)^(oo) 1 / lambda^(n+1) x^n.
+    $
+  + Suppose $x in A^(times)$, $y in A$ and $norm(y)<norm(x^(-1))^(-1)$. Then $x - y$ is invertible and
+    $
+      (x - y)^(-1) = x^(-1)sum_(n=0)^(oo) (y x^(-1))^n.
+    $
+]<neumann-series>
+#proof[
+  + By the @Banach-spaces-invertibility-1-x, since
+    $
+      norm(1/lambda x) = 1 / abs(lambda) norm(x) < 1,
+    $
+    we have
+    $
+      (1_A - 1 / lambda x)^(-1) = limits(sum)_(n=0)^(oo) (1 / lambda x)^n.
+    $
+    Multiplying both sides by $1/lambda$ gives the result.
+
+  + By the @Banach-spaces-invertibility-1-x, since
+    $
+      norm(y x^(-1)) <= norm(y) norm(x^(-1)) < 1,
+    $
+    we have
+    $
+      (1_A - y x^(-1))^(-1) = limits(sum)_(n=0)^(oo) (y x^(-1))^n.
+    $
+    Left multiplying both sides by $x^(-1)$ and we get
+    $
+      x^(-1)(1_A - y x^(-1))^(-1)=((1_A - y x^(-1))x)^(-1)=(x - y)^(-1) = x^(-1) limits(sum)_(n=0)^(oo) (y x^(-1))^n.
+    $
+]
+
+#proposition[Unit Group of Unital Banach Algebra is Open][
+  Let $A$ be a unital $𝕜$-Banach algebra.
+
+  + If $x in A^(times)$, $y in A$ and $norm(y) <= 1/2 norm(x^(-1))^(-1)$, then
+    $
+      norm((x - y)^(-1)-x^(-1)) <= 2 norm(x^(-1))^2 norm(y) .
+    $
+
+  + $A^(times)$ is open in $A$.
+
+  + The map
+    $
+      eta:A^(times)&-->A^(times)\
+      x &--> x^(-1)
+    $
+    is a homeomorphism.
+]<Banach-spaces-unit-group-is-open>
+#proof[
+  + According to the @neumann-series, since $norm(y) <= 1/2 norm(x^(-1))^(-1)<norm(x^(-1))^(-1)$, we have
+    $
+      (x - y)^(-1) = x^(-1) limits(sum)_(n=0)^(oo) (y x^(-1))^n.
+    $
+    So we can write
+    $
+      norm((x - y)^(-1)-x^(-1)) &=norm(x^(-1) limits(sum)_(n=0)^(oo) (y x^(-1))^n-x^(-1))\
+      &= norm(x^(-1) limits(sum)_(n=1)^(oo) (y x^(-1))^n) \
+      &<= norm(x^(-1)) limits(sum)_(n=1)^(oo) (norm(y) norm(x^(-1)))^n\
+      &<= norm(x^(-1))^2 norm(y)limits(sum)_(n=1)^(oo) (norm(y) norm(x^(-1)))^(n-1)\
+      &<= norm(x^(-1))^2 norm(y)limits(sum)_(n=1)^(oo) 1 / 2^(n-1)\
+      &<= 2 norm(x^(-1))^2 norm(y).
+    $
+
+  + Suppose $x in A^(times)$. For any $z in A$ such that $norm(z-x) < 1/2 norm(x^(-1))^(-1)$, let $y = x - z$. Then we have
+    $
+      norm(y) < 1 / 2 norm(x^(-1))^(-1)<norm(x^(-1))^(-1).
+    $
+    According to the @neumann-series, $x-y$ is invertible, which means $z=x-y in A^(times)$. Thus $B(x , 1/2 norm(x^(-1))^(-1)) subset.eq A^(times)$ is an open neighborhood of $x$. This implies $A^(times)$ is open in $A$.
+
+  + The map $eta$ is injective since $x^(-1) = y^(-1)$ implies $x = y$. Since $eta$ is also surjective, it is a bijection. To show continuity of $eta$, consider a point $x in A^(times)$ and a sequence $(x_n)_(n=1)^(oo)$ in $A^(times)$ such that $x_n arrow x$. We need to show $x_n^(-1) arrow x^(-1)$ in $A$. For sufficiently large $n$, we have $norm(x_n - x) < 1/2 norm(x^(-1))^(-1)$. From (i) we obtain
+    $
+      norm(x_n^(-1) - x^(-1))=norm((x-(x-x_n))^(-1) - x^(-1)) <= 2 norm(x^(-1))^2 norm(x_n - x) .
+    $
+    This shows $x_n^(-1) arrow x^(-1)$ in $A$.
+]
+
+#definition[Spectrum of an Element in Banach algebra][
+  Let $A$ be a unital Banach algebra and $x in A$. The #strong[spectrum] of $x$ is defined as
+  $
+    sigma(x) = {lambda in bb(k) : lambda 1_A - x in.not A^(times)}.
+  $
+]
+
+
+#proposition[Properties of Spectrum ][
+  Let $A$ be a unital Banach algebra and $x in A$.
+
+  + $sigma(x)$ is a compact subset of the disc
+    $
+      overline(B (0 , ||x||)) = {lambda in bb(k) med : med abs(lambda) <= norm(x)}.
+    $
+
+  + $sigma(x)$ is non-empty.
+]
+
+#definition[Spectral Radius][
+  Let $A$ be a unital Banach algebra and $x in A$. The #strong[spectral radius] of $x$ is defined as
+  $
+    rho(x) = sup lr({abs(lambda) : lambda in sigma(x)}) .
+  $
+]
+#proposition[Spectral Radius Theorem][
+  Let $A$ be a unital Banach algebra and $x in A$. Then
+  $
+    rho(x) = lim_(n arrow.r oo) norm(x^n)^(1 / n).
+  $
+]
+#definition[Unital Banach Division Algebra][
+  A unital Banach algebra $A$ is called a #strong[unital Banach division algebra] if every nonzero element of $A$ is invertible, namely $A^(times) = A - {0}$.
+]
+#theorem[Gelfand-Mazur Theorem][
+  Let $A$ be a unital Banach division algebra, then $A$ is isomorphic to $CC$.
+]<gelfand-mazur-theorem>
+
 
 == $upright(C)^*$-Algebras <cstar-algebras>
 
@@ -886,16 +1309,317 @@ In an involutive ring we have $1^*=1$.
 #example[$C_0(X)$ for Locally Compact Hausdorff Space $X$][
   Let $X$ be a locally compact Hausdorff space. The set of all continuous complex-valued functions on $X$ vanishing at infinity is denoted by $C_0(X)$. It is a commutative $upright(C)^*$-algebra with respect to the supremum norm
   $
-    norm(f) = sup_(x in X) |f(x)|.
+    norm(f)_sup = sup_(x in X) |f(x)|.
   $
   and pointwise multiplication. The involution is defined as the complex conjugation $overline(#hide($z$))#h(0.2em):f |-> overline(f)$.
 
   $C_0(X)$ is unital if and only if $X$ is compact. In this case, the constant function $1$ is the unit element. And we have $C_0(X) = C(X)$.
-]
+]<C_0-as-C-star-algebra>
 
-#example[Bounded Linear Operators on a complex Hilbert Space][
+#example[Bounded Linear Operators on a Complex Hilbert Space][
   Let $H$ be a complex Hilbert space. The set of all bounded linear operators on $H$ is a $upright(C)^*$-algebra is denoted by $B(H)$.
   with respect to the operator norm and the adjoint operation.
+]
+
+
+== Gelfand Theory
+
+#definition[Spectrum of a Commutative Unital Banach Algebra][
+  Let $A$ be a commutative unital Banach algebra. A *multiplicative
+functional* on $A$ is a nonzero Banach algebra homomorphism $h:A -> CC$. The set of all multiplicative functionals on $A$ is called the *spectrum* of $A$ and is denoted by $sigma(A)$. If not specified, $sigma(A)$ is always equipped with the subspace topology as a subset of the continuous dual space $A'$ endowed with the weak$zws^*$ topology.
+]
+
+#proposition[][
+  Let $A$ be a commutative unital Banach algebra and $h in sigma(A)$. Then we have
+
+  + $h(1_A) = 1$.
+
+  + $h$ is surjective.
+
+  + If $x in A^(times)$, then $h(x) in CC^(times)$.
+
+  + For any $x in A$, $abs(h(x)) <= norm(x)$. So the operator norm of $h$
+    $
+      norm(h)_(op("op"))=sup_(x in A \ norm(x) <= 1) abs(h(x)) <= 1.
+    $
+]<properties-of-multiplicative-functionals>
+#proof[
+  + Since $h eq.not 0$, there exists $x in A$ such that $h(x) eq.not 0$. Then $h(x) = h(1_A x) = h(1_A) h(x) $. So we have $h(1_A) = 1$.
+
+  + For any $lambda in CC$, $h(lambda 1_A) = lambda h(1_A) = lambda$. So $h$ is surjective.
+
+  + If $x in A^(times)$, then $h(x^(-1))h(x)=h(x^(-1) x)=h(1_A)=1$. So we have $h(x)in CC^(times)$.
+
+  + Suppose there exists $a in A$ such that $|h(a)| > norm(a)$. According to @neumann-series, $h(a)1_A - a$ is invertible. Then by (ii) we have
+    $
+      h(h(a)1_A - a) = h(a)h(1_A) - h(a) = h(a) - h(a) = 0 in CC^(times),
+    $
+    which is a contradiction.
+]
+
+#proposition[Spectrum is Compact Hausdorff][
+  Let $A$ be a commutative unital Banach algebra. Then $sigma(A)$ is a compact Hausdorff space.
+]<compact-hausdorffness-of-spectrum>
+#proof[
+  Let $B$ be the closed unit ball of $(A', bar.v.double dot.op bar.v.double)$ where $bar.v.double dot.op bar.v.double$ is the operator norm. By the #link(<banach-alaoglu-theorem>)[Banach-Alaoglu theorem], $B$ is compact with respect to the weak$zws^*$ topology. According to the @properties-of-multiplicative-functionals, $sigma(A)$ is a subset of $B$. We need to show $sigma(A)$ is closed in $B$. Let $(h_n)_(n>=1)$ be a sequence in $sigma(A)$ such that
+  $
+    h_n -->^("w"^*) h
+  $
+  in $B$. For any $x , y in A$, we have
+  $
+    h(x y) = lim_(n arrow.r oo) h_n (x y) = lim_(n arrow.r oo) h_n (x) h_n (y) = h(x) h(y).
+  $
+  This implies $h in sigma(A)$. So $sigma(A)$ is a closed subset of $B$. Since closed subset of compact space is compact, $sigma(A)$ is compact. The Hausdorff property of $sigma(A)$ is inherited from $A'$, which is Hausdorff by @hausdorffness-of-weak-star-topology.
+]
+
+#proposition[Proper Ideals of Commutative Unital Banach Algebra][
+  Let $A$ be a commutative unital Banach algebra and $frak(a)$ be a proper ideal of $A$.
+  Then we have
+
+  + $frak(a) inter A^(times) = emptyset$.
+
+  + $overline(frak(a))$ is a proper ideal of $A$.
+
+  + If $frak(a)$ is a maximal ideal, then $frak(a)$ is closed.
+]<Banach-algebras-proper-ideals>
+#proof[
+  + This is a standard fact of ring theory.
+
+  + According to standard fact of topological ring theory, $overline(frak(a))$ is a ideal of $A$. By @Banach-spaces-unit-group-is-open, $A-A^(times)$ is closed in $A$. Since $frak(a) subset.eq A-A^(times)$, we have $overline(frak(a)) subset.eq A-A^(times)$. So $overline(frak(a))$ is a proper ideal of $A$.
+
+  + Suppose $frak(a)$ is a maximal ideal. By (ii) $overline(frak(a))$ is a proper ideal contains $frak(a)$. By the maximality of $frak(a)$, there must be $overline(frak(a)) = frak(a)$. So $frak(a)$ is closed.
+]
+
+#proposition[][
+  Let $A$ be a commutative unital Banach algebra and $h in sigma(A)$. Then
+  $
+    ker: sigma(A)&--> op("MaxSpec")(A)\
+    h &arrow.bar.long ker h = {h in sigma(A) mid(|) h(x) = 0}
+  $
+  is bijection.
+]<bijection-between-spectrum-and-maximal-spectrum>
+#proof[
+  First we show $ker h$ is a maximal ideal of $A$. Since $h$ is a surjective ring homomorphism, by the first isomorphism theorem, $A \/ ker tilde.equiv h(A)=CC$. So $ker h$ is a maximal ideal of $A$.
+
+  Next we show $ker$ is injective. Suppose $ker h_1 = ker h_2$ for some $h_1 , h_2 in sigma(A)$. Note that for any $x in A$,
+  $
+    h_1(x- h_1(x) 1_A) = h_1(x) - h_1(x) h_1(1_A) = 0.
+  $
+  So we get $x - h_1(x) 1_A in ker h_1= ker h_2$. Since $h_2(x - h_1(x) 1_A) = 0$, we have
+  $
+    h_2(x)=h_2(x - h_1(x) 1_A + h_1(x) 1_A) = h_1(x) h_2(1_A) = h_1(x).
+  $
+  This shows $ker$ is injective.
+
+  Finally we show $ker$ is surjective. Let $frak(a)$ be a maximal ideal of $A$. By @Banach-algebras-proper-ideals, $frak(a)$ is closed. Therefore, $A \/ frak(a)$ is a Banach field. By the #link(<gelfand-mazur-theorem>)[Gelfand-Mazur theorem], $A \/ frak(a) equiv CC$. So there exists a isomorphism $psi : A \/ frak(a) ->^(tilde) CC$. Suppose $pi: A -> A \/ frak(a)$ is the canonical projection. Then $h = psi compose pi$ is a multiplicative functional on $A$ such that $ker h = frak(a)$.
+]
+
+
+
+#definition[Gelfand Transform][
+  Let $A$ be a commutative unital Banach algebra. The #strong[Gelfand transform] of $A$ is the unital Banach algebra homomorphism
+  $
+    Gamma_A:A&-->C(sigma(A))\
+    x &arrow.bar.long (hat(x):h arrow.bar.long h(x))
+  $
+  where $C(sigma(A))$ is the set of all continuous complex-valued functions on $sigma(A)$.
+]
+#remark[
+  According to the @compact-hausdorffness-of-spectrum, $sigma(A)$ is a compact Hausdorff space. From @C_0-as-C-star-algebra we see $C(sigma(A))$ is a unital Banach algebra with respect to the supremum norm
+  $
+    norm(v)_sup = sup_(h in sigma(A)) |v(h)|, quad forall v in C(sigma(A)).
+  $
+  Now we can check that $Gamma_A$ is a unital Banach algebra homomorphism.
+
+  + $Gamma_A$ preserves the multiplication: for any $x , y in A$ and $h in sigma(A)$, we have
+    $
+      (hat(x y))(h) = h(x y) = h(x) h(y) = hat(x)(h) hat(y)(h).
+    $
+    So $Gamma_A (x y)=hat(x y) = hat(x) hat(y)=Gamma_A (x)Gamma_A (y)$.
+
+  + $Gamma_A$ preserves the unital element: for any $h in sigma(A)$, we have
+    $
+      hat(1_A)(h) = h(1_A) = 1.
+    $
+    So $Gamma_A (1_A) = hat(1_A)=1_(C(sigma(A)))$.
+
+  + $Gamma_A$ is bounded: for any $x in A$ and $h in sigma(A)$, we have
+    $
+      |hat(x)(h)| = |h(x)| <= norm(x).
+    $
+    So for any $x in A$, we have $norm(hat(x))_(sup) <= norm(x)$, which implies
+    $
+      norm(Gamma_A)_(op("op")) = sup_(x in A \
+      norm(x)_(A)<=1 ) norm(hat(x))_(sup) <= 1.
+    $
+
+  + $Gamma_A$ is $CC$-linear: for any $x , y in A$, $lambda in CC$ and $h in sigma(A)$, we have
+    $
+      (hat(lambda x + y))(h) = h(lambda x + y) = lambda h(x) + h(y) = lambda hat(x)(h) + hat(y)(h).
+    $
+    So $Gamma_A (lambda x + y) = lambda Gamma_A (x) + Gamma_A (y)$.
+]
+
+#proposition[Properties of Gelfand Transform][
+  Let $A$ be a commutative unital Banach algebra and $x in A$. Then we have
+
+  + $x in A^(times)$ if and only if $hat(x)$ never vanishes on $sigma(A)$.
+
+  + $op("im") hat(x) = sigma(x)$.
+
+  + $norm(hat(x))_(sup) = rho(x) <= norm(x)$.
+]
+#proof[
+  + Since
+    $
+      x in.not A^(times) & <==>  x in frak(m) "for some" frak(m) in op("MaxSpec")(A)\
+      & <==> x in ker h "for some" h in sigma(A) quad "(by" #ref(<bijection-between-spectrum-and-maximal-spectrum>)")"\
+    & <==>  h(x)=0 "for some" h in sigma(A) \
+    & <==>  hat(x)(h)=0 "for some" h in sigma(A),
+    $
+    we see $x in A^(times)$ $<==>$ $hat(x)$ never vanishes on $sigma(A)$.
+
+  + From (i) we have
+    $
+      lambda in sigma(x) & <==> lambda 1_A - x in.not A^(times) \
+      & <==> h(lambda 1_A - x) = 0 "for some" h in sigma(A) \
+      & <==> lambda - h(x) = 0 "for some" h in sigma(A) \
+      & <==> lambda = hat(x)(h) "for some" h in sigma(A) \
+      & <==> lambda in op("im") hat(x).
+    $
+
+  + According to the definition of spectral radius, utilizing the fact that $op("im") hat(x) = sigma(x)$, we have
+    $
+      rho(x) = sup_(lambda in sigma(x)) abs(lambda) = sup_(lambda in op("im") hat(x)) abs(lambda) = sup_(h in sigma(A)) abs(hat(x)(h))
+      = norm(hat(x))_(sup).
+    $
+]
+
+#proposition[][
+  Suppose $G$ is a discrete group and $mu$ be the counting measure on $G$. Define
+  $
+    delta_g:G&-->CC\
+    a &arrow.bar.long cases(gap: #0.5em,
+    1 & "if" x = g\, ,
+    0 & "if" x eq.not g.
+  )
+  $
+  Then
+
+  + For any $f in L^1(G)$, the support of $f$
+
+    $
+      op("supp") f= {g in G mid(|) f(g) eq.not 0}
+    $
+    is countable and we can define
+    $
+      sum_(g in G) f(g) := sum_(g in op("supp") f) f(g)
+    $
+    This is well-defined because the summation order of absolutely convergent series does not matter.
+
+  + ${delta_g}_(g in G)$ spans a dense subspace of $L^1(G)$.
+
+  + $sigma(L^1(G))$ is an abelian group we have the following topological group isomorphism
+    $
+      Phi:sigma(L^1(G)) &--> op("Hom")_(Grp)(G,CC^(times))\
+      h &arrow.bar.long (g arrow.bar.long h(delta_g)),
+    $
+    where $op("Hom")_(Grp)(G,CC^(times))$ is endowed with pointwise multiplication and pointwise convergence topology, that is, the initial topology with respect to the evaluation maps $(op("ev")_g)_(g in G)$ which are defined as
+    $
+      op("ev")_g:op("Hom")_(Grp)(G,CC^(times))&-->CC^(times)\
+      chi & arrow.bar.long chi(g).
+    $
+
+  + The Gelfand transform on $L^1(G)$ is given by
+    $
+      Gamma:L^1(G)&-->C(sigma(L^1(G)))\
+      f=(f(g))_(g in G) &arrow.bar.long (hat(x): h arrow.bar.long sum_(n in G) f(g) h(delta_g)).
+    $
+
+]
+#proof[
+  + Let $mu$ be the counting measure on $G$. Given any $f in L^1(G)$, define
+    $
+      A_n:= {g in G mid(|) abs(f(g)) >= 1 / n}.
+    $
+    If $A_n$ is infinite, then we have $mu(A_n)=oo$ and
+    $
+      integral_(G) |f| dif mu >= integral_(A_n) |f| dif mu >= 1 / n mu(A_n) = oo,
+    $
+    contradicting $f in L^1(G)$. So $A_n$ is finite for all $n in ZZ_(>=1)$. This implies $op("supp") f = limits(union.big)_(n in ZZ_(>=1)) A_n$ is countable.
+
+  + For any $f in L^1(G)$ and $epsilon > 0$, we can assume the support of $f$ is $op("supp") f = {g_n}_(n in ZZ_(>=1))$. Define $E_n={g_1,g_2,...,g_n}$, $G_n=op("supp") f-E_n$. Note that
+    $
+      f(a) - sum_(n=1)^(N) f(g_n) delta_(g_n)(a)= cases(gap: #0.9em,
+        0 & " if" a in E_N,
+        f(a) & " otherwise"
+      ) quad = f(a)bold(1)_(G_N)(a).
+    $
+    As $N -> oo$, we have
+    $
+      norm(f - sum_(n=1)^(N) f(g_n) delta_(g_n))_(L^1(G)) = integral_(G) abs(f(a)bold(1)_(G_N)(a)) dif mu(a) = integral_(G_N) abs(f(a)) dif mu(a) --> 0.
+    $
+
+  + First we need to show $chi_h: g |-> h(delta_g)$ is a group homomorphism. Note
+    $
+      delta_(g_1) * delta_(g_2)(a)= sum_(x in G) delta_(g_1)(x) delta_(g_2)(x^(-1) a) = delta_(g_2)(g_1^(-1)a) = bold(1)_(g_1^(-1)a = g_2) = delta_(g_1 g_2)(a).
+    $
+    For any $g_1,g_2 in G$, we have
+    $
+      chi_h (g_1 g_2) = h(delta_(g_1 g_2)) = h(delta_(g_1)* delta_(g_2)) = h(delta_(g_1)) h(delta_(g_2)) = chi_h (g_1) chi_h (g_2).
+    $
+    Since $delta_(g) in L^1(G)^times$ for all $g in G$, by @properties-of-multiplicative-functionals we have $h(delta_(g)) in CC^times$. Thus $Phi(h)=chi_h in op("Hom")_(Grp)(G,CC^times)$.
+
+    Next we show $Phi$ preserves multiplication. For any $h_1 , h_2 in sigma(L^1(G))$, we have
+    $
+      (Phi(h_1) Phi(h_2))(g) &= (chi_(h_1) chi_(h_2))(g) \
+      &= chi_(h_1)(g) chi_(h_2)(g) \
+      &= h_1(delta_g) h_2(delta_g) \
+      &= (h_1 h_2)(delta_g) \
+      &= Phi(h_1 h_2)(g).
+    $
+    To show $Phi$ is injective, suppose $h_1 , h_2 in sigma(L^1(G))$ such that $Phi(h_1) = Phi(h_2)$. Then for any $g in G$, we have
+    $
+      h_1(delta_g) = h_2(delta_g).
+    $
+    Since ${delta_g}_(g in G)$ spans a dense subspace of $L^1(G)$ and $h_1 , h_2$ are continuous, we have $h_1 = h_2$.
+
+    Then we show $Phi$ is surjective. Let $chi in op("Hom")_(Grp)(G,CC^times)$. Define 
+    $
+      h: L^1(G)&-->CC\
+      f &arrow.bar.long sum_(g in G) f(g) chi(g).
+    $
+    This is a multiplicative functional: for any $f_1, f_2 in L^1(G)$, we have
+    $
+      h(f_1 * f_2) & = sum_(g in G) (f_1 * f_2)(g) chi(g)\
+      & = sum_(g in G) sum_(x in G) f_1(x) f_2(x^(-1) g) chi(g)\
+      & = sum_(x in G) sum_(y in x^(-1)G)  f_1(x) f_2(y) chi(x y) quad("let" x^(-1) g=y)\
+  
+      &=(sum_(x in G) f_1(x) chi(x))(sum_(y in G) f_2(y) chi(y)) \
+      &= h(f_1) h(f_2).
+    $
+    So $h in sigma(L^1(G))$. For any $f in L^1(G)$ and $g in G$, we have
+    $
+      (Phi(h))(g)=h(delta_g) = sum_(x in G) delta_g (x) chi(x) = chi(g).
+    $
+    So $Phi(h) = chi$. This shows $Phi$ is surjective.
+
+    Finally we show $Phi$ is continuous. For any net $(h_i)_(i in I)$ in $sigma(L^1(G))$ such that $h_i --> h$ in $sigma(L^1(G))$, we need to show $Phi(h_i) --> Phi(h)$ in $op("Hom")_(Grp)(G,CC^times)$. For any $g in G$, we have
+    $
+      abs((Phi(h_i) - Phi(h))(g)) = |chi_(h_i)(g) - chi_h(g)| = |h_i (delta_g) - h (delta_g)| --> 0.
+    $
+    This shows $Phi$ is continuous.  We still need to show 
+    $
+      Phi^(-1):op("Hom")_(Grp)(G,CC^times)&-->sigma(L^1(G))\
+      chi &arrow.bar.long (f arrow.bar.long sum_(g in G) f(g) chi(g))
+    $
+    
+     is continuous. For any net $(chi_i)_(i in I)$ in $op("Hom")_(Grp)(G,CC^times)$ such that $chi_i --> chi$ in $op("Hom")_(Grp)(G,CC^times)$, we need to show $Phi^(-1)(chi_i) --> Phi^(-1)(chi)$ in $sigma(L^1(G))$. For any $f in L^1(G)$, we have
+    $
+      abs(Phi^(-1)(chi_i)(f) - Phi^(-1)(chi)(f)) &= abs(sum_(g in G) f(g) chi_i (g) - sum_(g in G) f(g) chi(g)) \
+      &= abs(sum_(g in G) f(g) (chi_i (g) - chi(g))) <= norm(f) norm(chi_i - chi)_(op("op")) --> 0.
+    $
+    This shows $Phi^(-1)$ is continuous.
 ]
 
 
