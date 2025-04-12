@@ -1622,7 +1622,3 @@ functional* on $A$ is a nonzero Banach algebra homomorphism $h:A -> CC$. The set
     This shows $Phi^(-1)$ is continuous.
 ]
 
-
-#pagebreak()
-
-= Appendix <appendix>
