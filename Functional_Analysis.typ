@@ -1,6 +1,6 @@
 
-#import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
-#import "@preview/cetz:0.3.4"
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
+#import "@preview/cetz:0.4.0"
 #import "@local/math-notes:0.3.0": *
 #import "@preview/xarrow:0.3.1": xarrow
 
@@ -28,12 +28,17 @@
 
 
 #let injlim = $limits(limits(lim)_(xarrow(#v(-50em), width: #1.8em)))$
-#let projlim = $limits(limits(lim)_(xarrow(sym:arrow.l.long, #v(-50em), width: #1.8em)))$
+#let projlim = $limits(limits(lim)_(xarrow(sym: arrow.l.long, #v(-50em), width: #1.8em)))$
 
 #let topdual(X) = $#X^(')$
 #let kk = $bb(k)$
 
 #let Grp = $sans("Grp")$
+
+#let scr(it) = text(
+  features: ("ss01",),
+  box($cal(it)$),
+)
 
 = Topological Vector Spaces <topological-vector-spaces>
 == Basic notions
@@ -55,8 +60,9 @@ We often write TVS for topological vector space.
   This category is denoted by $sans("TVS")_𝕜$ or $𝕜"-"sans("TopVect")$.
 ]
 
+Let $X$ be a topological vector space over a topological field $𝕜$. Then $X$ is a topological group with respect to the addition operation. And the topology on $X$ is completely determined by any neighborhood basis at 0.
 
-#proposition()[Topological Field Induces Topological Vector Space][
+#proposition[Topological Field Induces Topological Vector Space][
   Let $𝕜$ be a topological field and $V$ be a (merely algebraic) $𝕜$-vector space. Suppose
   $
     phi: V -->^(tilde) product_(i in I) 𝕜
@@ -66,7 +72,7 @@ We often write TVS for topological vector space.
 
 
 #definition[Absorb][
-  Suppose $𝕜 = RR "or" CC$. Let $X$ be a topological $𝕜$-vector space and $A$, $B$ be two subsets of $X$. We say $A$ #strong[absorb] $B$ if there exists a real number $r>0$ such that for any scalar $lambda  in 𝕜$ with $|lambda| > r$, we have
+  Suppose $𝕜 = RR "or" CC$. Let $X$ be a topological $𝕜$-vector space and $A$, $B$ be two subsets of $X$. We say $A$ #strong[absorb] $B$ if there exists a real number $r>0$ such that for any scalar $lambda in 𝕜$ with $|lambda| > r$, we have
   $
     B subset.eq lambda A= {lambda x mid(|) x in A}.
   $
@@ -80,6 +86,8 @@ We often write TVS for topological vector space.
 #definition[von Neumann Bounded Set][
   Suppose $𝕜 = RR "or" CC$. Let $X$ be a topological $𝕜$-vector space. A subset $S$ of $X$ is called a #strong[von Neumann bounded set] if $S$ is absorbed by every neighborhood of $0$.
 ]<von-neumann-bounded-set>
+
+
 
 
 === Locally Convex Topological Vector Spaces
@@ -111,7 +119,7 @@ We often write TVS for topological vector space.
 #definition[Seminorm][
   Given a vector space $X$ over $𝕜 = bb(R) upright("or") bb(C)$. A *seminorm* on $X$ is a mapping $p : X arrow.r bb(R)$ which satisfies the following conditions:
 
-  + (absolute homogeneity): $forall x in X ,  forall lambda in 𝕜$, $p(lambda x)= abs(lambda) p(x)$,
+  + (absolute homogeneity): $forall x in X , forall lambda in 𝕜$, $p(lambda x)= abs(lambda) p(x)$,
 
   + (triangle inequality): $forall x , y in X$, $p(x + y) lt.eq p(x) + p(y)$.
 ]
@@ -120,12 +128,71 @@ We often write TVS for topological vector space.
   We can show nonnegativity: $forall x in X$, $p(x) gt.eq 0$ and $p(x)=0$.
 ]
 
-#definition[Seminorm-induced Topology][
-  Let $X$ be a vector space and $p:X -> RR$ be a seminorm on $X$. The #strong[seminorm-induced topology] on $X$ is the topology induced by the canonical pseudometric
+#definition[Seminorm-induced Pseudometric][
+  Let $X$ be a vector space over $𝕜 = bb(R) upright("or") bb(C)$ and $p:X -> RR$ be a seminorm on $X$. The #strong[seminorm-induced pseudometric] on $X$ is the function
   $
-    d(x,y) = p(x-y) ,quad forall x,y in X.
+    d(x,y) = p(x-y),quad forall x,y in X.
   $
+  The topology induced by this pseudometric is called the seminorm-induced topology on $X$.
 ]
+
+
+#definition[Seminorm-induced Topology][
+  Let $X$ be a vector space over $𝕜 = bb(R) upright("or") bb(C)$ and $(p_alpha)_(alpha in A)$ be a family of seminorms on $X$. The #strong[seminorm-induced topology] on $X$ is the initial topology with respect to the family of seminorms $(p_alpha)_(alpha in A)$, i.e. the weakest topology on $X$ such that all seminorms $p_alpha:X -> RR$ are continuous.
+]
+
+#lemma[][
+  Let $X$ be a vector space over $𝕜 = bb(R) upright("or") bb(C)$ and $p$ is a family of seminorms on $X$. Then
+  + For any $x_0 in X$ and any $epsilon>0$,
+    $
+      B(x_0,epsilon) := {x in X mid(|) p (x-x_0) < epsilon}
+    $
+    is a convex subset of $X$.
+  + For any $epsilon>0$,
+    $
+      B(0,epsilon) := {x in X mid(|) p (x) < epsilon}
+    $
+    is a balanced, and absorbing subset of $X$.
+]
+#proof[
+  + Convexity: For any $x_1, x_2 in B(x_0,epsilon)$, for any $t in [0,1]$, we have
+    $
+      p(t x_1 + (1-t)x_2 - x_0) & = p(t (x_1 - x_0) + (1-t)(x_2 - x_0)) \
+                                & <= t p(x_1 - x_0) + (1-t)p(x_2 - x_0) \
+                                & < t epsilon + (1-t)epsilon            \
+                                & = epsilon.
+    $
+
+  + - Balancedness: For any $lambda in 𝕜$ with $|lambda| <= 1$, we have
+      $
+        p(lambda x) & = |lambda| p(x) \
+                    & <= p(x)         \
+                    & < epsilon,
+      $
+      which implies $lambda x in B(0,epsilon)$.
+
+    - Absorbingness: For any $x in X$, we can take $r = p(x) / epsilon$. Then for any $lambda in 𝕜$ with $|lambda| > r$, we have
+      $
+        p(1/lambda x) & = abs(1/lambda) p(x) \
+                      & < p(x)/r             \
+                      & = epsilon.
+      $
+      which implies $1/lambda x in B(0,epsilon)$. Thus $x=lambda (1/lambda x) in lambda B(0,epsilon)$.
+]
+
+#proposition[Properties of Seminorm-induced Topology][
+  Let $X$ be a vector space over $𝕜 = bb(R) upright("or") bb(C)$ and $(p_alpha)_(alpha in A)$ be a family of seminorms on $X$. Then
+
+  + The topology on $X$ induced by $(p_alpha)_(alpha in A)$ is a locally convex topology.
+
+  + If $p:X -> RR$ be a seminorm on $X$. Then $p$ is continuous with respect to the seminorm-induced topology on $X$.
+
+  + If $p:X -> RR$ be a seminorm on $X$. The topology on $X$ induced by $p$ is the topology induced by the canonical pseudometric
+    $
+      d(x,y) = p(x-y) ,quad forall x,y in X.
+    $
+]
+
 
 
 
@@ -156,6 +223,70 @@ A locally convex topological vector space has a bounded neighborhood of 0 if and
   A locally convex TVS is a Fréchet space if and only if it is metrizable by a complete translation-invariant metric.
 ]
 
+#example[Weighted Sequence Space][
+  Let $W_op("seq")$ be the linear space of all sequences of complex numbers. Then $W_op("seq")$ is a Fréchet space with the metric
+  $
+    d(x,y) = sum_(n=1)^oo 1 / (2^n) (|x_n - y_n|) / (1+|x_n-y_n|).
+  $
+  The convergence in this metric is equivalent to the convergence of each coordinate, i.e.
+  $
+    x^((k))=(x^((k))_1, x^((k))_2, x^((k))_3, dots.c ) --> x=(x_1,x_2,x_3,dots.c )
+  $
+  if and only if $x^((k))_n --> x_n$ for all $n in ZZ_(>=1)$.
+]
+#proof[
+  First we show that $d$ is a metric. It is easy to see that $d$ is symmetric and positive definite. We need to show that $d$ satisfies the triangle inequality. Note the function $t |-> t/(1+t)$ is increasing on $[0,oo)$. For any $x,y,z in W_op("seq")$, we have
+  $
+    d(x,y) & = sum_(n=1)^oo 1 / (2^n) (|x_n - y_n|) / (1+|x_n-y_n|)                                                         \
+           & = sum_(n=1)^oo 1 / (2^n) (|x_n - z_n|+|z_n-y_n|) / (1+|x_n - z_n|+|z_n-y_n|)                                   \
+           & <= sum_(n=1)^oo 1 / (2^n) (|x_n - z_n|) / (1+|x_n-z_n|) + sum_(n=1)^oo 1 / (2^n) (|z_n - y_n|) / (1+|z_n-y_n|) \
+           & = d(x,z) + d(z,y).
+  $
+  Next we show the equivalence of convergence. Suppose $lim_(n->oo) d(x^((k)),x) = 0$. Now fix $n in ZZ_(>=1)$. Then for any $epsilon > 0$, there exists $N in ZZ_(>=1)$ such that for all $k >= N$,
+  $
+    d(x^((k)),x) < 1 / (2^n) epsilon / (1+epsilon).
+  $
+  Thus by the monotonicity of the function $t |-> t/(1+t)$, we have
+  $
+    & 1 / (2^n) (|x^((k))_n - x_n|) / (1+|x^((k))_n-x_n|)<=d(x^((k)),x)< 1 / (2^n) epsilon / (1+epsilon)==> |x^((k))_n - x_n| < epsilon,
+  $
+  which implies $lim_(k->oo) x^((k))_n = x_n$.
+
+  Conversely, suppose $lim_(k->oo) x^((k))_n = x_n$ for all $n in ZZ_(>=1)$. For any $epsilon > 0$, there exists $M in ZZ_(>=1)$ such that for all $n > M$,
+  $
+    sum_(m=n)^(oo) 1 / 2^m < epsilon.
+  $
+
+  For each $n in [1,M] inter ZZ$, pick $N_n in ZZ_(>=1)$ so that for all $k>= N_n$, $|x^((k))_n - x_n|<epsilon$. Let $N=max {M,N_1,dots.c,N_M}$. Note
+  $
+    t / (1+t)<=t,quad forall t in RR_(>=0).
+  $
+  For any $k >= N$,
+  $
+    d(x^((k)),x) &= sum_(n=1)^oo 1 / (2^n) (|x^((k))_n - x_n|) / (1+|x^((k))_n-x_n|)\
+    &= sum_(n=1)^N 1 / (2^n) (|x^((k))_n - x_n|) / (1+|x^((k))_n-x_n|)+sum_(n=N+1)^oo 1 / (2^n) (|x^((k))_n - x_n|) / (1+|x^((k))_n-x_n|)\
+    &<= sum_(n=1)^N 1 / (2^n) |x^((k))_n - x_n| + sum_(n=N+1)^oo 1 / (2^n) \
+    &< sum_(n=1)^N epsilon / (2^n) + epsilon \
+    &< 2 epsilon.
+  $
+  This implies $lim_(k->oo) d(x^((k)),x) = 0$. Thus the convergence in the metric $d$ is equivalent to the convergence of each coordinate.
+
+  Finally, to prove completeness, let $(x^((k)))_(k>=1)$ be a Cauchy sequence in $d$. Then for any $epsilon>0$ and for each fixed $n$, there exists $M$ such that for all $j,l>= M$,
+  $
+    d(x^((l)),x^((j))) < 1 / (2^n) epsilon / (1+epsilon).
+  $
+  Since
+  $
+    1 / (2^n) (|x^((l))_n - x^((j))_n|) / (1+|x^((l))_n-x^((j))_n|) <= d(x^((l)),x^((j))) < 1 / (2^n) epsilon / (1+epsilon)==> |x^((l))_n - x^((j))_n| < epsilon,
+  $
+  we deduce that $(x^((k))_n)_(k>=1)$ is Cauchy in $CC$, hence converges to some $x_n$. Define $x=(x_n)$. The equivalence above yields
+  $
+    lim_(k->oo) d(x^((k)),x) = 0.
+  $
+  Therefore $W_op("seq")$ is complete. Combined with metrizability by $d$ and translation invariance, this shows $W_op("seq")$ is a Fréchet space.
+]
+
+
 == Continuous Dual Space
 
 #definition[Non-degenerate Bilinear Form][
@@ -173,24 +304,24 @@ A locally convex topological vector space has a bounded neighborhood of 0 if and
 #definition[Weak Topology with respect to a Pairing][
   Let $X$ and $Y$ be topological vector spaces over a field $bb(k)$ and $(X, Y, b)$ be a dual pairing. The #strong[weak topology on $X$] is the weakest topology on $X$ such that for any $y in Y$, the functional
   $
-    X &--> bb(k) \
+    X & --> bb(k)             \
     x & arrow.long.bar b(x,y)
   $
-  is continuous. The weak topology on $X$ is denoted by $tau(X,Y,b)$.
+  is continuous. The weak topology on $X$ is denoted by $tau(X, Y, b)$.
 
   Similarly, the #strong[weak topology on $Y$] is the weakest topology on $Y$ such that for any $x in X$, the functional
   $
-    Y &--> bb(k) \
+    Y & --> bb(k)             \
     y & arrow.long.bar b(x,y)
   $
-  is continuous. The weak topology on $Y$ is denoted by $tau(Y,X,b)$.
+  is continuous. The weak topology on $Y$ is denoted by $tau(Y, X, b)$.
 ]
 
 #proposition[Weak Topology can be Induced by a Family of Seminorms][
-  Let $(X,Y,b)$ be a dual pairing. Then $(X,tau(X,Y,b))$ is a locally convex TVS and the weak topology on $X$ is determined by a family of seminorms $(p_y)_(y in Y)$ defined by
+  Let $(X,Y,b)$ be a dual pairing. Then $(X,tau(X, Y, b))$ is a locally convex TVS and the weak topology on $X$ is determined by a family of seminorms $(p_y)_(y in Y)$ defined by
   $
-    p_y: X &--> RR \
-    x & arrow.long.bar |b(x,y)|.
+    p_y: X & --> RR                   \
+         x & arrow.long.bar |b(x,y)|.
   $
 ]<weak-topology-can-be-induced-by-a-family-of-seminorms>
 #proof[
@@ -198,7 +329,7 @@ A locally convex topological vector space has a bounded neighborhood of 0 if and
 
   + Triangle inequality. For any $x_1, x_2 in X$, we have
     $
-      p_y(x_1+x_2)=abs(b(x_1 +  x_2, y)) = abs(b(x_1, y) +  b(x_2, y)) <= |b(x_1, y)| + abs(b(x_2, y)) = p_y (x_1) + p_y (x_2).
+      p_y(x_1+x_2)=abs(b(x_1 + x_2, y)) = abs(b(x_1, y) + b(x_2, y)) <= |b(x_1, y)| + abs(b(x_2, y)) = p_y (x_1) + p_y (x_2).
     $
 
   + Absolute homogeneity. For any $x in X$ and $lambda in 𝕜$, we have
@@ -221,15 +352,15 @@ A locally convex topological vector space has a bounded neighborhood of 0 if and
 #definition[Weak and Weak$zws^*$ Topologies][
   Let $X$ be a topological vector space over a field $𝕜= RR "or" CC$. Then $(X',X, angle.l dot, dot angle.r)$ where
   $
-    angle.l dot, dot angle.r : X' times X &-> 𝕜 \
-    (f,x) & arrow.long.bar angle.l f, x angle.r = f(x)
+    angle.l dot, dot angle.r : X' times X & -> 𝕜                                       \
+                                    (f,x) & arrow.long.bar angle.l f, x angle.r = f(x)
   $
   is called the *canonical pairing* of $X$.
 
-  - The *weak$zws^*$ topology on $X'$* is $tau(X',X,angle.l dot, dot angle.r)$, which is the weakest topology on $X'$ such that for any $x in X$, the functional
+  - The *weak$zws^*$ topology on $X'$* is $tau(X', X, angle.l dot, dot angle.r)$, which is the weakest topology on $X'$ such that for any $x in X$, the functional
     $
-      angle.l dot, x angle.r:X' &--> kk\
-      f &arrow.long.bar f(x)
+      angle.l dot, x angle.r:X' & --> kk              \
+                              f & arrow.long.bar f(x)
     $
     is continuous. That is, the weak$zws^*$ topology is the initial topology on $X'$ with respect to $(angle.l dot, x angle.r)_(x in X)$, i.e. the pointwise convergence topology on $X'$.
 
@@ -238,10 +369,10 @@ A locally convex topological vector space has a bounded neighborhood of 0 if and
       {angle.l dot, x angle.r^(-1)(U) in 2^X' mid(|) U "is open in" kk "and" x in X}.
     $
 
-  - The *weak topology on $X'$* is $tau(X',X'',angle.l dot, dot angle.r)$, which is the weakest topology on $X'$ such that for any $v in X''$, the functional
+  - The *weak topology on $X'$* is $tau(X', X'', angle.l dot, dot angle.r)$, which is the weakest topology on $X'$ such that for any $v in X''$, the functional
     $
-      angle.l v, dot angle.r:X' &--> bb(k)\
-      f &arrow.long.bar v(f)
+      angle.l v, dot angle.r:X' & --> bb(k)           \
+                              f & arrow.long.bar v(f)
     $
     is continuous.
 
@@ -262,8 +393,8 @@ A locally convex topological vector space has a bounded neighborhood of 0 if and
 
   + #enum-label(<weak-topology-characterization:seminorm>) The topology induced by a family of seminorms $(op("ev")_x)_(x in X)$ defined by
     $
-      op("ev")_x: X' &--> kk \
-      f & arrow.long.bar abs(f(x)).
+      op("ev")_x: X' & --> kk                    \
+                   f & arrow.long.bar abs(f(x)).
     $
 ]<weak-topology-characterization>
 #proof[
@@ -371,15 +502,15 @@ is the open ball centered at $f$ with radius $epsilon$ with respect to the semin
 #definition[Spaces of $C^k$-differentiable Functions on Open Sets][
   Let $U$ be an non-empty open subset of $bb(R)^d$. Suppose $k in ZZ_(>=0)union {oo}$. The #strong[space of $C^k$-continuous functions] $C^k (U)$ is the topological vector space consisting of all $k$-times continuously differentiable functions on $U$. For any non-empty compact subset of $K$ of $U$, any integer $m in ZZ$ with $0<=m<=k$ and any multi-index $alpha in ZZ_(>=0)^n$ with length $|alpha|<=m$, we can define seminorms
   $
-    p_(alpha , K,1)(f)&=sup_(x in K) |partial^alpha f(x)|\
-    p_(m , K,2)(f)&=sup_(|beta| <= m) p_(alpha , K,1)(f)\
-    p_(m , K,3)(f)&=sup_(x in K\ |beta| <= m) |partial^alpha f(x)|\
-    p_(m , K,4)(f)&=sup_(x in K) (sum_(|beta|<=m) |partial^beta f(x)|)
+    p_(alpha , K,1)(f) & =sup_(x in K) |partial^alpha f(x)|                  \
+        p_(m , K,2)(f) & =sup_(|beta| <= m) p_(alpha , K,1)(f)               \
+        p_(m , K,3)(f) & =sup_(x in K\ |beta| <= m) |partial^alpha f(x)|     \
+        p_(m , K,4)(f) & =sup_(x in K) (sum_(|beta|<=m) |partial^beta f(x)|)
   $
   on $C^k (U)$. Each of the following families of seminorms
   $
-    &{p_(alpha , K,1) mid(|)K subset.eq U "is compact" , alpha in ZZ_(>=0)^n "satisfies" |alpha|<=k}\
-    &{p_(m , K,j) mid(|) K subset.eq U "is compact" ,m in ZZ_(>=0) "satisfies" m<=k}, quad j in {2,3,4}
+    & {p_(alpha , K,1) mid(|)K subset.eq U "is compact" , alpha in ZZ_(>=0)^n "satisfies" |alpha|<=k}    \
+    & {p_(m , K,j) mid(|) K subset.eq U "is compact" ,m in ZZ_(>=0) "satisfies" m<=k}, quad j in {2,3,4}
   $
   generates the same topology on $C^k (U)$, which makes $C^k (U)$ a locally convex TVS.
 ]
@@ -439,12 +570,14 @@ is the open ball centered at $f$ with radius $epsilon$ with respect to the semin
     C_c^(oo)(U) = injlim_(K in cal(K)) C^(oo)(K).
   $
   The universal property of $C_c^(oo)(U)$ is that for any locally convex TVS $X$ and any family of continuous linear maps $(T_j:C^(oo)(K_j) -> X)_(j in J)$, there exists a unique continuous linear map $tilde(T):C^(oo)_c (U) -> X$ such that the following diagram commutes
-  #commutative_diagram($
-    &X&\
-    & C^(oo)_c (U) edge("u",#left,tilde(T), "-->")&\
-    C^(oo)(K_i)edge("ru",#right, op("ext")_(K_i arrow.hook U),->)edge("ruu",T_(i),->) edge("rr",#right, op("ext")_(K_i arrow.hook K_j),->)&& C^(oo)(K_j) edge("lu",#left,op("ext")_(K_j arrow.hook U),->)edge("luu",T_j,->)
-  $)
-  As a set, $C^(oo)_c (U)=union.big _(j in J) C^(oo)(K_j)$ is the union of all $C^(oo)(K_j)$ with $K_j in cal(K)$.
+  #commutative_diagram(
+    $
+      &X&\
+      & C^(oo)_c (U) edge("u", #left, tilde(T), "-->")&\
+      C^(oo)(K_i)edge("ru", #right, op("ext")_(K_i arrow.hook U), ->)edge("ruu", T_(i), ->) edge("rr", #right, op("ext")_(K_i arrow.hook K_j), ->)&& C^(oo)(K_j) edge("lu", #left, op("ext")_(K_j arrow.hook U), ->)edge("luu", T_j, ->)
+    $,
+  )
+  As a set, $C^(oo)_c (U)=union.big_(j in J) C^(oo)(K_j)$ is the union of all $C^(oo)(K_j)$ with $K_j in cal(K)$.
   The topology on $C^(oo)_c (U)$ is the finest locally convex topology that makes all of the inclusion maps $op("ext")_(K_j subset.eq U):C^(oo) (K_j) arrow.hook C_c^(oo) (U)$ continuous.
 ]
 
@@ -490,8 +623,8 @@ is the open ball centered at $f$ with radius $epsilon$ with respect to the semin
 #definition[Weak$zws^*$ Topology on the Space of Distributions][
   Let $U$ be an non-empty open subset of $bb(R)^d$. The #strong[weak$zws^*$ topology] on the space of distributions $D'(U)$ is the weakest topology on $D'(U)$ such that for any $f in C^(oo)_c (U)$, the functional
   $
-    D'(U) &--> bb(k) \
-    T & arrow.long.bar T(f)
+    D'(U) & --> bb(k)           \
+        T & arrow.long.bar T(f)
   $
   is continuous.
 ]
@@ -587,7 +720,95 @@ $
 
 If $f$ and $g$ are locally integrable functions on $X$, then $T_f=T_g$ if and only if $f=g$ almost everywhere.
 
+== Vector-Valued Integrals
 
+#definition[Weakly Integrable][
+  Suppose $(X,Sigma, mu)$ is a measure space and $Y$ is a locally convex topological vector space over $𝕜 = bb(R) upright("or") bb(C)$. A function $f:X -> Y$ is said to be *weakly integrable* if for any $phi in Y'$, we have
+  $
+    phi compose f in L^1 (X, Sigma, mu).
+  $
+  In this case, if there is a vector $y in Y$ such that for any $phi in Y'$,
+  $
+    integral_X phi compose f dif mu = phi (y),
+  $
+  then we say that $y$ is the *integral* of $f$ over $X$ and denote it by
+  $
+    integral_X f dif mu := y.
+  $
+]
+#remark[
+  If the integral of $f$ exists, then it is unique. Assume there are two vectors $y_1, y_2 in Y$ such that for any $phi in Y'$, we have
+  $
+    phi(y_1) = integral_X phi compose f dif mu = phi(y_2) ==>phi(y_1 - y_2) = 0.
+  $
+  Suppose $y_1 eq.not y_2$. Then $y_1 - y_2 != 0$. Since $Y$ is locally convex, we know continuous linear functionals separate points. So we can find $psi in Y'$ with $psi(y_1 - y_2) != 0$, contradicting
+  $
+    phi(y_1 - y_2) = 0, quad forall phi in Y'.
+  $
+  Hence $y_1 = y_2$.
+]
+
+#proposition[Integrals Commute with Bounded Linear Operators][
+  Let $(X,Sigma, mu)$ be a measure space and $Y,Z$ be locally convex topological vector spaces over $𝕜 = bb(R) upright("or") bb(C)$. Suppose $f:X -> Y$ is weakly integrable and the integral $integral_X f dif mu$ exists. Let $T: Y-> Z$ be a bounded linear operator. Then
+
+  - The function $T compose f:X -> Z$ is weakly integrable.
+
+  - The integral of $T compose f$ exists and is given by
+  $
+    integral_X T compose f dif mu = T(integral_X f dif mu).
+  $
+]
+#proof[
+  Given any $phi.alt in Z'$, since $T$ is coutinous, we have $phi.alt compose T in Y'$. Since $f:X->Y$ is weakly integrable, we have
+  $
+    phi.alt compose (T compose f)=(phi.alt compose T) compose f in L^1 (X, Sigma, mu),
+  $
+  which implies that $T compose f$ is weakly integrable. Furthermore, define
+  $
+    z:=T(integral_X f dif mu).
+  $
+  For any $phi.alt in Z'$, we have
+  $
+    phi.alt(z) = phi.alt(T(integral_X f dif mu)) = (phi.alt compose T)(integral_X f dif mu) = integral_X (phi.alt compose T) compose f dif mu = integral_X phi.alt compose (T compose f) dif mu.
+  $
+  Thus the integral of $T compose f$ exists and is equal to $z$.
+
+]
+
+#proposition[][
+  Let $X$ be a locally compact Hausdorff space and $mu$ be a Radon measure on $X$. Let $Y$ be a Fréchet space over $𝕜 = bb(R) upright("or") bb(C)$. Suppose $f:X -> Y$ is a continuous function with compact support. Then
+
+  - $f$ is weakly integrable.#h(1fr)
+
+  - The integral $integral_X f dif mu$ exists and
+    $
+      integral_X f dif mu in overline(op("span")_𝕜 (f(X))) .
+    $
+
+  - If $Y$ is a Banach space, then
+    $
+      norm(integral_X f dif mu)_(Y) <= integral_X norm(f(x))_(Y) dif mu(x).
+    $
+
+]
+
+#proposition[][
+  Let $X$ be a locally compact Hausdorff space and $mu$ be a Radon measure on $X$. Let $Y$ be a Banach space over $𝕜 = bb(R) upright("or") bb(C)$. Suppose $g in L^1(X, scr(B)(X), mu)$ is a $𝕜$-valued function, and $f:X -> Y$ is bounded continuous function. Then
+
+  - $g f$ is weakly integrable.#h(1fr)
+
+  - The integral $integral_X g f dif mu$ exists and
+    $
+      integral_X g f dif mu in overline(op("span")_𝕜 (f(X))) .
+    $
+
+  - 
+   $
+    norm(integral_X g f dif mu)_(Y) <= sup_(x in X)norm(f(x)) integral_X |g| dif mu.
+   $
+
+
+]
 
 
 #pagebreak()
@@ -602,9 +823,9 @@ If $f$ and $g$ are locally integrable functions on $X$, then $T_f=T_g$ if and on
 
   + (positive definiteness): $forall x in X ,||x|| gt.eq 0$ and $||x|| = 0 arrow.l.r.double x = 0$,
 
-  + (absolute homogeneity): $forall x in X ,  forall lambda in 𝕜 , ||lambda x||= lr(|lambda|) norm(x)$,
+  + (absolute homogeneity): $forall x in X , forall lambda in 𝕜 , ||lambda x||= lr(|lambda|) norm(x)$,
 
-  + (triangle inequality): $forall x , y in X ,  ||x + y|| lt.eq ||x|| + ||y||$.
+  + (triangle inequality): $forall x , y in X , ||x + y|| lt.eq ||x|| + ||y||$.
 
   A #strong[normed vector space] or a #strong[normed space] is a pair $(X , bar.v.double dot.op bar.v.double)$ where $X$ is a $𝕜$-vector space and $bar.v.double dot.op bar.v.double$ is a norm on $X$.
 ]
@@ -633,9 +854,9 @@ If $f$ and $g$ are locally integrable functions on $X$, then $T_f=T_g$ if and on
 
   + (positive definiteness): $forall y in Y , ||y||_Y = ||y|| >= 0$ and $||y||_Y = 0 <==> ||y|| = 0 <==> y = 0$.
 
-  + (absolute homogeneity): $forall y in Y ,  forall lambda in 𝕜 , ||lambda y||_Y = ||lambda y|| = lambda||y|| = lambda||y||_Y$.
+  + (absolute homogeneity): $forall y in Y , forall lambda in 𝕜 , ||lambda y||_Y = ||lambda y|| = lambda||y|| = lambda||y||_Y$.
 
-  + (triangle inequality): $forall y_1 , y_2 in Y ,  norm(y_1 + y_2)_Y = norm(y_1 + y_2)<= ||y_1|| + ||y_2|| = ||y_1||_Y + ||y_2||_Y$.
+  + (triangle inequality): $forall y_1 , y_2 in Y , norm(y_1 + y_2)_Y = norm(y_1 + y_2)<= ||y_1|| + ||y_2|| = ||y_1||_Y + ||y_2||_Y$.
 ]
 
 #proposition[Topology of Sub Normed Space is Subspace Topology][
@@ -680,7 +901,7 @@ If $f$ and $g$ are locally integrable functions on $X$, then $T_f=T_g$ if and on
   $
   For any $x in X$, we have $norm(x+N)_(X\/N) <= norm(x-0) = norm(x)$. So the quotient norm is finite.
 
-  + (positive definiteness): for any $x in X $, since $N$ is a closed,
+  + (positive definiteness): for any $x in X$, since $N$ is a closed,
     $
       norm(x+N)_(X\/N) = 0 <==> d(x,N) = 0 <==> x in N <==> x+N = N.
     $
@@ -692,18 +913,18 @@ If $f$ and $g$ are locally integrable functions on $X$, then $T_f=T_g$ if and on
 
   + (triangle inequality): for any $x_1, x_2 in X$,
     $
-      norm(x_1 + x_2 + N)_(X\/N) &= inf_(z in N) norm(x_1 + x_2 - z) \
-      &= inf_(z_1,z_2 in N) norm(x_1 + x_2 - (z_1+z_2))\
-      &<= inf_(z_1,z_2 in N) norm(x_1 - z_1) + norm(x_2 - z_2) \
-      & = inf_(z_1 in N) norm(x_1 - z_1) + inf_(z_2 in N) norm(x_2 - z_2)\
-      & = norm(x_1 + N)_(X\/N) + norm(x_2 + N)_(X\/N).
+      norm(x_1 + x_2 + N)_(X\/N) & = inf_(z in N) norm(x_1 + x_2 - z)                                \
+                                 & = inf_(z_1,z_2 in N) norm(x_1 + x_2 - (z_1+z_2))                  \
+                                 & <= inf_(z_1,z_2 in N) norm(x_1 - z_1) + norm(x_2 - z_2)           \
+                                 & = inf_(z_1 in N) norm(x_1 - z_1) + inf_(z_2 in N) norm(x_2 - z_2) \
+                                 & = norm(x_1 + N)_(X\/N) + norm(x_2 + N)_(X\/N).
     $
 ]
 
 
 
 
-=== Bounded Linear Operators <bounded-linear-operators>
+== Bounded Linear Operators <bounded-linear-operators>
 #definition[Bounded Linear Operator][
   Let $(X,bar.v.double dot.op bar.v.double_X)$ and $(Y,bar.v.double dot.op bar.v.double_Y)$ be normed spaces over $𝕜 = RR upright("or") CC$ and $T:X -> Y$ be a linear map. We say $T$ is a #strong[bounded linear operator] if $T$ is a bounded linear operator between topological vector spaces $X$ and $Y$.
 
@@ -725,22 +946,22 @@ If $f$ and $g$ are locally integrable functions on $X$, then $T_f=T_g$ if and on
 #definition[Operator Norm][
   Let $T:X -> Y$ be a bounded linear operator between normed spaces $(X,bar.v.double dot.op bar.v.double_X)$ and $(Y,bar.v.double dot.op bar.v.double_Y)$. The #strong[operator norm] of $T$ is defined as
   $
-    norm(T)_(op("op")) = inf lr({ c>=0  : norm(T x)_Y <= c norm(x)_X " for all" x in X}).
+    norm(T)_(op("op")) = inf lr({ c>=0 : norm(T x)_Y <= c norm(x)_X " for all" x in X}).
   $
 ]<operator_norm>
 
 #proposition[Equivalent Definition of Operator Norm][
   Let $T:X -> Y$ be a bounded linear operator between normed spaces $(X,bar.v.double dot.op bar.v.double_X)$ and $(Y,bar.v.double dot.op bar.v.double_Y)$. Then the operator norm of $T$ can be equivalently defined as
   $
-    norm(T)_(op("op")) &= inf lr({ c>=0  : norm(T x)_Y <= c norm(x)_X " for all" x in X})\
-    & = sup lr({ norm(T x)_Y : x in X "and" norm(x)_X <= 1})\
-    & = sup lr({ norm(T x)_Y : x in X "and" norm(x)_X < 1})\
-    & = sup lr({ norm(T x)_Y : x in X "and" norm(x)_X in {0, 1}})\
+    norm(T)_(op("op")) & = inf lr({ c>=0 : norm(T x)_Y <= c norm(x)_X " for all" x in X}) \
+                       & = sup lr({ norm(T x)_Y : x in X "and" norm(x)_X <= 1})           \
+                       & = sup lr({ norm(T x)_Y : x in X "and" norm(x)_X < 1})            \
+                       & = sup lr({ norm(T x)_Y : x in X "and" norm(x)_X in {0, 1}})      \
   $
   Furthermore, if we assume $dim X>=1$, then we have
   $
-    norm(T)_(op("op")) &= sup lr({ norm(T x)_Y : x in X "and" norm(x)_X = 1})\
-    &= sup lr({ norm(T x)_Y/norm(x)_X : x in X  "and" x eq.not 0}).
+    norm(T)_(op("op")) & = sup lr({ norm(T x)_Y : x in X "and" norm(x)_X = 1})         \
+                       & = sup lr({ norm(T x)_Y/norm(x)_X : x in X "and" x eq.not 0}).
   $
 ]
 
@@ -754,9 +975,41 @@ If $f$ and $g$ are locally integrable functions on $X$, then $T_f=T_g$ if and on
   - If $X=Y$, then $B(X, X)$ is a Banach algebra under composition.
 
   - If $X$ is a Hilbert space, then $B(X, X)$ is a $C^*$-algebra.
+]<spaces-of-bounded-linear-operators>
+
+
+#definition[Norm Topology on $B(X)$][
+  Let $X$ be a normed space. The #strong[norm topology] on the space of bounded linear operators $B(X)$ is the topology induced by the operator norm
+  $
+    norm(T)_(op("op")) = sup_(x in X \ norm(x)<=1) norm(T x).
+  $
+  According to @spaces-of-bounded-linear-operators, the space $B(X)$ is a Banach algebra with respect to this norm.
 ]
 
-=== Continous Dual Space <continuous-dual-space>
+
+#definition[Strong Operator Topology on $B(X)$][
+  Let $X$ be a normed space. Then given any $x in X$, we can define a seminorm
+  $
+    p_x: B(X) & -> [0, oo)     \
+            T & --> norm(T x).
+  $
+
+  The *strong operator topology* on the space of bounded linear operators $B(X)$ is the topology induced by the family of seminorms
+  $
+    { p_x | x in X}.
+  $
+
+  The space $B(X)$ is a locally convex TVS with respect to this topology.
+]
+
+#definition[Linear Isometry][
+  Given two normed vector spaces $(X,bar.v.double dot.op bar.v.double_X)$ and $(Y,bar.v.double dot.op bar.v.double_Y)$, a linear map $T:X -> Y$ is called a *linear isometry* if it preserves the norm, that is,
+  $
+    norm(T x)_Y = norm(x)_X, quad forall x in X.
+  $
+]<linear-isometry>
+
+== Continous Dual Space <continuous-dual-space>
 
 #definition[Strong Dual Space][
   Let $(X,bar.v.double dot.op bar.v.double)$ be a normed space over $𝕜 = RR upright("or") CC$. The #strong[strong dual space] of $X$ is the Banach space $X'=B(X,𝕜)$ with the operator norm
@@ -778,7 +1031,7 @@ If $f$ and $g$ are locally integrable functions on $X$, then $T_f=T_g$ if and on
 = Banach Spaces <banach-spaces>
 == Basic Notions
 #definition[Banach Space][
-  A normed space is called a #strong[Banach space] if it is a complete metric space with respect to the metric induced by the norm.
+  A normed space is called a *Banach space* if it is a complete metric space with respect to the metric induced by the norm.
 ]<banach-space>
 
 #proposition[Closed Subspace of Banach Space forms Banach Space][
@@ -799,10 +1052,10 @@ $L^p$ spaces $thin lr((1 lt.eq p lt.eq oo))$ are Banach spaces defined on some m
   is a map defined as
   $
     norm(f)_p := cases(
-    (integral_Omega abs(f)^p dif mu)^(min{1/p, 1})\, &quad 0 < p < infinity,
-    , #h(0em)
-    inf thin {M: abs(f) < M "a.e."}\, &quad p = infinity
-  )
+      (integral_Omega abs(f)^p dif mu)^(min{1/p, 1})\, & quad 0 < p < infinity,
+      , #h(0em)
+      inf thin {M: abs(f) < M "a.e."}\, &quad p = infinity
+    )
   $
   Then
   $
@@ -819,10 +1072,8 @@ $L^p$ spaces $thin lr((1 lt.eq p lt.eq oo))$ are Banach spaces defined on some m
   is a subspace of $cal(L)^p (Omega , cal(F) , mu)$ and
   $ L^p (Omega , cal(F) , mu) := cal(L)^p (Omega , cal(F) , mu) \/ cal(N) $
   is a Banach space with the norm
-  $
-    bar.v.double dot.op bar.v.double_p : L^p (Omega , cal(F) , mu) & arrow.r \[ 0 , oo \) ,\
-    f + cal(N) & arrow.r.bar ||f||_p .
-  $ For
+  $ bar.v.double dot.op bar.v.double_p : L^p (Omega , cal(F) , mu) & arrow.r \[ 0 , oo \) , \
+                                                      f + cal(N) & arrow.r.bar ||f||_p . $ For
   simplicity, we can identify $f$ with its equivalence class $f + cal(N)$.
 
 ]<Banach-spaces-Lp>
@@ -845,6 +1096,21 @@ $L^p$ spaces $thin lr((1 lt.eq p lt.eq oo))$ are Banach spaces defined on some m
 
 ]
 
+#corollary[
+  Let $(Omega , Sigma , mu)$ be a measure space and let $p , q, r in [1 , oo]$.
+
+  + Suppose that $1 / p + 1 / q = 1/r$, $f in L^p (Omega , Sigma , mu)$ and $g in L^q (Omega , Sigma , mu)$. Then the product $f g$ is in $L^r (Omega , Sigma , mu)$ and
+    $
+      norm(f g)_r <= norm(f)_p norm(g)_q.
+    $
+
+  + Suppose that $1 / p + 1 / q + 1 / r = 1$. If $f in L^p (Omega , Sigma , mu)$ and $g in L^q (Omega , Sigma , mu)$, $h in L^r (Omega , Sigma , mu)$, then the product $f g h$ is in $L^1 (Omega , Sigma , mu)$ and
+    $
+      norm(f g h)_1 <= norm(f)_p norm(g)_q norm(h)_r.
+    $
+]
+
+
 For classical functional analysis, we mainly focus on the following two types of $L^p$ spaces.
 
 #example[$L^p lr((E))$ spaces ][
@@ -855,7 +1121,7 @@ For classical functional analysis, we mainly focus on the following two types of
   is a map defined as
   $
     norm(f)_p ≔ cases(
-      (integral_E |f|^p dif x)^(1/p)\,& quad 1 <= p < infinity \
+      (integral_E |f|^p dif x)^(1/p)\, & quad 1 <= p < infinity \
       , #h(0em)
       inf thin lr({M: |f| <= M "a.e."})\,& quad p = infinity
     )
@@ -867,19 +1133,17 @@ For classical functional analysis, we mainly focus on the following two types of
   The second type is defined on $lr((bb(N) , 2^(bb(N)) , mu_c))$ where $2^(bb(N))$ is the power set of $bb(N)$ and $mu_c$ is the counting measure
   $
     mu_c lr((A)) = cases(
-    delim: "{",
-    lr(|A|)& upright(" if ") A upright(" is finite")\, ,
-    , oo   & upright(" if ") A upright(" is infinite").
-  )
+      delim: "{",
+      lr(|A|) & upright(" if ") A upright(" is finite")\,,
+      , oo & upright(" if ") A upright(" is infinite").
+    )
   $
   $L^p lr((bb(N) , cal(P) lr((bb(N))) , mu_c))$ are often written as $ell^p$. In this case, the underlying set of $ell^p$ consists all real number sequences $x = lr((x_1 , x_2 , dots.h.c))$ such that $||x||_p < oo$ where $bar.v.double dot.op bar.v.double_p : bb(R)^(bb(N)) arrow.r lr([0 , oo])$ is defined as $ ||x||_p := cases(
-  delim: "{",
-  lr((thin sum_(i = 1)^oo lr(|x_i|)^p d x))^(1 / p)\,
-    & quad 1 lt.eq p < oo,
-  , #h(0em) limits(sup)_(i gt.eq 1) thin lr(|x_i|)\,
+    delim: "{",
+    lr((thin sum_(i = 1)^oo lr(|x_i|)^p d x))^(1 / p)\, & quad 1 lt.eq p < oo,
+    , #h(0em) limits(sup)_(i gt.eq 1) thin lr(|x_i|)\,
     & quad p = oo .,
-
-) $
+  ) $
 ] <ellp-spaces>
 
 
@@ -909,7 +1173,7 @@ For classical functional analysis, we mainly focus on the following two types of
   $
   Suppose $M$ is an integer such that ${1, 2, dots, N} subset.eq {sigma(1), sigma(2), dots, sigma(M)}$. Then
   $
-    norm(limits(sum)_(k=1)^(M) x_(sigma(k)) - limits(sum)_(k=1)^(N) x_k) &=norm(sum_(k in {sigma(1), dots, sigma(M)}-{1,  dots, N}) x_k) \
+    norm(limits(sum)_(k=1)^(M) x_(sigma(k)) - limits(sum)_(k=1)^(N) x_k) &=norm(sum_(k in {sigma(1), dots, sigma(M)}-{1, dots, N}) x_k) \
     &<= sum_(k in {sigma(1), dots, sigma(M)}-{1, dots, N}) norm(x_k)\
     & <= sum_(k=N+1)^oo norm(x_k) \
     & < epsilon / 2.
@@ -931,6 +1195,10 @@ For classical functional analysis, we mainly focus on the following two types of
 #proof[
   Applying the comparison test for series of nonnegative real numbers, we see $limits(sum)_(k=1)^(oo) norm(x_k)$ is convergent. Therefore, the series $limits(sum)_(k=1)^(oo) x_k$ is absolutely convergent.
 ]
+
+
+
+
 == Main Theorems
 
 #theorem[Open Mapping Theorem][
@@ -968,8 +1236,8 @@ For classical functional analysis, we mainly focus on the following two types of
   $
   then there exists a linear functional $F:X -> bb(k)$ such that
   $
-    F(y) &= f(y), quad forall y in Y,\
-    |F(x)| &<= p(x), quad forall x in X.
+      F(y) & = f(y), quad forall y in Y,  \
+    |F(x)| & <= p(x), quad forall x in X.
   $
 ]
 
@@ -991,21 +1259,218 @@ For classical functional analysis, we mainly focus on the following two types of
   for any complex-valued functions $f,g in L^2 (Omega , cal(F) , mu)$.
 ]
 
+== Basic Constructions
+=== Direct Sums <direct-sums>
+#definition[Direct Sum of Hilbert Spaces][
+  Let $(H_alpha)_(alpha in A)$ be a family of Hilbert spaces indexed by some index set $A$. The *direct sum* of the family $(H_alpha)_(alpha in A)$ is the vector space
+  $
+    H := {(x_alpha)_(alpha in A) in product_(alpha in A) H_alpha mid(|) sum_(alpha in A) norm(x_alpha)_(H_alpha)^2 < oo}
+  $
+  equipped with the inner product
+  $
+    angle.l x \, y angle.r = sum_(alpha in A) angle.l x_alpha \, y_alpha angle.r_(H_alpha), quad forall x , y in H,
+  $
+  where $x = (x_alpha)_(alpha in A)$ and $y = (y_alpha)_(alpha in A)$ are elements of $H$ with $x_alpha , y_alpha in H_alpha$ for each $alpha in A$.
+  The direct sum $H$ is a Hilbert space with respect to this inner product.
+]
+
+== Orthogonal Projection
+#proposition[][
+  Let $H$ be a Hilbert space and $M subset.eq H$ be a closed convex subset of $H$. Then for any $x in H$, there exists a unique $x_0 in M$ such that
+  $
+    norm(x - x_0)_H = inf_(y in M) norm(x - y)_H.
+  $
+]
+#proof[
+  Denote $d:=inf_(y in M) norm(x - y)_H$.
+  - *Existence*: For any $x in H$, we can find a sequence $(y_n)_(n=1)^(oo)$ in $M$ such that
+    $
+      lim_(n-> oo) norm(x - y_n)_H = d.
+    $
+    Next we show that the sequence $(y_n)_(n=1)^(oo)$ is Cauchy. By parallelogram law, we have
+    $
+      norm((y_m - x )+ (y_n - x))_H^2 + norm(y_m - y_n)_H^2 = 2 norm(y_m - x)_H^2 + 2 norm(y_n- x)_H^2 ,
+    $
+    which implies
+    $
+      norm(y_m - y_n)_H^2 & = 2 norm(y_m - x)_H^2 + 2 norm(y_n - x)_H^2 - norm((y_m - x )+ (y_n - x))_H^2 \
+                          & = 2 norm(y_m - x)_H^2 + 2 norm(y_n - x)_H^2 - 4 norm((y_m+y_n)/2 - x)_H^2 .
+    $
+    Since $M$ is convex, we have
+    $
+      (y_m + y_n)/2 in M ==> norm((y_m+y_n)/2 - x)_H^2>= d.
+    $
+    Therefore, we have
+    $
+      norm(y_m - y_n)_H^2 <= 2 norm(y_m - x)_H^2 + 2 norm(y_n - x)_H^2 - 4 d^2.
+    $
+    For any $epsilon > 0$, there exists $N in ZZ_(>=1)$ such that for all $n> N$,
+    $
+      abs(norm(y_n - x)_H^2 - d^2) < epsilon^2 / 4.
+    $
+    In particular, for all $m, n > N$, we have
+    $
+      norm(y_m - x)_H^2 <= d^2 + epsilon^2 / 4, quad norm(y_n - x)_H^2 <= d^2 + epsilon^2 / 4.
+    $
+    Thus we get
+    $
+      norm(y_m - y_n)_H^2 <= 2 (d^2 + epsilon^2 / 4) + 2 (d^2 + epsilon^2 / 4) - 4 d^2 = epsilon^2==> norm(y_m - y_n)_H <= epsilon,
+    $
+    which shows that $(y_n)_(n=1)^(oo)$ is a Cauchy sequence. Since $H$ is complete, $(y_n)_(n=1)^(oo)$ is convergent. Take
+    $
+      x_0 = lim_(n-> oo) y_n
+    $
+    Since $M$ is closed, we have $x_0 in M$ and
+    $
+      norm(x - x_0)_H = lim_(n-> oo) norm(x - y_n)_H = d.
+    $
+
+  - *Uniqueness*: Suppose there exists another point $x_1 in M$ such that
+    $
+      norm(x - x_1)_H = norm(x - x_0)_H = d.
+    $
+    Again by the parallelogram law, we have
+    $
+      norm(x_0 - x_1)_H^2<= 2 norm(x_0 - x)_H^2 + 2 norm(x_1 - x)_H^2 - 4d^2=0.
+    $
+    This implies $x_0 = x_1$.
+]
+#lemma[][
+  Let $H$ be a Hilbert space and $M subset.eq H$ be a closed subspace of $H$. Suppose $x in H$ and $x_0 in M$ are such that
+  $
+    norm(x - x_0)_H = inf_(y in M) norm(x - y)_H.
+  $
+  Then we have
+  $
+    ( x - x_0 ) perp M.
+  $
+]<orthogonal-decomposition-lemma>
+#proposition[Orthogonal Decomposition Theorem][
+  Let $H$ be a Hilbert space. Let $M$ be a closed linear subspace of $H$. Then we have
+  $
+    H = M plus.circle M^perp.
+  $
+]
+#proof[
+  For any $x in H$, we can find a unique $x_0 in M$ such that
+  $
+    norm(x - x_0)_H = inf_(y in M) norm(x - y)_H.
+  $
+  By @orthogonal-decomposition-lemma, we have $(x - x_0) perp M$. Therefore, we can write
+  $
+    x = x_0 + (x - x_0).
+  $
+  Since $M$ is closed, we have $x_0 in M$ and $x - x_0 in M^perp$. This shows that every element of $H$ can be written as a sum of an element in $M$ and an element in $M^perp$.
+
+  Suppose there exists another decomposition
+  $
+    x= x_0 + (x - x_0)= y + z
+  $
+  where $y in M$ and $z in M^perp$. On the one hand, we have $y - x_0 in M$. On the other hand, we have
+  $
+    y - x_0 = (x-x_0) - z in M^perp.
+  $
+  Thus there must be $y-x_0=0$. This implies $y=x_0$ and $z=x-x_0$. This shows that the decomposition is unique.
+
+]
+
+#proposition[][
+  Let $H$ be a Hilbert space and $M$ be a linear subspace of $H$. Then we have
+
+  + $E^(perp perp) = overline(E)$. If $E$ is closed, then $E^(perp perp)=E$.
+
+  + $E$ is dense in $H$ if and only if $E^perp = {0}$.
+]<orthogonal-complementation-properties>
+
+
 == Adjoint Operator
+
+
+
+#proposition[][
+  Let $H$ be an inner product space over $𝕜 = RR upright("or") CC$. Then for any $y in H$, the map
+  $
+    f:=angle.l dot , y angle.r : H & --> CC                     \
+                                 x & --> angle.l x \, y angle.r
+  $
+  is a bounded linear functional on $H$. And we have $norm(f)_(op("op")) = norm(y)_H$.
+]<inner-product-as-functional>
+
+
+#proof[
+  By the definition of inner product, we see that $f$ is linear. For any $x in H$, we have
+  $
+    |f(x)| = |angle.l x \, y angle.r| <= norm(x)_H norm(y)_H.
+  $
+  Therefore, $f$ is a bounded linear functional on $H$ and $norm(f)_(op("op")) <= norm(y)_H$.
+
+  - If $y=0$, then $f(x)=0$ for all $x in H$, so $norm(f)_(op("op")) = 0 = norm(y)_H$.
+
+  - If $y eq.not 0$, then we can take $y_0=y/norm(y)_H$. So we have $norm(y_0)_H = 1$ and
+    $
+      abs(f(y_0))=1/norm(y)_H abs(f(y)) =1/norm(y)_H angle.l y\, y angle.r= norm(y)_H,
+    $
+    which implies $norm(f)_(op("op")) >= norm(y)_H$. Therefore, we have $norm(f)_(op("op")) = norm(y)_H$.
+
+]
+
+If $H$ is a Hilbert space, then the converse
+of the above proposition holds, which is known as the Riesz representation theorem.
+
+#theorem[Riesz Representation Theorem][
+  Let $H$ be a Hilbert space over $𝕜 = RR upright("or") CC$. Then for any bounded linear functional $f:H -> 𝕜$, there exists a unique $y in H$ such that
+  $
+    f(x) = angle.l x \, y angle.r, quad forall x in H.
+  $
+  Furthermore, we have $norm(f)_(op("op")) = norm(y)_H$.
+]<riesz-representation-theorem>
+#proof[
+  Let $f$ be a bounded linear functional on $H$. If $f=0$, then we can take $y=0$ and the theorem holds trivially. If $f eq.not 0$, let $M = ker (f)$ be the kernel of $f$. Then $M$ is a closed subspace of $H$. By @orthogonal-decomposition-lemma, we have
+  $
+    H = M plus.circle M^perp.
+  $
+  Since $f eq.not 0$, we have $M=ker f eq.not H$, which implies $M$ is not dense in $H$. By @orthogonal-complementation-properties, we have $M^perp eq.not {0}$. Therefore, we can choose a $z in M^perp$ such that $norm(z)_H = 1$. Since $M inter M^perp={0}$, we see $z in.not M$ and accordingly $f(z) eq.not 0$. Now we can take
+  $
+    y = overline(f(z)) z in M^perp.
+  $
+  Note for any $x in H$,
+  $
+    f(f(x)/f(z) z -x)= f(x)/f(z) f(z) - f(x) = 0==> f(x)/f(z) z -x in M.
+  $
+  We can check that for any $x in H$,
+  $
+    f(x) & = f(x) angle.l z \, z angle.r                                         \
+         & = f(x)/f(z) f(z ) angle.l z \, z angle.r                              \
+         & = lr(angle.l f(x)/f(z) z \, overline(f(z)) z angle.r)                 \
+         & = lr(angle.l f(x)/f(z) z -x \, y angle.r) +lr(angle.l x \, y angle.r) \
+         & = angle.l x \, y angle.r.
+  $
+  To show the uniqueness of $y$, suppose there exists another $y' in H$ such that
+  $
+    f(x) = angle.l x \, y' angle.r, quad forall x in H.
+  $
+  Then we have
+  $
+    angle.l x \, y - y' angle.r = f(x) - f(x) = 0, quad forall x in H.
+  $
+  This means $y - y'=0$ and therefore $y = y'$.
+  Finally, by @inner-product-as-functional, we have $norm(f)_(op("op")) = norm(y)_H$.
+]
+
 #definition[Adjoint Operator][
   Let $X$ and $Y$ be Hilbert spaces and $T:X -> Y$ be a bounded linear operator. For any $y in Y$, the map
   $
-    angle.l T (dot) \, y angle.r:X&-->CC\
-    x &--> angle.l T x \, y angle.r
+    angle.l T (dot) \, y angle.r:X & -->CC                        \
+                                 x & --> angle.l T x \, y angle.r
   $
-  is a bounded linear functional on $X$. By the Riesz representation theorem, there exists a unique $T^* y in X$ such that
+  is a bounded linear functional on $X$. By the #link(<riesz-representation-theorem>)[Riesz representation theorem], there exists a unique $T^* y in X$ such that
   $
     angle.l T x \, y angle.r = angle.l x \, T^* y angle.r, quad forall x in X.
   $
   This gives a map
   $
-    T^* : Y &--> X\
-    y &--> T^* y
+    T^* : Y & --> X     \
+          y & --> T^* y
   $
   which is a bounded linear operator. We call $T^*$ the #strong[adjoint] of $T$.
 
@@ -1064,15 +1529,15 @@ For classical functional analysis, we mainly focus on the following two types of
 #remark[
   For any $x,y in A$, we have
   $
-    norm(x y + N)_(A\/N) &= inf_(z in N) norm(z-x y ) \
-    &= inf_( z' + x y in N) norm(z')\
-    &=inf_( z' in -x y +N) norm(z')\
-    &=inf_( -z' in x y +N) norm(-z')\
-    &=inf_( z in x y +N) norm(z)\
-    &=inf_(u in x+N\ v in y+N) norm(u v) \
-    &<= inf_(u in x+N\ v in y+N) norm(u) norm(v) \
-    &= inf_(u in x+N) norm(u) inf_(v in y+N) norm(v) \
-    &= norm(x+N)_(A\/N) norm(y+N)_(A\/N).
+    norm(x y + N)_(A\/N) & = inf_(z in N) norm(z-x y)                      \
+                         & = inf_( z' + x y in N) norm(z')                 \
+                         & =inf_( z' in -x y +N) norm(z')                  \
+                         & =inf_( -z' in x y +N) norm(-z')                 \
+                         & =inf_( z in x y +N) norm(z)                     \
+                         & =inf_(u in x+N\ v in y+N) norm(u v)             \
+                         & <= inf_(u in x+N\ v in y+N) norm(u) norm(v)     \
+                         & = inf_(u in x+N) norm(u) inf_(v in y+N) norm(v) \
+                         & = norm(x+N)_(A\/N) norm(y+N)_(A\/N).
   $
 ]
 
@@ -1096,23 +1561,23 @@ For classical functional analysis, we mainly focus on the following two types of
   If $G$ is discrete, then the Haar measure $mu$ is counting measure up to a constant. In this case, define the point-mass $delta_(1_G):G->CC$ as
   $
     delta_(1_G) (x) = cases(
-    1 & "if" x = 1_G,\
-    0 & "if" x eq.not 1_G.
-  )
+      1 & "if" x = 1_G, \
+      0 & "if" x eq.not 1_G.
+    )
   $
   Then for any $f in L^1(G, mu)$ and $x in G$, we have
   $
-    (f * delta_(1_G))(x) &= integral_G f(y) delta_(1_G)(y^(-1) x) dif mu(y) \
-    & = sum_(y in G) f(y) delta_(1_G)(y^(-1) x) \
-    & = sum_(y in G) f(y) bold(1)_(y = x) \
-    & = f(x)
+    (f * delta_(1_G))(x) & = integral_G f(y) delta_(1_G)(y^(-1) x) dif mu(y) \
+                         & = sum_(y in G) f(y) delta_(1_G)(y^(-1) x)         \
+                         & = sum_(y in G) f(y) bold(1)_(y = x)               \
+                         & = f(x)
   $
   and
   $
-    (delta_(1_G) * f)(x) &= integral_G delta_(1_G)(y) f(y^(-1) x) dif mu(y) \
-    & = sum_(y in G) delta_(1_G)(y) f(y^(-1) x) \
-    & = sum_(y in G) bold(1)_(y = 1_G) f(y^(-1) x) \
-    & = f(x).
+    (delta_(1_G) * f)(x) & = integral_G delta_(1_G)(y) f(y^(-1) x) dif mu(y) \
+                         & = sum_(y in G) delta_(1_G)(y) f(y^(-1) x)         \
+                         & = sum_(y in G) bold(1)_(y = 1_G) f(y^(-1) x)      \
+                         & = f(x).
   $
   This means $delta_(1_G)$ is the unity of $L^1(G, mu)$.
 ]
@@ -1187,8 +1652,8 @@ For classical functional analysis, we mainly focus on the following two types of
 
   + The map
     $
-      eta:A^(times)&-->A^(times)\
-      x &--> x^(-1)
+      eta:A^(times) & -->A^(times) \
+                  x & --> x^(-1)
     $
     is a homeomorphism.
 ]<Banach-spaces-unit-group-is-open>
@@ -1199,12 +1664,12 @@ For classical functional analysis, we mainly focus on the following two types of
     $
     So we can write
     $
-      norm((x - y)^(-1)-x^(-1)) &=norm(x^(-1) limits(sum)_(n=0)^(oo) (y x^(-1))^n-x^(-1))\
-      &= norm(x^(-1) limits(sum)_(n=1)^(oo) (y x^(-1))^n) \
-      &<= norm(x^(-1)) limits(sum)_(n=1)^(oo) (norm(y) norm(x^(-1)))^n\
-      &<= norm(x^(-1))^2 norm(y)limits(sum)_(n=1)^(oo) (norm(y) norm(x^(-1)))^(n-1)\
-      &<= norm(x^(-1))^2 norm(y)limits(sum)_(n=1)^(oo) 1 / 2^(n-1)\
-      &<= 2 norm(x^(-1))^2 norm(y).
+      norm((x - y)^(-1)-x^(-1)) & =norm(x^(-1) limits(sum)_(n=0)^(oo) (y x^(-1))^n-x^(-1))                     \
+                                & = norm(x^(-1) limits(sum)_(n=1)^(oo) (y x^(-1))^n)                           \
+                                & <= norm(x^(-1)) limits(sum)_(n=1)^(oo) (norm(y) norm(x^(-1)))^n              \
+                                & <= norm(x^(-1))^2 norm(y)limits(sum)_(n=1)^(oo) (norm(y) norm(x^(-1)))^(n-1) \
+                                & <= norm(x^(-1))^2 norm(y)limits(sum)_(n=1)^(oo) 1 / 2^(n-1)                  \
+                                & <= 2 norm(x^(-1))^2 norm(y).
     $
 
   + Suppose $x in A^(times)$. For any $z in A$ such that $norm(z-x) < 1/2 norm(x^(-1))^(-1)$, let $y = x - z$. Then we have
@@ -1326,7 +1791,7 @@ In an involutive ring we have $1^*=1$.
 
 #definition[Spectrum of a Commutative Unital Banach Algebra][
   Let $A$ be a commutative unital Banach algebra. A *multiplicative
-functional* on $A$ is a nonzero Banach algebra homomorphism $h:A -> CC$. The set of all multiplicative functionals on $A$ is called the *spectrum* of $A$ and is denoted by $sigma(A)$. If not specified, $sigma(A)$ is always equipped with the subspace topology as a subset of the continuous dual space $A'$ endowed with the weak$zws^*$ topology.
+  functional* on $A$ is a nonzero Banach algebra homomorphism $h:A -> CC$. The set of all multiplicative functionals on $A$ is called the *spectrum* of $A$ and is denoted by $sigma(A)$. If not specified, $sigma(A)$ is always equipped with the subspace topology as a subset of the continuous dual space $A'$ endowed with the weak$zws^*$ topology.
 ]
 
 #proposition[][
@@ -1344,7 +1809,7 @@ functional* on $A$ is a nonzero Banach algebra homomorphism $h:A -> CC$. The set
     $
 ]<properties-of-multiplicative-functionals>
 #proof[
-  + Since $h eq.not 0$, there exists $x in A$ such that $h(x) eq.not 0$. Then $h(x) = h(1_A x) = h(1_A) h(x) $. So we have $h(1_A) = 1$.
+  + Since $h eq.not 0$, there exists $x in A$ such that $h(x) eq.not 0$. Then $h(x) = h(1_A x) = h(1_A) h(x)$. So we have $h(1_A) = 1$.
 
   + For any $lambda in CC$, $h(lambda 1_A) = lambda h(1_A) = lambda$. So $h$ is surjective.
 
@@ -1393,8 +1858,8 @@ functional* on $A$ is a nonzero Banach algebra homomorphism $h:A -> CC$. The set
 #proposition[][
   Let $A$ be a commutative unital Banach algebra and $h in sigma(A)$. Then
   $
-    ker: sigma(A)&--> op("MaxSpec")(A)\
-    h &arrow.bar.long ker h = {h in sigma(A) mid(|) h(x) = 0}
+    ker: sigma(A) & --> op("MaxSpec")(A)                                   \
+                h & arrow.bar.long ker h = {h in sigma(A) mid(|) h(x) = 0}
   $
   is bijection.
 ]<bijection-between-spectrum-and-maximal-spectrum>
@@ -1419,8 +1884,8 @@ functional* on $A$ is a nonzero Banach algebra homomorphism $h:A -> CC$. The set
 #definition[Gelfand Transform][
   Let $A$ be a commutative unital Banach algebra. The #strong[Gelfand transform] of $A$ is the unital Banach algebra homomorphism
   $
-    Gamma_A:A&-->C(sigma(A))\
-    x &arrow.bar.long (hat(x):h arrow.bar.long h(x))
+    Gamma_A:A & -->C(sigma(A))                                \
+            x & arrow.bar.long (hat(x):h arrow.bar.long h(x))
   $
   where $C(sigma(A))$ is the set of all continuous complex-valued functions on $sigma(A)$.
 ]
@@ -1472,20 +1937,20 @@ functional* on $A$ is a nonzero Banach algebra homomorphism $h:A -> CC$. The set
 #proof[
   + Since
     $
-      x in.not A^(times) & <==>  x in frak(m) "for some" frak(m) in op("MaxSpec")(A)\
+      x in.not A^(times) & <==> x in frak(m) "for some" frak(m) in op("MaxSpec")(A)\
       & <==> x in ker h "for some" h in sigma(A) quad "(by" #ref(<bijection-between-spectrum-and-maximal-spectrum>)")"\
-    & <==>  h(x)=0 "for some" h in sigma(A) \
-    & <==>  hat(x)(h)=0 "for some" h in sigma(A),
+      & <==> h(x)=0 "for some" h in sigma(A) \
+      & <==> hat(x)(h)=0 "for some" h in sigma(A),
     $
     we see $x in A^(times)$ $<==>$ $hat(x)$ never vanishes on $sigma(A)$.
 
   + From (i) we have
     $
-      lambda in sigma(x) & <==> lambda 1_A - x in.not A^(times) \
-      & <==> h(lambda 1_A - x) = 0 "for some" h in sigma(A) \
-      & <==> lambda - h(x) = 0 "for some" h in sigma(A) \
-      & <==> lambda = hat(x)(h) "for some" h in sigma(A) \
-      & <==> lambda in op("im") hat(x).
+      lambda in sigma(x) & <==> lambda 1_A - x in.not A^(times)                \
+                         & <==> h(lambda 1_A - x) = 0 "for some" h in sigma(A) \
+                         & <==> lambda - h(x) = 0 "for some" h in sigma(A)     \
+                         & <==> lambda = hat(x)(h) "for some" h in sigma(A)    \
+                         & <==> lambda in op("im") hat(x).
     $
 
   + According to the definition of spectral radius, utilizing the fact that $op("im") hat(x) = sigma(x)$, we have
@@ -1498,11 +1963,12 @@ functional* on $A$ is a nonzero Banach algebra homomorphism $h:A -> CC$. The set
 #proposition[][
   Suppose $G$ is a discrete group and $mu$ be the counting measure on $G$. Define
   $
-    delta_g:G&-->CC\
-    a &arrow.bar.long cases(gap: #0.5em,
-    1 & "if" x = g\, ,
-    0 & "if" x eq.not g.
-  )
+    delta_g:G & -->CC \
+            a & arrow.bar.long cases(
+                  gap: #0.5em,
+                  1 & "if" x = g\,,
+                  0 & "if" x eq.not g.
+                )
   $
   Then
 
@@ -1521,19 +1987,19 @@ functional* on $A$ is a nonzero Banach algebra homomorphism $h:A -> CC$. The set
 
   + $sigma(L^1(G))$ is an abelian group we have the following topological group isomorphism
     $
-      Phi:sigma(L^1(G)) &--> op("Hom")_(Grp)(G,CC^(times))\
-      h &arrow.bar.long (g arrow.bar.long h(delta_g)),
+      Phi:sigma(L^1(G)) & --> op("Hom")_(Grp)(G,CC^(times))             \
+                      h & arrow.bar.long (g arrow.bar.long h(delta_g)),
     $
     where $op("Hom")_(Grp)(G,CC^(times))$ is endowed with pointwise multiplication and pointwise convergence topology, that is, the initial topology with respect to the evaluation maps $(op("ev")_g)_(g in G)$ which are defined as
     $
-      op("ev")_g:op("Hom")_(Grp)(G,CC^(times))&-->CC^(times)\
-      chi & arrow.bar.long chi(g).
+      op("ev")_g:op("Hom")_(Grp)(G,CC^(times)) & -->CC^(times)          \
+                                           chi & arrow.bar.long chi(g).
     $
 
   + The Gelfand transform on $L^1(G)$ is given by
     $
-      Gamma:L^1(G)&-->C(sigma(L^1(G)))\
-      f=(f(g))_(g in G) &arrow.bar.long (hat(x): h arrow.bar.long sum_(n in G) f(g) h(delta_g)).
+           Gamma:L^1(G) & -->C(sigma(L^1(G)))                                                     \
+      f=(f(g))_(g in G) & arrow.bar.long (hat(x): h arrow.bar.long sum_(n in G) f(g) h(delta_g)).
     $
 
 ]
@@ -1550,7 +2016,8 @@ functional* on $A$ is a nonzero Banach algebra homomorphism $h:A -> CC$. The set
 
   + For any $f in L^1(G)$ and $epsilon > 0$, we can assume the support of $f$ is $op("supp") f = {g_n}_(n in ZZ_(>=1))$. Define $E_n={g_1,g_2,...,g_n}$, $G_n=op("supp") f-E_n$. Note that
     $
-      f(a) - sum_(n=1)^(N) f(g_n) delta_(g_n)(a)= cases(gap: #0.9em,
+      f(a) - sum_(n=1)^(N) f(g_n) delta_(g_n)(a)= cases(
+        gap: #0.9em,
         0 & " if" a in E_N,
         f(a) & " otherwise"
       ) quad = f(a)bold(1)_(G_N)(a).
@@ -1572,11 +2039,11 @@ functional* on $A$ is a nonzero Banach algebra homomorphism $h:A -> CC$. The set
 
     Next we show $Phi$ preserves multiplication. For any $h_1 , h_2 in sigma(L^1(G))$, we have
     $
-      (Phi(h_1) Phi(h_2))(g) &= (chi_(h_1) chi_(h_2))(g) \
-      &= chi_(h_1)(g) chi_(h_2)(g) \
-      &= h_1(delta_g) h_2(delta_g) \
-      &= (h_1 h_2)(delta_g) \
-      &= Phi(h_1 h_2)(g).
+      (Phi(h_1) Phi(h_2))(g) & = (chi_(h_1) chi_(h_2))(g)  \
+                             & = chi_(h_1)(g) chi_(h_2)(g) \
+                             & = h_1(delta_g) h_2(delta_g) \
+                             & = (h_1 h_2)(delta_g)        \
+                             & = Phi(h_1 h_2)(g).
     $
     To show $Phi$ is injective, suppose $h_1 , h_2 in sigma(L^1(G))$ such that $Phi(h_1) = Phi(h_2)$. Then for any $g in G$, we have
     $
@@ -1584,19 +2051,18 @@ functional* on $A$ is a nonzero Banach algebra homomorphism $h:A -> CC$. The set
     $
     Since ${delta_g}_(g in G)$ spans a dense subspace of $L^1(G)$ and $h_1 , h_2$ are continuous, we have $h_1 = h_2$.
 
-    Then we show $Phi$ is surjective. Let $chi in op("Hom")_(Grp)(G,CC^times)$. Define 
+    Then we show $Phi$ is surjective. Let $chi in op("Hom")_(Grp)(G,CC^times)$. Define
     $
-      h: L^1(G)&-->CC\
-      f &arrow.bar.long sum_(g in G) f(g) chi(g).
+      h: L^1(G) & -->CC                                    \
+              f & arrow.bar.long sum_(g in G) f(g) chi(g).
     $
     This is a multiplicative functional: for any $f_1, f_2 in L^1(G)$, we have
     $
-      h(f_1 * f_2) & = sum_(g in G) (f_1 * f_2)(g) chi(g)\
-      & = sum_(g in G) sum_(x in G) f_1(x) f_2(x^(-1) g) chi(g)\
-      & = sum_(x in G) sum_(y in x^(-1)G)  f_1(x) f_2(y) chi(x y) quad("let" x^(-1) g=y)\
-  
-      &=(sum_(x in G) f_1(x) chi(x))(sum_(y in G) f_2(y) chi(y)) \
-      &= h(f_1) h(f_2).
+      h(f_1 * f_2) & = sum_(g in G) (f_1 * f_2)(g) chi(g)                                            \
+                   & = sum_(g in G) sum_(x in G) f_1(x) f_2(x^(-1) g) chi(g)                         \
+                   & = sum_(x in G) sum_(y in x^(-1)G) f_1(x) f_2(y) chi(x y) quad("let" x^(-1) g=y) \
+                   & =(sum_(x in G) f_1(x) chi(x))(sum_(y in G) f_2(y) chi(y))                       \
+                   & = h(f_1) h(f_2).
     $
     So $h in sigma(L^1(G))$. For any $f in L^1(G)$ and $g in G$, we have
     $
@@ -1608,13 +2074,13 @@ functional* on $A$ is a nonzero Banach algebra homomorphism $h:A -> CC$. The set
     $
       abs((Phi(h_i) - Phi(h))(g)) = |chi_(h_i)(g) - chi_h(g)| = |h_i (delta_g) - h (delta_g)| --> 0.
     $
-    This shows $Phi$ is continuous.  We still need to show 
+    This shows $Phi$ is continuous. We still need to show
     $
-      Phi^(-1):op("Hom")_(Grp)(G,CC^times)&-->sigma(L^1(G))\
-      chi &arrow.bar.long (f arrow.bar.long sum_(g in G) f(g) chi(g))
+      Phi^(-1):op("Hom")_(Grp)(G,CC^times) & -->sigma(L^1(G))                                           \
+                                       chi & arrow.bar.long (f arrow.bar.long sum_(g in G) f(g) chi(g))
     $
-    
-     is continuous. For any net $(chi_i)_(i in I)$ in $op("Hom")_(Grp)(G,CC^times)$ such that $chi_i --> chi$ in $op("Hom")_(Grp)(G,CC^times)$, we need to show $Phi^(-1)(chi_i) --> Phi^(-1)(chi)$ in $sigma(L^1(G))$. For any $f in L^1(G)$, we have
+
+    is continuous. For any net $(chi_i)_(i in I)$ in $op("Hom")_(Grp)(G,CC^times)$ such that $chi_i --> chi$ in $op("Hom")_(Grp)(G,CC^times)$, we need to show $Phi^(-1)(chi_i) --> Phi^(-1)(chi)$ in $sigma(L^1(G))$. For any $f in L^1(G)$, we have
     $
       abs(Phi^(-1)(chi_i)(f) - Phi^(-1)(chi)(f)) &= abs(sum_(g in G) f(g) chi_i (g) - sum_(g in G) f(g) chi(g)) \
       &= abs(sum_(g in G) f(g) (chi_i (g) - chi(g))) <= norm(f) norm(chi_i - chi)_(op("op")) --> 0.
