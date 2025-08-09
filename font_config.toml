@@ -41,6 +41,10 @@ weight = 400
 [[fonts]]
 family_name = "Icon Design"
 
+[[fonts]]
+family_name = "Inter 18pt"
+weight = 600
+
 # math fonts
 [[fonts]]
 family_name = "New Computer Modern Math"

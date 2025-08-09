@@ -715,7 +715,7 @@ positive linear functional on $C_c \( X \)$ arises in this fashion;
 moreover, one can impose some additional regularity to ensure the uniqueness of
 the measure $mu$.
 
-#theorem[Riesz–Markov–Kakutani Representation Theorem][
+#theorem[Riesz-Markov-Kakutani Representation Theorem][
   Let $X$ be a locally compact Hausdorff space and $T$ is a positive linear functional on $C_c (X)$. Then there exists a unique Radon measure $mu$ on $(X,cal(B)(X))$ such that
 
   $
@@ -743,7 +743,7 @@ the measure $mu$.
 ]
 
 
-By the Riesz–Markov–Kakutani representation theorem, the space $C_c^0 (X)'$ can be identified with the space of Radon measures on $X$.
+By the Riesz-Markov-Kakutani representation theorem, the space $C_c^0 (X)'$ can be identified with the space of Radon measures on $X$.
 
 One particularly important class of Radon measures are those that are induced locally integrable functions. There is a bijective correspondence between locally integrable functions $f$ on $X$ and linear functionals $T_f$ on $C_c^0 (X)$ defined by
 $
@@ -813,7 +813,68 @@ If $f$ and $g$ are locally integrable functions on $X$, then $T_f=T_g$ if and on
   uniformly as $n -> oo$.
 ]
 
+#proposition[][
+  If $I in C_0(X; RR)^'$, there exist positive functionals $I^+ , I^-in C_0(X; RR)^'$ such that $I = I^+ - I^-$.
 
+
+]
+#proof[
+  Fix some $I in C_0(X; RR)^'$. If $f in C_0(X;[0, oo))$, we define
+
+  $
+    I^+: C_0(X;[0, oo)) & --> RR \
+                      f & arrow.bar.long sup {I(g) mid(|) g in C_0(X; RR), 0 <= g <= f}.
+  $
+
+  Since $abs(I(g)) <= norm(I) norm(g)_oo <= norm(I) norm(f)_oo$ for $0 <= g <= f$, and $I(0)=0$, we have $0 <= I^+(f) <= norm(I) norm(f)_oo$. We claim that $I^+$ can be extended to a linear functional in $C_0(X; RR)^'$.
+
+  Obviously $I^+(c f) = c I^+(f)$ for any $c >= 0$. Also, whenever $0 <= g_1 <= f_1$ and $0 <= g_2 <= f_2$ we have $0 <= g_1 + g_2 <= f_1 + f_2$, so that $I^+(f_1 + f_2) >= I(g_1) + I(g_2)$, and it follows that $I^+(f_1 + f_2) >= I^+(f_1) + I^+(f_2)$. On the other hand, if $0 <= g <= f_1 + f_2$, let $g_1 = min(g, f_1)$ and $g_2 = g - g_1$. Then $0 <= g_1 <= f_1$ and $0 <= g_2 <= f_2$, so $I(g) = I(g_1) + I(g_2) <= I^+(f_1) + I^+(f_2)$; therefore $I^+(f_1 + f_2) <= I^+(f_1) + I^+(f_2)$. In short, $I^+(f_1 + f_2) = I^+(f_1) + I^+(f_2)$.
+
+  Now, if $f in C_0(X; RR)$, then its positive and negative parts $f^+$ and $f^-$ are in $C_0(X; [0, oo))$, and we define $I^+(f) = I^+(f^+) - I^+(f^-)$. If also $f = g - h$ where $g, h >= 0$, then $g + f^- = h + f^+$, whence $I^+(g) + I^+(f^-) = I^+(h) + I^+(f^+)$. Thus $I^+(f) = I^+(g) - I^+(h)$, and it follows easily  that $I^+$ is linear on $C_0(X; RR)$. Moreover,
+
+  $ abs(I^+(f)) <= max(I^+(f^+), I^+(f^-)) <= norm(I) max(norm(f^+)_oo, norm(f^-)_oo) = norm(I) norm(f)_oo, $
+
+  so that $norm(I^+) <= norm(I)$.
+
+  Finally, let $I^- = I^+ - I$. Then $I^- in C_0(X; RR)^'$, and it is immediate from the definition of $I^+$ that $I^+$ and $I^-$ are positive.
+]
+
+#lemma[][
+  Any functinal $I in C_0(X, CC)^'$ is uniquely determined by its restriction  to $C_0(X, RR)$.
+]
+#proof[
+  Let $I in C_0(X, CC)^'$ be a $CC$-linear functional, and let $J:= I|_(C_0(X, RR))$ be its restriction. Every $f in C_0(X, CC)$ can be decompose as
+  $
+    f = u + i v,
+  $
+  where $u=op("Re")(f) in C_0(X; RR)$ and $v=op("Im")(f) in C_0(X; RR)$. By complex linearity of $I$, we have
+  $
+    I(f) = I(u + i v)= I(u) + i I(v)=J(u) + i J(v) = J(op("Re")(f)) + i J(op("Im")(f)), quad forall f in C_0(X, CC).
+  $
+  This shows that $I$ is uniquely determined by $J= I|_(C_0(X, RR))$.
+]
+
+#example[Space of Complex Radon Measures][
+Let $X$ be a locally compact Hausdorff space. Then the space of all complex Radon measures on $X$ is denoted as $M_("Rad")(X; CC)$. This is a Banach space with respect to the total variation norm
+$
+  ||dot.c||: M_("Rad")(X; CC) &--> [0, oo) \
+  mu & arrow.long.bar norm(mu)=|mu|(X).
+$
+]
+
+#theorem[Riesz-Markov-Kakutani Representation Theorem][
+Let $X$ be a locally compact Hausdorff space. Given any $mu in M_("Rad")(X; CC)$, we can define a continuous linear functional 
+$
+  I_mu: C_0(X; CC) &--> CC \
+  f & arrow.bar.long integral_X f dif mu.
+$
+Then the map
+$
+  Phi: M_("Rad")(X; CC) &--> C_0(X; CC)' \
+  mu & arrow.bar.long I_mu
+$
+is an isometric isomorphism.
+]
 
 == Space of Distributions
 
