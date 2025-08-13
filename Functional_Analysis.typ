@@ -39,6 +39,447 @@
 
 #let scr(it) = text(features: ("ss01",), box($cal(it)$))
 
+= Measures
+== Class of sets <class-of-sets>
+If $2^Omega$ denotes the power set of the set $Omega$ and a collection of subsets $cal(C) subset 2^Omega$, we say $cal(C)$ is defined on $Omega$.
+
+For convenience, let’s define some operations on a collection of sets $cal(C) in 2^Omega$.
+
+- Given $f : Sigma arrow.r Omega$, $f^(- 1) (cal(C)) := { f^(- 1) (A) in Sigma divides A in cal(C) }$,
+
+- Given $B subset Omega$, $B inter cal(C) := { B inter A divides A in cal(C) }$.
+
+#definition[Semiring][
+  A nonempty family of sets $cal(S)$ is called a *semiring (of sets)* if the following three statements are true for all sets $A$ and $B$,
+
+  + $diameter in cal(S)$
+
+  + $A , B in cal(S) ==> A inter B in cal(S)$
+
+  + $A , B in cal(S)$ implies $A - B = union_(i = 1)^n C_i$, where ${ C_i }_(i = 1)^n$ is a collection of pairwise disjoint sets in $cal(S)$.
+
+
+  Since condition (3) together with $cal(S) eq.not diameter$ implies that $diameter in cal(S)$, conditions (1) is actually unnecessary.
+
+]
+#definition[Ring][
+  A nonempty family of sets $cal(R)$ is called a *ring (of sets)* if it is closed under finite union and difference. That is, the following two statements are true for all sets $A$ and $B$,
+
+  + $A , B in cal(R)$ implies $A union B in cal(R)$
+
+  + $A , B in cal(R)$ implies $A - B in cal(R)$.
+] <ring-of-sets>
+A ring of sets $cal(R)$ is a ring in the context of abstract algebra with the operations intersection(multiplication) and symmetric difference(addition), where the multiplicative identity is the set $union_(A in cal(R)) A$.
+
+#definition[Semialgebra#super[\#1]][
+  A subring $cal(S)$ defined on $Omega$ is called an #strong[semialgebra] if it contains $Omega$.
+]
+
+#definition[Semialgebra#super[\#2]][
+  A collection of sets $cal(S) subset 2^Omega$ is called an #strong[semialgebra] the following two statements are true for all sets $A$ and $B$,
+
+  + $A , B in cal(S)$ implies $A inter B in cal(S)$
+
+  + $A in cal(S)$ implies $A^complement = union_(i = 1)^n C_i$, where ${ C_i }_(i = 1)^n$ is a collection of pairwise disjoint sets in $cal(S)$.
+
+]
+#example[
+  $ cal(C) equiv { ( a , b \] in bb(R) divides - oo lt.eq a lt.eq b < oo } union { (a , oo) in bb(R) divides - oo lt.eq a < oo } $ is a semialgebra on $bb(R)$.
+
+]
+#definition[Algebra#super[\#1]][
+  A #link(<ring-of-sets>)[ring] $cal(F)$ defined on $Omega$ is called an #strong[algebra (of sets)] if it contains $Omega$.
+]
+#proposition[
+  Every #link(<ring-of-sets>)[ring] is a semiring.
+]
+#proof[
+  Let $cal(R)$ be a ring. First we see $diameter = A - A in cal(R)$. Second, it is straightforward to check $ A inter B = (A union B - (A - B)) - (B - A) in cal(R) . $ Finally, it is a trivial fact that $A - B = C_1 in cal(R)$. Thus we show the ring $cal(R)$ is also a semiring.~◻
+]
+
+The following equivalent definitions of algebra are common to see.
+
+#definition[Algebra#super[\#2]][A collection of sets $cal(F) subset 2^Omega$ is called an #strong[algebra (of sets)] if
+
+  + $Omega in cal(F)$,
+
+  + $A in cal(F)$ implies $A^complement in cal(F)$,
+
+  + $A , B in cal(F)$ implies $A union B in cal(F)$.
+
+]
+An algebra of sets is an associative algebra over a field in the context of abstract algebra: it is a ring and also a vector space over the field $F_2$ of 2 elements, which makes it an $F_2$-algebra.
+
+#proposition[
+  Every algebra is a #link(<ring-of-sets>)[ring].
+]
+#proof[
+  Note it holds that $ A - B = A inter B^complement = (A^complement union B)^complement . $
+
+]
+#example[
+  Let $Omega$ be a nonempty set, and let $\# A$ denote the number of elements of a set $A subset Omega$. Then
+  $
+    cal(F) = { A subset Omega : upright(" either ") \# A upright(" is finite or ") \# A^complement upright(" is finite") }
+  $
+  is an algebra defined on $Omega$.
+]
+#definition[$sigma$-algebra][
+  A class $cal(F) subset 2^Omega$ is called a #strong[$sigma$-algebra] if it is an algebra and if it satisfies
+
+  #set enum(numbering: "(a)", start: 4)
+
+  + $A_n in cal(F)$ for $n gt.eq 1$ $arrow.r.double.long$ $union.big_(n = 1)^oo A_n in cal(F)$.
+
+]
+Under the assumption that $cal(F)$ is an algebra, condition (d) can be replaced by a weaker condition (d’), which leads to the following equivalent definition.
+
+#definition[$sigma$-algebra][
+  A class $cal(F) subset 2^Omega$ is called a #strong[$sigma$-algebra] if it is an algebra and if it satisfies
+
+  + $A_n in cal(F) , med A_n subset A_(n + 1)$ for $n gt.eq 1$ $arrow.r.double.long$ $union.big_(n = 1)^oo A_n in cal(F)$.
+
+]
+#example[
+  Let $Omega$ be a nonempty set. Then
+  $
+    cal(F) = { A subset Omega : "either" A "is a countable set or" A^complement "is a countable set" }
+  $
+  is a $sigma$-algebra defined on $Omega$.
+]
+
+
+It is easy to check the intersection of a family of $sigma$-algebras on $Omega$ is also a $sigma$-algebra. However, the union of two $sigma$-algebras may not even be an algebra. In many instances, given an arbitrary collection of subsets of $Omega$, one would like to extend it to a $sigma$-algebra by adding extra subsets of $Omega$ as few as possible. This leads to the following definition.
+
+#definition[$sigma$-algebra Generated by Sets][
+  If $cal(A) subset 2^Omega$, then the #strong[$sigma$-algebra generated by] $cal(A)$, denoted by $sigma (cal(A))$, is defined as
+  $ sigma (cal(A)) = inter.big_(cal(F) in cal(I) (cal(A))) cal(F) $ where
+  $
+    cal(I) (cal(A)) = { cal(F) : cal(A) subset cal(F) "and" cal(F) "is a" sigma "-algebra defined on" Omega }
+  $
+  is the collection of all $sigma$-algebras containing the class $cal(A)$.
+]
+Note that since the power set $2^Omega$ contains $cal(A)$ and is itself a $sigma$-algebra defined on $Omega$, the collection $cal(I) (cal(A))$ is not empty and hence, the intersection in the above definition is well defined.
+
+#definition[Borel $sigma$-algebra][
+  The #strong[Borel $sigma$-algebra] on a topological space $bb(S)$ is defined as the $sigma$-algebra generated by the collection of open sets in $bb(S)$.
+]
+#example[
+  Let $cal(B) (bb(R)^k)$ denote the Borel $sigma$-algebra on the Euclidean space $bb(R)^k$ with standard topology, $1 lt.eq k < + oo$. Then, $cal(B) (bb(R)^k) = sigma ({ A : A upright("is an open subset of") bb(R)^k })$ is also generated by each of the following classes of sets $ cal(O)_1 & = { (a_1 , b_1) times dots.h.c times (a_k , b_k) : - oo lt.eq a_i < b_i lt.eq + oo , 1 lt.eq i lt.eq k } ; \
+  cal(O)_2 & = { (- oo , x_1) times dots.h.c times (- oo , x_k) : x_i in bb(R) , 1 lt.eq i lt.eq k } ; \
+  cal(O)_3 & = { (a_1 , b_1) times dots.h.c times (a_k , b_k) : a_i , b_i in bb(Q) , a_i < b_i , 1 lt.eq i lt.eq k } ; \
+  cal(O)_4 & = { (- oo , x_1) times dots.h.c times (- oo , x_k) : x_i in bb(Q) , 1 lt.eq i lt.eq k } . \ $
+
+]<borel-sigma-algebra-generated-by-sets>
+#definition[$pi$-system][
+  A class $cal(C)$ of subsets of $Omega$ is a *$pi$-system* or a *$pi$-class* if
+  $
+    A , B in cal(C) arrow.r.double.long A inter B in cal(C) .
+  $
+]
+#example[
+  The classes $cal(O)_i med (i = 1 , 2 , 3 , 4)$ in @borel-sigma-algebra-generated-by-sets are all $pi$-systems.
+]
+
+
+#definition[$lambda$-system][
+  A class $cal(L)$ of subsets of $Omega$ is a *$lambda$-system* or a *$lambda$-class* if
+
+  + $Omega in cal(L)$,
+
+  + $A , B in cal(L) , A subset B arrow.r.double.long B \\ A in cal(L)$,
+
+  + $A_n in cal(L) , A_n subset A_(n + 1)$ for all $n gt.eq 1$ $arrow.r.double.long A_n in cal(L)$ for $n gt.eq 1$.
+
+]
+
+#example[
+  Every $sigma$-algebra is a $lambda$-system.
+]
+#theorem[
+  If $cal(C)$ is a $pi$-system, then $lambda (cal(C)) = sigma (cal(C))$.
+]
+
+== Measurable Space <measurable-space>
+#definition[Measurable space][
+  Given a nonempty set $Omega$ and a $sigma$-algebra $cal(F)$ on $Omega$, the tuple $(Omega , cal(F))$ is called a #strong[measurable space];.
+
+]
+#definition[Measurable Map][
+  Given two measurable spaces $(Omega , cal(F))$ and $(S , cal(S))$, the map $f : Omega arrow.r S$ is $cal(F) \/ cal(S)$-#strong[measurable] if
+  $
+    f^(-1) (B) in cal(F) , quad forall B in cal(S).
+  $
+  We say $f$ is measurable if the underlying $sigma$-algebras $cal(F)$ and $cal(S)$ are self-evident.
+]
+Note $f^(- 1)$ preserves $sigma$-algebra, which leads to the following definition.
+
+#definition[$sigma$-algebra generated by measurable map][
+  Assume $f$ is a measurable map from $(Omega , cal(F))$ to $(S , cal(S))$. The $sigma$-algebra generated by $f$ is defined as
+  $
+    sigma (f) := sigma (f^(- 1) (cal(S))) = f^(- 1) (cal(S)) .
+  $
+
+]
+$sigma (f)$ is the smallest $sigma$-algebra on $Omega$ such that $f$ is $cal(F) \/ cal(S)$-measurable;. That is,
+$
+  f "is" cal(F)\/cal(S)"-measurable" ==> sigma(f)subset.eq cal(F).
+$
+
+#definition[Tensor Product $sigma$-algebra][
+  Let $(Omega_1 , cal(F)_1)$ and $(Omega_2 , cal(F)_2)$ be two measurable spaces. Denote by $cal(F)_1 times.circle cal(F)_2$ the $sigma$-algebra on the Cartesian product $Omega_1 times Omega_2$ generated by subsets of the form $B_1 times B_2$, where $B_1 in cal(F)_1$ and $B_2 in cal(F)_2$, i.e., $ cal(F)_1 times.circle cal(F)_2 = sigma ({B_1 times B_2 : B_1 in cal(F)_1 , B_2 in cal(F)_2}) . $
+
+]
+#definition[Product Measurable Space][
+  Let $(Omega_1 , cal(F)_1)$ and $(Omega_2 , cal(F)_2)$ be two measurable spaces. The #strong[product measurable space] of $(Omega_1 , cal(F)_1)$ and $(Omega_2 , cal(F)_2)$ is defined as $(Omega_1 times Omega_2 , cal(F)_1 times.circle cal(F)_2)$.
+]
+#definition[infinite product measurable space][
+  Let ${ (Omega_i , cal(F)_i) }_(i in T)$ be a collection of measurable spaces. The #strong[infinite product measurable space] of ${ (Omega_i , cal(F)_i) }_(i in T)$ is defined as $(product_(i in T) Omega_i , times.circle.big_(i in T) cal(F)_i)$, where $ cal(M C) ({ cal(F)_i }_(i in T)) := {product_(i in T) B_i : B_i in cal(F)_i , #h(0em) B_i = Omega_i "for all but a finite number of" i in T} $ is called the collection of #strong[measurable cylinders] and $ times.circle.big_(i in T) cal(F)_i = sigma (cal(M C) ({ cal(F)_i }_(i in T))) . $
+]
+// Product measurable space is the product in the category consisting of all measurable spaces and measurable functions and satisfies the following universal property: for every cone consisting of a measurable space $Y$ and a family of measurable functions ${ f_i : Y arrow.r Omega_i }_(i in T)$, there exists a unique measurable function $ f : Y arrow.r product_(i in T) Omega_i , #h(2em) y arrow.r.bar (f_i (y))_(i in T) $ denoted by $product_(i in T) f_i$ such that the following diagrams commute for all $i$ in $T$, \$\$\\xymatrix{
+// Y\\ar\@{--\>}\[r\]^{\\exists!f\\quad}\\ar\[rd\]\_{f\_i} &\\prod\\limits\_{i\\in T}\\ar\[d\]^{\\pi\_i}\\Omega\_i\\\\
+// &\\Omega\_i
+// }\$\$ where $pi_i : (omega_k)_(k in T) arrow.r.bar omega_i$ is the projection map. Thus we see that $times.circle.big_(i in T) cal(F)_i$ is the smallest $sigma$-algebra on $product_(i in T) Omega_i$ such that every projection map $pi_i$ is measurable, that is $ times.circle.big_(i in T) cal(F)_i = sigma (union.big_(i in T) sigma (pi_i)) . $ Generally, we have the following proposition.
+
+#proposition[
+  $ sigma (product_(i in T) f_i) = sigma (union.big_(i in T) sigma (f_i)) . $
+]
+
+#proposition[Product and Borel $sigma$-fields][
+  Let ${ S_i }_(i = 1)^oo$ be a sequence of separable metric spaces. Then
+  $
+    cal(B) (product_(i = 1)^oo S_i) = times.circle.big_(i = 1)^oo cal(B) (S_i).
+  $
+]
+In particular, $cal(B) (bb(R)^d) = (cal(B) (bb(R)))^d$.
+
+#proposition[Convergence and Limits][
+  Let $f_1 , f_2 , dots.h$ be measurable functions from a measurable space $(Omega , cal(F))$ into some metric space $(S , rho) .$ Then
+
+  + ${omega in Omega : f_n (omega) "converges"} in cal(A)$ if $S$ is complete;
+
+  + $f_n arrow.r f$ on $Omega$ implies that $f$ is measurable.
+
+]
+#example[Bounded Measurable Real Functions][
+  Let $(Omega , cal(F))$ be a measurable space. The set of bounded measurable real functions on $Omega$ with norm $norm(dot.op)_oo$ defined by
+  $
+    norm(f):= sup_(omega in Omega) abs(f(omega))
+  $
+  is a Banach space over $bb(R)$ and is denoted by $upright(B M)(Omega, cal(F))$.
+]
+
+
+== Measure <measure>
+#definition[Measure][
+  Given a measurable space $(Omega , cal(F))$, a set function $mu : cal(F) arrow.r [0 , + oo]$ is called a #strong[measure] if
+
+  + $mu (diameter) = 0$;
+
+  + $sigma$-additivity: for any countable collection ${ A_i }_(i = 1)^oo$ of pairwise disjoint sets in $cal(F)$, $ mu (union.big_(n = 1)^oo A_n) = sum_(n = 1)^oo mu (A_n) . $
+
+]
+#definition[Measure Space][
+  is a triple $(Omega , cal(F) , mu)$ where $Omega$ is a set, $cal(F)$ is a $sigma$-algebra on $Omega$ and $mu : cal(F) arrow.r [0 , + oo]$ is a measure.
+]
+
+#proposition[
+  Suppose $(Omega , cal(F) , mu)$ is a measure space.
+
+  + Monotonicity: If $A , B in cal(F)$ and $A subset B$, then $mu (A) lt.eq mu (B)$;
+
+  + Subadditivity: For any measurable sets ${ A_n }_(n = 1)^oo$ in $cal(F)$, $ mu (union.big_(n = 1)^oo A_n) lt.eq sum_(n = 1)^oo mu (A_n) $
+
+  + Continuity from below: If ${ A_n }_(n = 1)^oo$ is a collection of sets in $cal(F)$ that are increasing (meaning that $A_1 subset A_2 subset A_3 subset dots.h.c$ ) then the union of the sets $A_n$ is measurable and $ mu (union.big_(n = 1)^oo A_n) = mu (lim_(n arrow.r oo) A_n) = lim_(n arrow.r oo) mu (A_n) = sup_(n gt.eq 1) mu (A_n) ; $
+
+  + Continuity from above: If ${ A_n }_(n = 1)^oo$ is a collection of sets in $cal(F)$ that are decreasing (meaning that $A_1 supset A_2 supset A_3 supset dots.h.c$ ) then the intersection of the sets $A_n$ is measurable. Furthermore, if at least one of the $A_n$ has finite measure then $ mu (inter.big_(n = 1)^oo A_n) = mu (lim_(n arrow.r oo) A_n) = lim_(n arrow.r oo) mu (A_n) = inf_(n gt.eq 1) mu (A_n) . $
+]
+
+#corollary[
+  Suppose $(Omega , cal(F) , mu)$ is a measure space.
+
+  + If ${ A_n }_(n = 1)^oo$ is a collection of sets in $cal(F)$, then $ mu (lim_(n arrow.r oo) A_n) = lim_(n arrow.r oo) mu (inter.big_(k = n)^oo A_k) lt.eq lim_(n arrow.r oo) mu (A_n) ; $
+
+  + If ${ A_n }_(n = 1)^oo$ is a collection of sets in $cal(F)$, and $mu (A_n)$ is finite for all $n gt.eq 1$, $ mu (lim_(n arrow.r oo) A_n) = lim_(n arrow.r oo) mu (union.big_(k = n)^oo A_k) gt.eq lim_(n arrow.r oo) mu (A_n) . $
+
+]
+#definition[Pre-measure][
+  Let $cal(S)$ be a semiring on $Omega$. A set function $mu_0 : cal(S) arrow.r [0 , + oo]$ is called a #strong[pre-measure] if
+
+  + $mu_0 (diameter) = 0$;
+
+  + $sigma$-additivity: for any countable collection ${ A_i }_(i = 1)^oo$ of pairwise disjoint sets in $cal(S)$, $ mu_0 (union.big_(n = 1)^oo A_n) = sum_(n = 1)^oo mu_0 (A_n) . $
+
+]
+Clearly we see every measure is a pre-measure, since every $sigma$-algebra is a semiring.
+
+#definition[$sigma$-finite Measure][
+  Let $(Omega , cal(F))$ be a measurable space and $mu$ a measure on it. The measure $mu$ is called a #strong[$sigma$-finite measure] if the set $Omega$ can be covered with at most countably many measurable sets with finite measure, which means that there are sets $A_1 , A_2 , dots.h in cal(F)$ with $mu (A_n) < oo$ for all $n in bb(N_(+))$ that satisfy $ union.big_(n = 1)^oo A_n = Omega . $
+]
+
+*$sigma$-finite Pre-measure* can be defined in a similar way.
+
+#definition[Finite Measure][
+  Let $(Omega , cal(F))$ be a measurable space and $mu$ a measure on it. The measure $mu$ is called a #strong[finite measure] if $mu (Omega) < oo$.
+]
+#definition[Probability Measure][
+  Let $(Omega , cal(F))$ be a measurable space and $mu$ a measure on it. The measure $mu$ is called a #strong[probability measure] if $mu (Omega) = 1$. In this case, $(Omega , cal(F) , mu)$ is called a #strong[probability measure space] or #strong[probability space] in short.
+]
+#example[Dirac Measure][
+  Let $(Omega , cal(F))$ be a measurable space. For any $x in Omega$, the #strong[Dirac measure] $delta_x$ is defined by
+  $
+    delta_x (A) = upright(bold(1))_A (x) = cases(
+      1\, & x in A\,, ,
+      0\, & x in.not A .
+    )
+  $
+]
+#definition[Complete Measure][
+  A measure $mu$ defined on the measurable space $(Omega , cal(F))$ is called #strong[complete] if for any $A in cal(F)$ with $mu (A) = 0$, $2^A subset cal(F)$. In this case, the measure space $(Omega , cal(F) , mu)$ is called a complete measure space.
+]
+#definition[Borel Measure][
+  Suppose $cal(B) (bb(S))$ is the Borel $sigma$-algebra on a topological space $bb(S)$. A #strong[Borel measure] is measure defined on the measurable space $(bb(S) , cal(B) (bb(S)))$.
+]
+
+#definition[$mu$-null Set][
+  Given a measure space $(Omega , cal(F) , mu)$, a set $A in cal(F)$ is called a $mu$-null set is $mu (A) = 0$.
+
+]
+#definition[Extension of a Measure Space][
+  The measure space $(Omega , tilde(cal(F)) , tilde(mu))$ is called the extension of the measure space $(Omega , cal(F) , mu)$ if $cal(F) subset tilde(cal(F))$ and $tilde(mu)|_(cal(F)) = mu$.
+]
+
+#proposition[
+  Given a measure space $(Omega , cal(F) , mu)$, define $ tilde(cal(F)) = { A union E in 2^Omega divides A in cal(F) , E upright(" is a subset of a ") mu upright("-null set") } $ and $ tilde(mu) : tilde(cal(F)) & arrow.r [0 , + oo] , \
+                  A union E & arrow.r.bar mu (A) . $ Then we have
+
+  + $tilde(mu)$ is well-defined,
+
+  + $(Omega , tilde(cal(F)) , tilde(mu))$ is a complete measure space,
+
+  + $tilde(mu)$ is the unique measure on $(Omega , tilde(cal(F)))$ that coincides with $mu$ on $cal(F)$,
+
+  + $(Omega , tilde(cal(F)) , tilde(mu))$ is the smallest complete extension of $(Omega , cal(F) , mu)$.
+]
+#definition[Completion of a Measure Space][
+  Given a measure space $(Omega , cal(F) , mu)$, define $ tilde(cal(F)) = { A union E in 2^Omega divides A in cal(F) , E upright(" is a subset of a ") mu upright("-null set") } $ and
+  $
+    tilde(mu) : tilde(cal(F)) & arrow.r [0 , + oo] , \
+                    A union E & arrow.r.bar mu (A) .
+  $
+  The measure space $(Omega , tilde(cal(F)) , tilde(mu))$ is called the #strong[completion of $(Omega , cal(F) , mu)$];.
+
+]
+#definition[Outer Measure][
+  A set function $mu^(\*) : 2^Omega arrow.r [0 , + oo]$ is called a #strong[outer measure] on $Omega$ if
+
+  + $mu^(\*) (diameter) = 0$;
+
+  + $A subset B subset Omega arrow.r.double.long mu^(\*) (A) lt.eq mu^(\*) (B)$;
+
+  + countable subadditivity: for any countable collection ${ A_i }_(i = 1)^oo$ of sets in $2^Omega$, $ mu^(\*) (union.big_(n = 1)^oo A_n) lt.eq sum_(n = 1)^oo mu^(\*) (A_n) . $
+]<outer-measure>
+#definition[$mu^(\*)$-measurable][
+  Suppose that $mu^(\*)$ is an #link(<outer-measure>)[outer measure] on $Omega$. A set $A$ is said to be #strong[$mu^(\*)$-measurable] if
+  $
+    mu^(\*) (E) = mu^(\*) (E inter A) + mu^(\*) (E inter A^c) upright("for all") E subset Omega .
+  $
+]
+#proposition[
+  Let $Omega$ be a set, let $mu^(\*)$ be an #link(<outer-measure>)[outer measure] on $Omega$, and let $cal(M)_(mu^(\*))$ be the collection of all $mu^(\*)$-measurable subsets of $Omega$. Then
+
+  + $cal(M)_(mu^(\*))$ is a $sigma$-algebra,
+
+  + the restriction of $mu^(\*)$ to $cal(M)_(mu^(\*))$ is a measure on $cal(M)_(mu^(\*))$,
+
+  + $(Omega , cal(M)_(mu^(\*)) , mu^(\*) \|_(cal(M)_(mu^(\*))))$ is a complete measure space.
+
+]
+#definition[Induced Outer Measure][
+  Given a pre-measure $mu_0$ on a semialgebra, $cal(S) subset 2^Omega$, the #strong[outer measure induced by $mu_0$] is the set function $mu_0^(\*) : 2^Omega arrow.r [0 , + oo]$, as $ mu_0^(\*) (A) = inf {sum_(n = 1)^oo mu_0 (A_n) : {A_n}_(n gt.eq 1) subset cal(S) , A subset union.big_(n gt.eq 1) A_n} . $
+
+  Especially, given a measure $mu$ on a measurable space $(Omega , cal(F))$, the #strong[outer measure induced by $mu$] is the set function $mu^(\*) : 2^Omega arrow.r [0 , + oo]$, defined as $ mu^(\*) (A) = inf {mu (C) : C in cal(F) , A subset C} . $
+
+]
+
+#theorem[Carathéodory's Extension Theorem][
+  Let $cal(C)$ be a semialgebra on $Omega$, let $mu_0 : cal(C) arrow.r [0 , + oo]$ be a pre-measure and let $mu_0^(\*)$ be the outer measure induced by $mu_0$. Then
+
+  + $cal(C) subset sigma (cal(C)) subset cal(M)_(mu_0^(\*))$, where $cal(M)_(mu_0^(\*))$ denotes the collection of all $mu_0^(\*)$-measurable subsets of $Omega$,
+
+  + $mu_0^(\*) \|_(cal(C)) = mu_0$,
+
+  + $(Omega , sigma (cal(C)) , mu_0^(\*) \|_(sigma (cal(C))))$ is a measure space. $(Omega , cal(M)_(mu_0^(\*)) , mu_0^(\*) \|_(cal(M)_(mu_0^(\*))))$ is a complete measure space,
+
+  + If $mu_0$ is $sigma$-finite, then
+
+    #block[
+      #set enum(numbering: "(a)", indent: 0em)
+
+      + $mu_0^(\*) \|_(sigma (cal(C)))$ is the unique measure on $(Omega , sigma (cal(C)))$ that coincides with $mu_0$ on $cal(C)$. In this case, $mu_0^(\*) \|_(sigma (cal(C)))$ is also $sigma$-finite,
+
+      + $(Omega , cal(M)_(mu_0^(\*)) , mu_0^(\*) \|_(cal(M)_(mu_0^(\*))))$ is the completion of $(Omega , sigma (cal(C)) , mu_0^(\*) \|_(sigma (cal(C))))$,
+
+      + $mu_0^(\*) \|_(cal(M)_(mu_0^(\*)))$ is the unique measure on $(Omega , cal(M)_(mu_0^(\*)))$ that coincides with $mu_0$ on $cal(C)$.
+    ]
+
+  For simplicity, $(Omega , sigma (cal(C)) , mu_0^*|_(sigma (cal(C))))$ and $(Omega , cal(M)_(mu_0^*) , mu_0^(\*)|_(cal(M)_(mu_0^(*))))$ can be denoted as $(Omega , sigma (cal(C)) , mu_0^(*))$ and $(Omega , cal(M)_(mu_0^(*)) , mu_0^(*))$.
+
+]
+=== Product Measure <product-measure>
+#definition[Product Measure][
+  Let $(Omega_1 , cal(F)_1 , mu_1)$ and $(Omega_2 , cal(F)_2 , mu_2)$ be two measure spaces. A measure $mu$ on the measurable space $(Omega_1 times Omega_2 , cal(F)_1 times.circle cal(F)_2)$ is said to be a #strong[product measure] of $mu_1$ and $mu_2$ if it satisfies the property
+  $
+    mu (B_1 times B_2) = mu_1 (B_1) mu_2 (B_2)
+  $
+  for all $B_1 in Omega_1$, $B_2 in Omega_2$. In this case, the measure space $(Omega_1 times Omega_2 , cal(F)_1 times.circle cal(F)_2 , mu)$ is called the product measure space of $(Omega_1 , cal(F)_1 , mu_1)$ and $(Omega_2 , cal(F)_2 , mu_2)$.
+
+]
+#proposition[
+  Let $(Omega_1 , cal(F)_1 , mu_1)$ and $(Omega_2 , cal(F)_2 , mu_2)$ be two measure spaces. If the measure $mu_1$ and $mu_2$ are $sigma$-finite, the product measure of $mu_1$ and $mu_2$ uniquely exists and denoted by $mu_1 times mu_2$.
+]
+#definition[Product Probability Measure][
+  Let ${ (Omega_i , cal(F)_i , upright(P)_i) }_(i in T)$ be a collection of probability measure spaces. The map
+  $
+    upright(P)_0 : cal(M C) ({ cal(F)_i }_(i in T)) & arrow.r [0 , 1]\
+    product_(i in T) B_i & arrow.r.bar product_(i in T : upright(P)_i (B_i) < 1) upright(P)_i (B_i)
+  $
+  can be uniquely extended to a probability measure $upright(P)$ on the product measurable space $(product_(i in T) Omega_i , times.circle.big_(i in T) cal(F)_i)$. The #strong[product probability space] of ${ (Omega_i , cal(F)_i , upright(P)_i) }_(i in T)$ is defined as $(product_(i in T) Omega_i , times.circle.big_(i in T) cal(F)_i , upright(P))$.
+]
+
+#theorem[Tonelli's Theorem][
+  Let $(Omega_1 , cal(F)_1 , mu_1)$ and $(Omega_2 , cal(F)_2 , mu_2)$ be two $sigma$-finite measure spaces. Let $mu = mu_1 times mu_2$ be the product measure of $mu_1$ and $mu_2$. Then for any $cal(F)_1 times.circle cal(F)_2$-measurable function $f : Omega_1 times Omega_2 arrow.r [0 , + oo]$, we have
+  $
+    integral_(Omega_1 times Omega_2) f dif mu & = integral_(Omega_1) (integral_(Omega_2) f (omega_1 , omega_2) dif mu_2 (omega_2)) dif mu_1 (omega_1)\
+    & = integral_(Omega_2) (integral_(Omega_1) f (omega_1 , omega_2) dif mu_1 (omega_1)) dif mu_2 (omega_2) .
+  $
+]
+#definition[Measurable Semigroup][
+  Let $G$ be a semigroup and $(G , cal(F))$ be a measurable space. We say that $(G , cal(F))$ is a #strong[measurable semigroup] if the multiplication map $ m : G times G & arrow.r G , \
+    (g_1 , g_2) & arrow.r.bar g_1 g_2 $ is $cal(F) times.circle cal(F)$-measurable, i.e., $m^(- 1) (B) in cal(F) times.circle cal(F)$ for all $B in cal(F)$.
+]
+#definition[Convolution of Measures][
+  Let $(G , cal(F))$ be a measurable semigroup and $mu_1 , mu_2$ be two $sigma$-finite measures on $(G , cal(F))$. The #strong[convolution] of $mu_1$ and $mu_2$, denoted by $mu_1 * mu_2$, is defined as the pushforward measure $ mu_1 * mu_2 := m_(*) (mu_1 * mu_2) . $ More explicitly, for any $A in cal(F)$, we have
+  $
+    mu_1 * mu_2 (A) & = (mu_1 times mu_2) (m^(- 1) (A)) \
+                    & = integral_(G times G) upright(bold(1))_(m^(- 1) (A)) dif (mu_1 times mu_2) \
+                    & = integral_(G times G) upright(bold(1))_A (g_1 g_2) dif (mu_1 times mu_2) (g_1 , g_2) \
+                    & = integral_G integral_G upright(bold(1))_A (g_1 g_2) dif mu_1 (g_1) dif mu_2 (g_2) .
+  $
+
+]
+=== Lebesgue-Stieltjes measure <lebesgue-stieltjes-measure>
+#definition[Lebesgue-Stieltjes Measure on $bb(R)$][
+  Given nondecreasing function $F : bb(R) arrow.r bb(R)$ and semialgebra $ cal(C) equiv { ( a , b \] in bb(R) divides - oo lt.eq a lt.eq b < oo } union { (a , oo) in bb(R) divides - oo lt.eq a < oo } $ we can define a pre-measure $mu_F$ on $cal(C)$ as follows
+  $
+    mu_F ( (a , b \]) & = F (b +) - F (a +) , \
+      mu_F ((a , oo)) & = F (oo) - F (a +) .
+  $
+  The measure space $(bb(R) , cal(M)_(mu_F^(\*)) , mu_F^(\*))$ is called a #strong[Lebesgue-Stieltjes measure space] and $mu_F^(\*)$ is the #strong[Lebesgue-Stieltjes measure] generated by $F$.
+]
+
+#pagebreak()
+
 = Topological Vector Spaces <topological-vector-spaces>
 
 == Basic notions
@@ -855,25 +1296,25 @@ If $f$ and $g$ are locally integrable functions on $X$, then $T_f=T_g$ if and on
 ]
 
 #example[Space of Complex Radon Measures][
-Let $X$ be a locally compact Hausdorff space. Then the space of all complex Radon measures on $X$ is denoted as $M_("Rad")(X; CC)$. This is a Banach space with respect to the total variation norm
-$
-  ||dot.c||: M_("Rad")(X; CC) &--> [0, oo) \
-  mu & arrow.long.bar norm(mu)=|mu|(X).
-$
+  Let $X$ be a locally compact Hausdorff space. Then the space of all complex Radon measures on $X$ is denoted as $M_("Rad")(X; CC)$. This is a Banach space with respect to the total variation norm
+  $
+    ||dot.c||: M_("Rad")(X; CC) & --> [0, oo) \
+                             mu & arrow.long.bar norm(mu)=|mu|(X).
+  $
 ]
 
 #theorem[Riesz-Markov-Kakutani Representation Theorem][
-Let $X$ be a locally compact Hausdorff space. Given any $mu in M_("Rad")(X; CC)$, we can define a continuous linear functional 
-$
-  I_mu: C_0(X; CC) &--> CC \
-  f & arrow.bar.long integral_X f dif mu.
-$
-Then the map
-$
-  Phi: M_("Rad")(X; CC) &--> C_0(X; CC)' \
-  mu & arrow.bar.long I_mu
-$
-is an isometric isomorphism.
+  Let $X$ be a locally compact Hausdorff space. Given any $mu in M_("Rad")(X; CC)$, we can define a continuous linear functional
+  $
+    I_mu: C_0(X; CC) & --> CC \
+                   f & arrow.bar.long integral_X f dif mu.
+  $
+  Then the map
+  $
+    Phi: M_("Rad")(X; CC) & --> C_0(X; CC)' \
+                       mu & arrow.bar.long I_mu
+  $
+  is an isometric isomorphism.
 ]
 
 == Space of Distributions
