@@ -36,14 +36,15 @@
 #let kk = $bb(k)$
 
 #let Grp = $sans("Grp")$
+#let normdot = $norm(#h(0.15em)dot#h(0.15em))$
 
 #let scr(it) = text(features: ("ss01",), box($cal(it)$))
 
 = Measures
-== Class of sets <class-of-sets>
+== Class of Sets <class-of-sets>
 If $2^Omega$ denotes the power set of the set $Omega$ and a collection of subsets $cal(C) subset 2^Omega$, we say $cal(C)$ is defined on $Omega$.
 
-For convenience, let’s define some operations on a collection of sets $cal(C) in 2^Omega$.
+For convenience, let's define some operations on a collection of sets $cal(C) in 2^Omega$.
 
 - Given $f : Sigma arrow.r Omega$, $f^(- 1) (cal(C)) := { f^(- 1) (A) in Sigma divides A in cal(C) }$,
 
@@ -120,7 +121,7 @@ An algebra of sets is an associative algebra over a field in the context of abst
 #example[
   Let $Omega$ be a nonempty set, and let $\# A$ denote the number of elements of a set $A subset Omega$. Then
   $
-    cal(F) = { A subset Omega : upright(" either ") \# A upright(" is finite or ") \# A^complement upright(" is finite") }
+    cal(F) = { A subset Omega : "either" \# A "is finite or" \# A^complement "is finite" }
   $
   is an algebra defined on $Omega$.
 ]
@@ -132,7 +133,7 @@ An algebra of sets is an associative algebra over a field in the context of abst
   + $A_n in cal(F)$ for $n gt.eq 1$ $arrow.r.double.long$ $union.big_(n = 1)^oo A_n in cal(F)$.
 
 ]
-Under the assumption that $cal(F)$ is an algebra, condition (d) can be replaced by a weaker condition (d’), which leads to the following equivalent definition.
+Under the assumption that $cal(F)$ is an algebra, condition (d) can be replaced by a weaker condition (d'), which leads to the following equivalent definition.
 
 #definition[$sigma$-algebra][
   A class $cal(F) subset 2^Omega$ is called a #strong[$sigma$-algebra] if it is an algebra and if it satisfies
@@ -233,10 +234,18 @@ $
 #definition[Product Measurable Space][
   Let $(Omega_1 , cal(F)_1)$ and $(Omega_2 , cal(F)_2)$ be two measurable spaces. The #strong[product measurable space] of $(Omega_1 , cal(F)_1)$ and $(Omega_2 , cal(F)_2)$ is defined as $(Omega_1 times Omega_2 , cal(F)_1 times.circle cal(F)_2)$.
 ]
-#definition[infinite product measurable space][
+#definition[Infinite Product Measurable Space][
   Let ${ (Omega_i , cal(F)_i) }_(i in T)$ be a collection of measurable spaces. The #strong[infinite product measurable space] of ${ (Omega_i , cal(F)_i) }_(i in T)$ is defined as $(product_(i in T) Omega_i , times.circle.big_(i in T) cal(F)_i)$, where $ cal(M C) ({ cal(F)_i }_(i in T)) := {product_(i in T) B_i : B_i in cal(F)_i , #h(0em) B_i = Omega_i "for all but a finite number of" i in T} $ is called the collection of #strong[measurable cylinders] and $ times.circle.big_(i in T) cal(F)_i = sigma (cal(M C) ({ cal(F)_i }_(i in T))) . $
 ]
-// Product measurable space is the product in the category consisting of all measurable spaces and measurable functions and satisfies the following universal property: for every cone consisting of a measurable space $Y$ and a family of measurable functions ${ f_i : Y arrow.r Omega_i }_(i in T)$, there exists a unique measurable function $ f : Y arrow.r product_(i in T) Omega_i , #h(2em) y arrow.r.bar (f_i (y))_(i in T) $ denoted by $product_(i in T) f_i$ such that the following diagrams commute for all $i$ in $T$, \$\$\\xymatrix{
+Product measurable space is the product in the category consisting of all measurable spaces and measurable functions and satisfies the following universal property: for every cone consisting of a measurable space $Y$ and a family of measurable functions ${ f_i : Y arrow.r Omega_i }_(i in T)$, there exists a unique measurable function
+$
+  f : Y & --> product_(i in T) Omega_i , \
+      y & arrow.r.bar.long (f_i (y))_(i in T)
+$
+denoted by $product_(i in T) f_i$ such that the following diagrams commute for all $i$ in $T$,
+//
+//
+//  \$\$\\xymatrix{
 // Y\\ar\@{--\>}\[r\]^{\\exists!f\\quad}\\ar\[rd\]\_{f\_i} &\\prod\\limits\_{i\\in T}\\ar\[d\]^{\\pi\_i}\\Omega\_i\\\\
 // &\\Omega\_i
 // }\$\$ where $pi_i : (omega_k)_(k in T) arrow.r.bar omega_i$ is the projection map. Thus we see that $times.circle.big_(i in T) cal(F)_i$ is the smallest $sigma$-algebra on $product_(i in T) Omega_i$ such that every projection map $pi_i$ is measurable, that is $ times.circle.big_(i in T) cal(F)_i = sigma (union.big_(i in T) sigma (pi_i)) . $ Generally, we have the following proposition.
@@ -262,9 +271,9 @@ In particular, $cal(B) (bb(R)^d) = (cal(B) (bb(R)))^d$.
 
 ]
 #example[Bounded Measurable Real Functions][
-  Let $(Omega , cal(F))$ be a measurable space. The set of bounded measurable real functions on $Omega$ with norm $norm(dot.op)_oo$ defined by
+  Let $(Omega , cal(F))$ be a measurable space. The set of bounded measurable real functions on $Omega$ with norm $normdot_oo$ defined by
   $
-    norm(f):= sup_(omega in Omega) abs(f(omega))
+    norm(f)_oo:= sup_(omega in Omega) abs(f(omega))
   $
   is a Banach space over $bb(R)$ and is denoted by $upright(B M)(Omega, cal(F))$.
 ]
@@ -371,61 +380,62 @@ Clearly we see every measure is a pre-measure, since every $sigma$-algebra is a 
 
 ]
 #definition[Outer Measure][
-  A set function $mu^(\*) : 2^Omega arrow.r [0 , + oo]$ is called a #strong[outer measure] on $Omega$ if
+  A set function $mu^* : 2^Omega arrow.r [0 , + oo]$ is called a #strong[outer measure] on $Omega$ if
 
-  + $mu^(\*) (diameter) = 0$;
+  + $mu^* (diameter) = 0$;
 
-  + $A subset B subset Omega arrow.r.double.long mu^(\*) (A) lt.eq mu^(\*) (B)$;
+  + $A subset B subset Omega arrow.r.double.long mu^* (A) lt.eq mu^* (B)$;
 
-  + countable subadditivity: for any countable collection ${ A_i }_(i = 1)^oo$ of sets in $2^Omega$, $ mu^(\*) (union.big_(n = 1)^oo A_n) lt.eq sum_(n = 1)^oo mu^(\*) (A_n) . $
+  + countable subadditivity: for any countable collection ${ A_i }_(i = 1)^oo$ of sets in $2^Omega$, $ mu^* (union.big_(n = 1)^oo A_n) lt.eq sum_(n = 1)^oo mu^* (A_n) . $
 ]<outer-measure>
-#definition[$mu^(\*)$-measurable][
-  Suppose that $mu^(\*)$ is an #link(<outer-measure>)[outer measure] on $Omega$. A set $A$ is said to be #strong[$mu^(\*)$-measurable] if
+#definition[$mu^*$-measurable][
+  Suppose that $mu^*$ is an #link(<outer-measure>)[outer measure] on $Omega$. A set $A$ is said to be #strong[$mu^*$-measurable] if
   $
-    mu^(\*) (E) = mu^(\*) (E inter A) + mu^(\*) (E inter A^c) upright("for all") E subset Omega .
+    mu^* (E) = mu^* (E inter A) + mu^* (E inter A^c) upright("for all") E subset Omega .
   $
 ]
 #proposition[
-  Let $Omega$ be a set, let $mu^(\*)$ be an #link(<outer-measure>)[outer measure] on $Omega$, and let $cal(M)_(mu^(\*))$ be the collection of all $mu^(\*)$-measurable subsets of $Omega$. Then
+  Let $Omega$ be a set, let $mu^*$ be an #link(<outer-measure>)[outer measure] on $Omega$, and let $cal(M)_(mu^*)$ be the collection of all $mu^*$-measurable subsets of $Omega$. Then
 
-  + $cal(M)_(mu^(\*))$ is a $sigma$-algebra,
+  + $cal(M)_(mu^*)$ is a $sigma$-algebra,
 
-  + the restriction of $mu^(\*)$ to $cal(M)_(mu^(\*))$ is a measure on $cal(M)_(mu^(\*))$,
+  + the restriction of $mu^*$ to $cal(M)_(mu^*)$ is a measure on $cal(M)_(mu^*)$,
 
-  + $(Omega , cal(M)_(mu^(\*)) , mu^(\*) \|_(cal(M)_(mu^(\*))))$ is a complete measure space.
+  + $(Omega , cal(M)_(mu^*) , mu^* \|_(cal(M)_(mu^*)))$ is a complete measure space.
 
 ]
 #definition[Induced Outer Measure][
-  Given a pre-measure $mu_0$ on a semialgebra, $cal(S) subset 2^Omega$, the #strong[outer measure induced by $mu_0$] is the set function $mu_0^(\*) : 2^Omega arrow.r [0 , + oo]$, as $ mu_0^(\*) (A) = inf {sum_(n = 1)^oo mu_0 (A_n) : {A_n}_(n gt.eq 1) subset cal(S) , A subset union.big_(n gt.eq 1) A_n} . $
+  Given a pre-measure $mu_0$ on a semialgebra, $cal(S) subset 2^Omega$, the #strong[outer measure induced by $mu_0$] is the set function $mu_0^* : 2^Omega arrow.r [0 , + oo]$, as $ mu_0^* (A) = inf {sum_(n = 1)^oo mu_0 (A_n) : {A_n}_(n gt.eq 1) subset cal(S) , A subset union.big_(n gt.eq 1) A_n} . $
 
-  Especially, given a measure $mu$ on a measurable space $(Omega , cal(F))$, the #strong[outer measure induced by $mu$] is the set function $mu^(\*) : 2^Omega arrow.r [0 , + oo]$, defined as $ mu^(\*) (A) = inf {mu (C) : C in cal(F) , A subset C} . $
+  Especially, given a measure $mu$ on a measurable space $(Omega , cal(F))$, the #strong[outer measure induced by $mu$] is the set function $mu^* : 2^Omega arrow.r [0 , + oo]$, defined as $ mu^* (A) = inf {mu (C) : C in cal(F) , A subset C} . $
 
 ]
 
 #theorem[Carathéodory's Extension Theorem][
-  Let $cal(C)$ be a semialgebra on $Omega$, let $mu_0 : cal(C) arrow.r [0 , + oo]$ be a pre-measure and let $mu_0^(\*)$ be the outer measure induced by $mu_0$. Then
+  Let $cal(C)$ be a semialgebra on $Omega$, let $mu_0 : cal(C) arrow.r [0 , + oo]$ be a pre-measure and let $mu_0^*$ be the outer measure induced by $mu_0$. Then
 
-  + $cal(C) subset sigma (cal(C)) subset cal(M)_(mu_0^(\*))$, where $cal(M)_(mu_0^(\*))$ denotes the collection of all $mu_0^(\*)$-measurable subsets of $Omega$,
+  + $cal(C) subset sigma (cal(C)) subset cal(M)_(mu_0^*)$, where $cal(M)_(mu_0^*)$ denotes the collection of all $mu_0^*$-measurable subsets of $Omega$,
 
-  + $mu_0^(\*) \|_(cal(C)) = mu_0$,
+  + $mu_0^* \|_(cal(C)) = mu_0$,
 
-  + $(Omega , sigma (cal(C)) , mu_0^(\*) \|_(sigma (cal(C))))$ is a measure space. $(Omega , cal(M)_(mu_0^(\*)) , mu_0^(\*) \|_(cal(M)_(mu_0^(\*))))$ is a complete measure space,
+  + $(Omega , sigma (cal(C)) , mu_0^* \|_(sigma (cal(C))))$ is a measure space. $(Omega , cal(M)_(mu_0^*) , mu_0^* \|_(cal(M)_(mu_0^*)))$ is a complete measure space,
 
   + If $mu_0$ is $sigma$-finite, then
 
     #block[
       #set enum(numbering: "(a)", indent: 0em)
 
-      + $mu_0^(\*) \|_(sigma (cal(C)))$ is the unique measure on $(Omega , sigma (cal(C)))$ that coincides with $mu_0$ on $cal(C)$. In this case, $mu_0^(\*) \|_(sigma (cal(C)))$ is also $sigma$-finite,
+      + $mu_0^* \|_(sigma (cal(C)))$ is the unique measure on $(Omega , sigma (cal(C)))$ that coincides with $mu_0$ on $cal(C)$. In this case, $mu_0^* \|_(sigma (cal(C)))$ is also $sigma$-finite,
 
-      + $(Omega , cal(M)_(mu_0^(\*)) , mu_0^(\*) \|_(cal(M)_(mu_0^(\*))))$ is the completion of $(Omega , sigma (cal(C)) , mu_0^(\*) \|_(sigma (cal(C))))$,
+      + $(Omega , cal(M)_(mu_0^*) , mu_0^* \|_(cal(M)_(mu_0^*)))$ is the completion of $(Omega , sigma (cal(C)) , mu_0^* \|_(sigma (cal(C))))$,
 
-      + $mu_0^(\*) \|_(cal(M)_(mu_0^(\*)))$ is the unique measure on $(Omega , cal(M)_(mu_0^(\*)))$ that coincides with $mu_0$ on $cal(C)$.
+      + $mu_0^* \|_(cal(M)_(mu_0^*))$ is the unique measure on $(Omega , cal(M)_(mu_0^*))$ that coincides with $mu_0$ on $cal(C)$.
     ]
 
-  For simplicity, $(Omega , sigma (cal(C)) , mu_0^*|_(sigma (cal(C))))$ and $(Omega , cal(M)_(mu_0^*) , mu_0^(\*)|_(cal(M)_(mu_0^(*))))$ can be denoted as $(Omega , sigma (cal(C)) , mu_0^(*))$ and $(Omega , cal(M)_(mu_0^(*)) , mu_0^(*))$.
+  For simplicity, $(Omega , sigma (cal(C)) , mu_0^*|_(sigma (cal(C))))$ and $(Omega , cal(M)_(mu_0^*) , mu_0^*|_(cal(M)_(mu_0^(*))))$ can be denoted as $(Omega , sigma (cal(C)) , mu_0^(*))$ and $(Omega , cal(M)_(mu_0^(*)) , mu_0^(*))$.
 
 ]
+
 === Product Measure <product-measure>
 #definition[Product Measure][
   Let $(Omega_1 , cal(F)_1 , mu_1)$ and $(Omega_2 , cal(F)_2 , mu_2)$ be two measure spaces. A measure $mu$ on the measurable space $(Omega_1 times Omega_2 , cal(F)_1 times.circle cal(F)_2)$ is said to be a #strong[product measure] of $mu_1$ and $mu_2$ if it satisfies the property
@@ -441,33 +451,86 @@ Clearly we see every measure is a pre-measure, since every $sigma$-algebra is a 
 #definition[Product Probability Measure][
   Let ${ (Omega_i , cal(F)_i , upright(P)_i) }_(i in T)$ be a collection of probability measure spaces. The map
   $
-    upright(P)_0 : cal(M C) ({ cal(F)_i }_(i in T)) & arrow.r [0 , 1]\
-    product_(i in T) B_i & arrow.r.bar product_(i in T : upright(P)_i (B_i) < 1) upright(P)_i (B_i)
+    upright(P)_0 : cal(M C) ({ cal(F)_i }_(i in T)) & --> [0 , 1]\
+    product_(i in T) B_i & arrow.r.bar.long product_(i in T : upright(P)_i (B_i) < 1) upright(P)_i (B_i)
   $
   can be uniquely extended to a probability measure $upright(P)$ on the product measurable space $(product_(i in T) Omega_i , times.circle.big_(i in T) cal(F)_i)$. The #strong[product probability space] of ${ (Omega_i , cal(F)_i , upright(P)_i) }_(i in T)$ is defined as $(product_(i in T) Omega_i , times.circle.big_(i in T) cal(F)_i , upright(P))$.
 ]
 
-#theorem[Tonelli's Theorem][
-  Let $(Omega_1 , cal(F)_1 , mu_1)$ and $(Omega_2 , cal(F)_2 , mu_2)$ be two $sigma$-finite measure spaces. Let $mu = mu_1 times mu_2$ be the product measure of $mu_1$ and $mu_2$. Then for any $cal(F)_1 times.circle cal(F)_2$-measurable function $f : Omega_1 times Omega_2 arrow.r [0 , + oo]$, we have
+#theorem[Fubini-Tonelli Theorem][
+  Let $(Omega_1 , cal(F)_1 , mu_1)$ and $(Omega_2 , cal(F)_2 , mu_2)$ be two $sigma$-finite measure spaces. Let $mu = mu_1 times mu_2$ be the product measure of $mu_1$ and $mu_2$. Suppose $f : Omega_1 times Omega_2 arrow.r Y$ is a $cal(F)_1 times.circle cal(F)_2$-measurable function. Then the function
   $
-    integral_(Omega_1 times Omega_2) f dif mu & = integral_(Omega_1) (integral_(Omega_2) f (omega_1 , omega_2) dif mu_2 (omega_2)) dif mu_1 (omega_1)\
-    & = integral_(Omega_2) (integral_(Omega_1) f (omega_1 , omega_2) dif mu_1 (omega_1)) dif mu_2 (omega_2) .
+    f(omega_1,dot.c): Omega_2 & --> Y, \
+                      omega_2 & arrow.long.bar f (omega_1 , omega_2)
   $
+  is $cal(F)_2$-measurable. The function
+  $
+    f(dot.c, omega_2): Omega_1 & --> Y, \
+                       omega_1 & arrow.long.bar f (omega_1 , omega_2).
+  $
+  is $cal(F)_1$-measurable.
+
+  + (Tonelli) If $f(Omega_1 times Omega_2)subset.eq [0 , + oo]$,
+
+    - The function
+      $
+        g: Omega_1 & --> [0 , + oo], \
+           omega_1 & arrow.long.bar integral_(Omega_2) f (omega_1 , omega_2) dif mu_2 (omega_2)
+      $
+      is $cal(F)_1$-measurable.
+
+    - The function
+      $
+        h: Omega_2 & --> [0 , + oo], \
+           omega_2 & arrow.long.bar integral_(Omega_1) f (omega_1 , omega_2) dif mu_1 (omega_1)
+      $
+      is $cal(F)_2$-measurable.
+
+    - $
+        integral_(Omega_1 times Omega_2) f dif mu & = integral_(Omega_1) (integral_(Omega_2) f (omega_1 , omega_2) dif mu_2 (omega_2)) dif mu_1 (omega_1)\
+        & = integral_(Omega_2) (integral_(Omega_1) f (omega_1 , omega_2) dif mu_1 (omega_1)) dif mu_2 (omega_2) .
+      $
+
+
+  + (Fubini) If $f in L^1(mu)$, then
+
+    - $f(omega_1,dot.c) in L^1(mu_2)$ for $mu_1$-almost every $omega_1 in Omega_1$. So the function
+      $
+        g: Omega_1 & --> CC, \
+           omega_1 & arrow.bar.long integral_(Omega_2) f (omega_1 , omega_2) dif mu_2 (omega_2)
+      $
+      is well-defined  for $mu_1$-almost every $omega_1 in Omega_1$.
+
+    - $f(dot.c, omega_2) in L^1(mu_1)$ for $mu_2$-almost every $omega_2 in Omega_2$. So the function
+      $
+        h: Omega_2 & --> CC, \
+           omega_2 & arrow.long.bar integral_(Omega_1) f (omega_1 , omega_2) dif mu_1 (omega_1)
+      $
+      is well-defined for $mu_1$-almost every $omega_1 in Omega_1$ and
+
+    - $g in L^1(mu_1)$ and $h in L^1(mu_2)$.
+
+
+    - $
+        integral_(Omega_1 times Omega_2) f dif mu & = integral_(Omega_1) (integral_(Omega_2) f (omega_1 , omega_2) dif mu_2 (omega_2)) dif mu_1 (omega_1)\
+        & = integral_(Omega_2) (integral_(Omega_1) f (omega_1 , omega_2) dif mu_1 (omega_1)) dif mu_2 (omega_2) .
+      $
 ]
 #definition[Measurable Semigroup][
   Let $G$ be a semigroup and $(G , cal(F))$ be a measurable space. We say that $(G , cal(F))$ is a #strong[measurable semigroup] if the multiplication map $ m : G times G & arrow.r G , \
     (g_1 , g_2) & arrow.r.bar g_1 g_2 $ is $cal(F) times.circle cal(F)$-measurable, i.e., $m^(- 1) (B) in cal(F) times.circle cal(F)$ for all $B in cal(F)$.
 ]
-#definition[Convolution of Measures][
-  Let $(G , cal(F))$ be a measurable semigroup and $mu_1 , mu_2$ be two $sigma$-finite measures on $(G , cal(F))$. The #strong[convolution] of $mu_1$ and $mu_2$, denoted by $mu_1 * mu_2$, is defined as the pushforward measure $ mu_1 * mu_2 := m_(*) (mu_1 * mu_2) . $ More explicitly, for any $A in cal(F)$, we have
+#definition[Convolution of $sigma$-finite Measures][
+  Let $(G , cal(F))$ be a measurable semigroup and $mu_1 , mu_2$ be two $sigma$-finite measures on $(G , cal(F))$. The #strong[convolution] of $mu_1$ and $mu_2$, denoted by $mu_1 * mu_2$, is defined as the pushforward measure $ mu_1 * mu_2 := m_(*) (mu_1 times mu_2) . $ More explicitly, for any $A in cal(F)$, we have
   $
     mu_1 * mu_2 (A) & = (mu_1 times mu_2) (m^(- 1) (A)) \
                     & = integral_(G times G) upright(bold(1))_(m^(- 1) (A)) dif (mu_1 times mu_2) \
                     & = integral_(G times G) upright(bold(1))_A (g_1 g_2) dif (mu_1 times mu_2) (g_1 , g_2) \
                     & = integral_G integral_G upright(bold(1))_A (g_1 g_2) dif mu_1 (g_1) dif mu_2 (g_2) .
   $
-
 ]
+
+
 === Lebesgue-Stieltjes measure <lebesgue-stieltjes-measure>
 #definition[Lebesgue-Stieltjes Measure on $bb(R)$][
   Given nondecreasing function $F : bb(R) arrow.r bb(R)$ and semialgebra $ cal(C) equiv { ( a , b \] in bb(R) divides - oo lt.eq a lt.eq b < oo } union { (a , oo) in bb(R) divides - oo lt.eq a < oo } $ we can define a pre-measure $mu_F$ on $cal(C)$ as follows
@@ -478,11 +541,267 @@ Clearly we see every measure is a pre-measure, since every $sigma$-algebra is a 
   The measure space $(bb(R) , cal(M)_(mu_F^(\*)) , mu_F^(\*))$ is called a #strong[Lebesgue-Stieltjes measure space] and $mu_F^(\*)$ is the #strong[Lebesgue-Stieltjes measure] generated by $F$.
 ]
 
+
+=== Radon measure <radon-measure>
+#definition[Radon Measure][
+  Let $(X , tau)$ be a Hausdorff topological space and $cal(B) (X)$ be the Borel $sigma$-algebra on $X$. A measure $mu$ on $(X , cal(B) (X))$ is called a #strong[Radon measure] if
+
+  + (locally finite) for any $x in X$, there exists a neighborhood $U$ of $x$ such that $mu (U) < oo$.
+
+  + (inner regularity for Borel sets) for any $B in cal(B) (X)$, $ mu (B) = sup { mu (K) : K subset.eq B , K "is compact" } ; $
+
+
+]
+#remark[
+  In some literature, we define Radon measure as a measure $m$ on $(X , cal(B) (X))$ that satisfies the following conditions:
+
+  + (locally finite) for any $x in X$, there exists a neighborhood $U$ of $x$ such that $m (U) < oo$.
+
+  + (inner regularity for open sets) for any $U in tau$, $ m (U) = sup { m (K) : K subset.eq U , K "is compact" } ; $
+
+  + (outer regularity for Borel sets) for any $B in cal(B) (X)$, $ m (B) = inf { m (U) : U supset.eq B , U "is open" } . $
+
+  Let's call the Borel measures that satisfy (1) and (2) #strong[type-1 Radon measures] and the Borel measures that satisfy (1$'$), (2$'$) and (3$'$) #strong[type-2 Radon measures];. There is a bijection between these two classes of Radon measures,
+  $
+    { "type-1 Radon measures on" (X , cal(B) (X)) } & arrow.r.long^tilde.op { "type-2 Radon measures on" (X , cal(B) (X)) }\
+    mu & arrow.r.bar.long (B arrow.r.bar.long inf {mu (U) : U supset.eq B , U "is open"})\
+    (B arrow.r.bar.long sup {m (B') : B' subset.eq B , B' "is Borel" , m(B') "is finite"}) & arrow.l.long.bar m
+  $
+
+]
+If $m$ is locally finite, then it follows that $m$ is finite on compact sets, and for locally compact Hausdorff spaces, the converse holds, too. Thus, in this case, local finiteness may be equivalently replaced by finiteness on compact subsets.
+
+#proposition[
+  Let $(X , tau)$ be a locally compact Hausdorff topological space and $cal(B) (X)$ be the Borel $sigma$-algebra on $X$. Then a measure $mu$ on $(X , cal(B) (X))$ is a Radon measure if and only if it satisfies the following conditions:
+
+  + $mu$ is finite on all compact subsets of $X$.
+
+  + (inner regularity for open sets) for any open set $U in tau$, $ mu (U) = sup { mu (K) : K subset.eq U , K "is compact" } ; $
+
+  + (outer regularity for Borel sets) for any $B in cal(B) (X)$, $ mu (B) = inf { mu (U) : U supset.eq B , U "is open" } . $
+
+
+]
+#definition[Finite Signed Radon Measure][
+  Let $(X , tau)$ be a Hausdorff topological space and $cal(B) (X)$ be the Borel $sigma$-algebra on $X$. A finite signed measure $mu$ on $(X , cal(B) (X))$ is called a #strong[finite signed Radon measure] if $mu^(+)$ and $mu^(-)$ are Radon measures, where $mu^(+)$ and $mu^(-)$ are the positive and negative parts of $mu$, respectively.
+]
+#definition[Complex Radon Measure][
+  Let $(X , tau)$ be a Hausdorff topological space and $cal(B) (X)$ be the Borel $sigma$-algebra on $X$. A complex measure $mu$ on $(X , cal(B) (X))$ is called a #strong[complex Radon measure] if both its real part and imaginary part are finite signed Radon measures.
+]
+
+#example[Banach Space of Complex Radon Measures][
+  Let $X$ be a locally compact Hausdorff space. Then the space of all complex Radon measures on $X$ is denoted as $M_("Rad")(X; CC)$. This is a Banach space with respect to the total variation norm
+  $
+    ||dot.c||: M_("Rad")(X; CC) & --> [0, oo) \
+                             mu & arrow.long.bar norm(mu)=|mu|(X).
+  $
+]
+
+#lemma[
+  Let $(G , cal(B) (G))$ be a locally compact Hausdorff topological group and $M_("Rad")(X; CC)$ be the set of complex Radon measures on $G$. Given two complex measures $mu_1 , mu_2 in M_("Rad")(X; CC)$, define
+  $
+    I: C_0(G; CC) & --> CC \
+                f & arrow.long.bar integral_G integral_G f(x y) dif mu_1(x) dif mu_2(y)
+  $
+  Then  $I$ is a continuous linear functional on $C_0(G; CC)$ and we have
+  $
+    abs(I(f)) <= norm(f)_oo norm(mu_1) norm(mu_2).
+  $
+]
+
+#definition[Convolution of Radon Measures][
+  Let $(G , cal(B) (G))$ be a locally compact Hausdorff topological group and $M_("Rad")(X; CC)$ be the set of complex Radon measures on $G$. Given two complex measures $mu_1 , mu_2 in M_("Rad")(X; CC)$, define
+  $
+    I: C_0(G; CC) & --> CC \
+                f & arrow.long.bar integral_G integral_G f(x y) dif mu_1(x) dif mu_2(y)
+  $
+]
+
+#definition[Measure Algebra][
+  Let $G$ be a locally compact Hausdorff topological group and $cal(B) (G)$ be the Borel $sigma$-algebra on $(G,cal(B))$. Let $M(G)$ be the set of complex Radon measures on $G$.
+  The #strong[measure algebra] of $G$ is defined as
+]
+
+
+
+== Signed Measure <signed-measures>
+#definition[Signed Measure][
+  Given a measurable space $(Omega , cal(F))$, a set function $mu : cal(F) arrow.r ( - oo , + oo \]$ or $mu : cal(F) arrow.r \[ - oo , + oo \)$ is called a #strong[signed measure] if
+
+  + $mu (diameter) = 0$;
+
+  + $sigma$-additivity: for any countable collection ${ A_i }_(i = 1)^oo$ of pairwise disjoint sets in $cal(F)$,
+  $
+    mu (union.big_(n = 1)^oo A_n) = sum_(n = 1)^oo mu (A_n) .
+  $
+]
+#definition[Finite Signed Measure][
+  A signed measure $mu$ on measurable space $(Omega , cal(F))$ is #strong[finite] if $mu (cal(F)) in (- oo , + oo)$.
+]<finite-signed-measure>
+
+#example[
+  Let $(Omega , cal(F) , mu)$ be a measure space, let $f$ belong to $L^1 (Omega , cal(F) , mu)$, and define a function $nu$ on $cal(F)$ by $nu (A) = integral_A f d mu$. Then the linearity of the integral and the dominated convergence theorem imply that $nu$ is a signed measure on $(Omega , cal(F))$. Note that such a signed measure is the difference of the positive measures $nu_1$ and $nu_2$ defined by $nu_1 (A) = integral_A f^(+) d mu$ and $nu_2 (A) = integral_A f^(-) d mu$.
+]
+#definition[Positive Set][
+  Let $(Omega , cal(F))$ be a measurable space and $mu$ be a signed measure on it.
+
+  + $P$ is a #strong[positive set] for $mu$, or equivalently $P$ is a #strong[$mu$-positive set];, if for every $E in cal(F)$ such that $E subset.eq P$, one has $mu (E) gt.eq 0$.
+
+  + $N$ is a #strong[negative set] for $mu$, or equivalently $N$ is a #strong[$mu$-negative set];, if for every $E in cal(F)$ such that $E subset.eq N$, one has $mu (E) lt.eq 0$.
+
+]
+#theorem[Hahn Decomposition Theorem][
+  Let $(Omega , cal(F))$ be a measurable space, and let $mu$ be a signed measure on $(Omega , cal(F)) .$ Then there are disjoint subsets $P$ and $N$ of $Omega$ such that $P$ is a positive set for $mu , N$ is a negative set for $mu$, and $Omega = P union N$. Let
+  $
+    mu^(+) : cal(F) & --> [0 , oo] , \
+                  A & arrow.r.bar.long mu (A inter P)
+  $
+  be the #strong[positive part] of $mu$ and
+  $
+    mu^(-) : cal(F) & --> [0 , oo] , \
+                  A & arrow.r.bar.long - mu (A inter N)
+  $
+  be the #strong[negative part] of $mu$. Then $mu$ is the difference of two measures, that is $ mu = mu^(+) - mu^(-) , $ at least one of which is finite.
+
+]
+
+#definition[Variation of a Signed Measure][
+  The #strong[variation] of the signed measure $mu$ is the measure $lr(|mu|)$ defined by $lr(|mu|) = mu^(+) + mu^(-)$.
+]
+It is easy to check that
+$
+  lr(|mu (A)|) lt.eq lr(|mu|) (A) , quad forall A in cal(F) .
+$
+
+#definition[Absolutely Continuous][
+  Let $(Omega , cal(F))$ be a measurable space, and let $mu$ and $nu$ be signed measures on $(Omega , cal(F))$. Then $nu$ is #strong[absolutely continuous] with respect to $mu$ if for all $A in cal(F)$, $ mu (A) = 0 arrow.r.double.long nu (A) = 0 . $ One usually writes $nu lt.double mu$ to indicate that $nu$ is absolutely continuous with respect to $mu$.
+]
+#definition[Concentrated on a Measurable Set][
+  Let $(Omega , cal(F))$ be a measurable space and $E in cal(F)$.
+
+  + A measure $mu$ on $(Omega , cal(F))$ is #strong[concentrated on] $E$ if $mu (E^c) = 0 .$
+
+  + A signed or complex measure $mu$ on $(Omega , cal(F))$ is #strong[concentrated on] $E$ if the variation $lr(|mu|)$ of $mu$ is concentrated on $E$, or equivalently, if each $cal(F)$-measurable subset $A$ of $E^c$ satisfies $mu (A) = 0$.
+]
+#definition[Mutually Singular][
+  Suppose that $mu$ and $nu$ are measures (or signed measures) on $(Omega , cal(F))$. Then $mu$ and $nu$ are #strong[mutually singular] if there is an $cal(F)$-measurable set $E$ such that $mu$ is concentrated on $E$ and $nu$ is concentrated on $E^c$.
+]
+One usually writes $mu perp nu$ to indicate that $mu$ and $nu$ are mutually singular.
+
+#theorem[Lebesgue Decomposition Theorem][
+  Let $(Omega , cal(F))$ be a measurable space.
+
+  + Let $mu$ be a measure on $(Omega , cal(F))$, and let $nu$ be a $sigma$-finite measure on $(Omega , cal(F))$. Then there are unique measures $nu_a$ and $nu_s$ on $(Omega , cal(F))$ such that
+    #block[
+      #set enum(numbering: "(a)", indent: 0em)
+      + $nu_a lt.double mu$,
+
+      + $nu_s perp mu$,
+
+      + $nu = nu_a + nu_s$.
+    ]
+    In this case, $nu_a$ and $nu_s$ are $sigma$-finite measures and called the absolutely continuous and singular parts of $nu$.
+
+  + Let $mu$ be a measure on $(Omega , cal(F))$, and let $nu$ be a finite signed measure on $(Omega , cal(F))$. Then there are unique finite signed measures $nu_a$ and $nu_s$ on $(Omega , cal(F))$ such that
+    #block[
+      #set enum(numbering: "(a)", indent: 0em)
+      + $nu_a lt.double mu$,
+
+      + $nu_s perp mu$,
+
+      + $nu = nu_a + nu_s$.
+    ]
+]
+
+#theorem[Radon-Nikodym Theorem][
+  Let $(Omega , cal(F))$ be a measurable space.
+
+  + Let $mu$ and $nu$ be $sigma$-finite measures on $(Omega , cal(F))$. If $v lt.double mu$, then there is an $cal(F)$-measurable function $g : Omega arrow.r$ $\[ 0 , + oo \)$ such that $nu (A) = integral_A g dif mu$ holds for each $A in cal(F)$. The function $g$ is unique up to $mu$-almost everywhere equality.
+
+  + Let $mu$ be a $sigma$-finite measure on $(Omega , cal(F))$, and let $nu$ be a finite signed measure on $(Omega , cal(F))$. If $nu lt.double mu$, then there exists unique $g in L^1 (Omega , cal(F) , mu)$ and satisfies $nu (A) = integral_A g dif mu$ for each $A in cal(F)$.
+]
+
+== Complex Measure <complex-measure>
+#definition[Complex Measure][
+  Given a measurable space $(Omega , cal(F))$, a map function $mu : cal(F) arrow.r bb(C)$ is called a #strong[complex measure] if
+
+  + $mu (diameter) = 0$;
+
+  + $sigma$-additivity: for any countable collection ${ A_i }_(i = 1)^oo$ of pairwise disjoint sets in $cal(F)$, $ mu (union.big_(n = 1)^oo A_n) = sum_(n = 1)^oo mu (A_n) . $
+
+]
+#definition[Real Part and Imaginary Part of a Complex Measure][
+  Let $mu$ be a complex measure on $(Omega , cal(F))$. The #strong[real part] of $mu$, denoted by $op("Re") (mu)$, is defined by $ op("Re") (mu) (A) = op("Re") (mu (A)) , quad forall A in cal(F) . $ The #strong[imaginary part] of $mu$, denoted by $upright(I m) (mu)$, is defined by $ upright(I m) (mu) (A) = upright(I m) (mu (A)) , quad forall A in cal(F) . $ Then both $op("Re") (mu)$ and $upright(I m) (mu)$ are finite signed measures on $(Omega , cal(F))$.
+
+]
+#proposition[Unique Decomposition of Complex Measures][
+  Let $mu$ be a complex measure on $(Omega , cal(F))$. Then
+
+  + Every complex measure $mu$ decomposes as $ mu = op("Re") (mu) + i #h(0em) upright(I m) (mu) . $
+
+  + The decomposition is unique, meaning that if $ mu = mu_1 + i mu_2 $ where $mu_1$ and $mu_2$ are finite signed measures on $(Omega , cal(F))$, then
+    $
+      mu_1 = op("Re") (mu) , quad mu_2 = op("Im") (mu) .
+    $
+]
+#proposition[
+  Let $mu_1$ and $mu_2$ be finite signed measures on $(Omega , cal(F))$. Then $ mu = mu_1 + i mu_2 $ is a complex measure on $(Omega , cal(F))$.
+]
+#definition[Variation of a Complex Measure][
+  Let $mu$ be a complex measure on $(Omega , cal(F))$. The #strong[variation] of $mu$, denoted by $lr(|mu|)$, is a finite measure on $(Omega , cal(F))$ defined by
+  $
+    lr(|mu|) (A) := sup {sum_(k = 1)^n abs(mu (A_k)): n in bb(Z)_(gt.eq 1), med A_1 , dots.h , A_n in cal(F) , med A = union.sq.big_(k = 1)^n A_k} .
+  $
+
+
+]
+#proposition[Polar Decomposition of Complex Measures][
+  Let $mu$ be a complex measure on $(Omega , cal(F))$. Then there exists a measurable function $f : Omega arrow.r bb(C)$ such that $lr(|f|) = 1$ and
+  $
+    mu (A) = integral_A f thin dif lr(|mu|) , quad forall A in cal(F) .
+  $
+]
+#proof[
+  See Rudin's book (Real and complex analysis, p124, theorem 6.12).
+
+]
+#proposition[
+  Let $mu$ be a complex measure on $(Omega , cal(F))$. Then
+  + $
+      lr(|op("Re") (mu)|) lt.eq lr(|mu|) , quad lr(|upright(I m) (mu)|) lt.eq lr(|mu|) .
+    $
+  + For any $f in L^1(abs(mu))$,
+    $
+      abs(integral_Omega f dif mu) <= integral_Omega abs(f) dif abs(mu)
+    $
+
+]
+#proof[
+  Using the polar decomposition of complex measures, there exists a measurable function $h : Omega arrow.r bb(C)$ such that $lr(|h|) = 1$ and
+  $
+    mu (A) = integral_A h dif lr(|mu|) , quad forall A in cal(F) .
+  $
+  + Note we have
+    $
+      op("Re") (mu) (A) = op("Re") (mu (A)) = op("Re") (integral_A h dif lr(|mu|)) = integral_A op("Re") (h) dif lr(|mu|) .
+    $
+    Therefore,
+    $
+      lr(|op("Re") (mu)|) (A) & = integral_A lr(|op("Re") (h)|) dif lr(|mu|) lt.eq integral_A lr(|h|) dif lr(|mu|) = lr(|mu|) (A) .
+    $
+
+  + For any $f in L^1(abs(mu))$,
+    $
+      abs(integral_Omega f dif mu) = abs(integral_Omega f h dif abs(mu))<= integral_Omega abs(f h) dif abs(mu)= integral_Omega abs(f ) dif abs(mu).
+    $
+
+]
+
 #pagebreak()
 
 = Topological Vector Spaces <topological-vector-spaces>
 
-== Basic notions
+== Basic Notions
 
 
 
@@ -1099,13 +1418,13 @@ For any open subsets $U$ of $bb(R)^d$, The inclusion map $iota:C^(oo)_c (U) arro
 #lemma[][
   If $z in CC$ is a complex number, then there exists a complex number $lambda$ such that $abs(lambda)=1$ and
   $
-    abs(z) = op("Re")(lambda z).
+    abs(z) = op(op("Re"))(lambda z).
   $
 ]<complex-number-modulus-lemma>
 #proof[
   We can write $z = abs(z) e^(i theta)$ for some $theta in [0, 2pi)$. Take $lambda = e^(-i theta)$. Then we have
   $
-    op("Re")(lambda z)=op("Re")(e^(-i theta) abs(z) e^(i theta)) = op("Re")(abs(z)) = abs(z).
+    op(op("Re"))(lambda z)=op(op("Re"))(e^(-i theta) abs(z) e^(i theta)) = op(op("Re"))(abs(z)) = abs(z).
   $
 ]
 
@@ -1131,11 +1450,11 @@ For any open subsets $U$ of $bb(R)^d$, The inclusion map $iota:C^(oo)_c (U) arro
 
   - $bb(k)=CC$. If $f in C_c (X; CC)$ is a complex-valued function with $op("supp") (f)subset.eq K$, then by @complex-number-modulus-lemma we can write
     $
-      |T(f)| = op("Re")(lambda T(f))
+      |T(f)| = op(op("Re"))(lambda T(f))
     $
     for some $lambda in CC$ with $|lambda|=1$. Then we have
     $
-      |T(f)| = op("Re")(lambda T(f)) = op("Re")( T( lambda f))= T(op("Re")( lambda f))<= T( |f| )
+      |T(f)| = op(op("Re"))(lambda T(f)) = op(op("Re"))( T( lambda f))= T(op(op("Re"))( lambda f))<= T( |f| )
     $
     Note $T|_(C_c (X;RR)) in C_c (X;RR)'$ is a positive linear functional, and $abs(f) in C_c (X;RR)$ satisfies $op("supp") (abs(f)) =op("supp") (f)subset.eq K$. By the previous case, there exists a constant $M_K > 0$ such that
     $
@@ -1157,22 +1476,22 @@ moreover, one can impose some additional regularity to ensure the uniqueness of
 the measure $mu$.
 
 #theorem[Riesz-Markov-Kakutani Representation Theorem][
-  Let $X$ be a locally compact Hausdorff space and $T$ is a positive linear functional on $C_c (X)$. Then there exists a unique Radon measure $mu$ on $(X,cal(B)(X))$ such that
+  Let $X$ be a locally compact Hausdorff space and $T:C_c (X;bb(k))->bb(k)$ be a positive linear functional on $C_c (X;bb(k))$. Then there exists a unique Radon measure $mu$ on $(X,cal(B)(X))$ such that
 
   $
-    T(f) = integral_X f dif mu ,quad forall f in C_c (X)
+    T(f) = integral_X f dif mu ,quad forall f in C_c (X;bb(k))
   $
 
   Moreover, we have
 
   + If $U$ is an open subset of $X$, then
     $
-      mu(U) = sup{ T(f) mid(|) f in C_c (X) , 0 <= f <= 1, op("supp")(f) subset.eq U}.
+      mu(U) = sup{ T(f) mid(|) f in C_c (X;bb(k)) , 0 <= f <= 1, op("supp")(f) subset.eq U}.
     $
 
   + If $K$ is a compact subset of $X$, then
     $
-      mu(K) = inf{ T(f) mid(|) f in C_c (X), f >= bb(1)_K}.
+      mu(K) = inf{ T(f) mid(|) f in C_c (X;bb(k)), f >= bb(1)_K}.
     $
 ]
 #remark[
@@ -1288,20 +1607,14 @@ If $f$ and $g$ are locally integrable functions on $X$, then $T_f=T_g$ if and on
   $
     f = u + i v,
   $
-  where $u=op("Re")(f) in C_0(X; RR)$ and $v=op("Im")(f) in C_0(X; RR)$. By complex linearity of $I$, we have
+  where $u=op(op("Re"))(f) in C_0(X; RR)$ and $v=op("Im")(f) in C_0(X; RR)$. By complex linearity of $I$, we have
   $
-    I(f) = I(u + i v)= I(u) + i I(v)=J(u) + i J(v) = J(op("Re")(f)) + i J(op("Im")(f)), quad forall f in C_0(X, CC).
+    I(f) = I(u + i v)= I(u) + i I(v)=J(u) + i J(v) = J(op(op("Re"))(f)) + i J(op("Im")(f)), quad forall f in C_0(X, CC).
   $
   This shows that $I$ is uniquely determined by $J= I|_(C_0(X, RR))$.
 ]
 
-#example[Space of Complex Radon Measures][
-  Let $X$ be a locally compact Hausdorff space. Then the space of all complex Radon measures on $X$ is denoted as $M_("Rad")(X; CC)$. This is a Banach space with respect to the total variation norm
-  $
-    ||dot.c||: M_("Rad")(X; CC) & --> [0, oo) \
-                             mu & arrow.long.bar norm(mu)=|mu|(X).
-  $
-]
+
 
 #theorem[Riesz-Markov-Kakutani Representation Theorem][
   Let $X$ be a locally compact Hausdorff space. Given any $mu in M_("Rad")(X; CC)$, we can define a continuous linear functional
@@ -1592,9 +1905,9 @@ If $f$ and $g$ are locally integrable functions on $X$, then $T_f=T_g$ if and on
   $
   be the distance from $x$ to $S$.
 
-  + Translation Invariance: $d(x, S + y) = d(x - y, S)$ for all $x, y in X$.
+  + _Translation Invariance_: $d(x, S + y) = d(x - y, S)$ for all $x, y in X$.
 
-  + Convexity: if $S$ is convex, then $x|-> d(x,S)$ is convex.
+  + _Convexity_: if $S$ is convex, then $x|-> d(x,S)$ is convex.
 
   + If and only if $S$ is a linear subspace of $X$, $x|-> d(x,S)$ is a seminorm on $X$. That is,
     - Absolute homogeneity: $d(lambda x, S) = |lambda| d(x, S)$ for all $x in X$ and $lambda in 𝕜$.
@@ -1827,7 +2140,7 @@ $L^p$ spaces $thin lr((1 lt.eq p lt.eq oo))$ are Banach spaces defined on some m
   other.
 
   If, in addition, $p , q in (1 , oo)$ and $f in L^p (Omega , Sigma , mu)$
-  and $g in L^q (Omega , Sigma , mu)$, then Hölder’s inequality becomes an
+  and $g in L^q (Omega , Sigma , mu)$, then Hölder's inequality becomes an
   equality if and only if $lr(|f|)^p$ and $lr(|g|)^q$ are linearly
   dependent in $L^1 (Omega , Sigma , mu)$, meaning that there exist real
   numbers $alpha , beta gt.eq 0$, not both of them zero, such that
