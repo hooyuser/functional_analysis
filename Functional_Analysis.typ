@@ -90,7 +90,7 @@ A ring of sets $cal(R)$ is a ring in the context of abstract algebra with the op
 ]
 #definition[Algebra#super[\#1]][
   A #link(<ring-of-sets>)[ring] $cal(F)$ defined on $Omega$ is called an #strong[algebra (of sets)] if it contains $Omega$.
-]
+]<algebra-of-sets-1>
 #proposition[
   Every #link(<ring-of-sets>)[ring] is a semiring.
 ]
@@ -108,7 +108,7 @@ The following equivalent definitions of algebra are common to see.
 
   + $A , B in cal(F)$ implies $A union B in cal(F)$.
 
-]
+]<algebra-of-sets-2>
 An algebra of sets is an associative algebra over a field in the context of abstract algebra: it is a ring and also a vector space over the field $F_2$ of 2 elements, which makes it an $F_2$-algebra.
 
 #proposition[
@@ -132,7 +132,7 @@ An algebra of sets is an associative algebra over a field in the context of abst
 
   + $A_n in cal(F)$ for $n gt.eq 1$ $arrow.r.double.long$ $union.big_(n = 1)^oo A_n in cal(F)$.
 
-]
+]<sigma-algebra>
 Under the assumption that $cal(F)$ is an algebra, condition (d) can be replaced by a weaker condition (d'), which leads to the following equivalent definition.
 
 #definition[$sigma$-algebra][
@@ -318,8 +318,7 @@ In particular, $cal(B) (bb(R)^d) = (cal(B) (bb(R)))^d$.
   + $mu_0 (diameter) = 0$;
 
   + $sigma$-additivity: for any countable collection ${ A_i }_(i = 1)^oo$ of pairwise disjoint sets in $cal(S)$, $ mu_0 (union.big_(n = 1)^oo A_n) = sum_(n = 1)^oo mu_0 (A_n) . $
-
-]
+]<pre-measure>
 Clearly we see every measure is a pre-measure, since every $sigma$-algebra is a semiring.
 
 #definition[$sigma$-finite Measure][
@@ -394,7 +393,7 @@ Clearly we see every measure is a pre-measure, since every $sigma$-algebra is a 
     mu^* (E) = mu^* (E inter A) + mu^* (E inter A^c) upright("for all") E subset Omega .
   $
 ]
-#proposition[
+#proposition[Construction of a Measure from an Outer Measure][
   Let $Omega$ be a set, let $mu^*$ be an #link(<outer-measure>)[outer measure] on $Omega$, and let $cal(M)_(mu^*)$ be the collection of all $mu^*$-measurable subsets of $Omega$. Then
 
   + $cal(M)_(mu^*)$ is a $sigma$-algebra,
@@ -405,7 +404,7 @@ Clearly we see every measure is a pre-measure, since every $sigma$-algebra is a 
 
 ]
 #definition[Induced Outer Measure][
-  Given a pre-measure $mu_0$ on a semialgebra, $cal(S) subset 2^Omega$, the #strong[outer measure induced by $mu_0$] is the set function $mu_0^* : 2^Omega arrow.r [0 , + oo]$, as $ mu_0^* (A) = inf {sum_(n = 1)^oo mu_0 (A_n) : {A_n}_(n gt.eq 1) subset cal(S) , A subset union.big_(n gt.eq 1) A_n} . $
+  Given a pre-measure $mu_0$ on a semialgebra, $cal(S) subset.eq 2^Omega$, the #strong[outer measure induced by $mu_0$] is the set function $mu_0^* : 2^Omega arrow.r [0 , + oo]$, as $ mu_0^* (A) = inf {sum_(n = 1)^oo mu_0 (A_n) : {A_n}_(n gt.eq 1) subset cal(S) , A subset.eq union.big_(n gt.eq 1) A_n} . $
 
   Especially, given a measure $mu$ on a measurable space $(Omega , cal(F))$, the #strong[outer measure induced by $mu$] is the set function $mu^* : 2^Omega arrow.r [0 , + oo]$, defined as $ mu^* (A) = inf {mu (C) : C in cal(F) , A subset C} . $
 
@@ -414,7 +413,7 @@ Clearly we see every measure is a pre-measure, since every $sigma$-algebra is a 
 #theorem[Carathéodory's Extension Theorem][
   Let $cal(C)$ be a semialgebra on $Omega$, let $mu_0 : cal(C) arrow.r [0 , + oo]$ be a pre-measure and let $mu_0^*$ be the outer measure induced by $mu_0$. Then
 
-  + $cal(C) subset sigma (cal(C)) subset cal(M)_(mu_0^*)$, where $cal(M)_(mu_0^*)$ denotes the collection of all $mu_0^*$-measurable subsets of $Omega$,
+  + $cal(C) subset.eq sigma (cal(C)) subset.eq cal(M)_(mu_0^*)$, where $cal(M)_(mu_0^*)$ denotes the collection of all $mu_0^*$-measurable subsets of $Omega$,
 
   + $mu_0^* \|_(cal(C)) = mu_0$,
 
@@ -434,7 +433,7 @@ Clearly we see every measure is a pre-measure, since every $sigma$-algebra is a 
 
   For simplicity, $(Omega , sigma (cal(C)) , mu_0^*|_(sigma (cal(C))))$ and $(Omega , cal(M)_(mu_0^*) , mu_0^*|_(cal(M)_(mu_0^(*))))$ can be denoted as $(Omega , sigma (cal(C)) , mu_0^(*))$ and $(Omega , cal(M)_(mu_0^(*)) , mu_0^(*))$.
 
-]
+]<caratheodory-extension-theorem>
 
 === Product Measure <product-measure>
 #definition[Product Measure][
@@ -445,8 +444,31 @@ Clearly we see every measure is a pre-measure, since every $sigma$-algebra is a 
   for all $B_1 in Omega_1$, $B_2 in Omega_2$. In this case, the measure space $(Omega_1 times Omega_2 , cal(F)_1 times.circle cal(F)_2 , mu)$ is called the product measure space of $(Omega_1 , cal(F)_1 , mu_1)$ and $(Omega_2 , cal(F)_2 , mu_2)$.
 
 ]
-#proposition[
-  Let $(Omega_1 , cal(F)_1 , mu_1)$ and $(Omega_2 , cal(F)_2 , mu_2)$ be two measure spaces. If the measure $mu_1$ and $mu_2$ are $sigma$-finite, the product measure of $mu_1$ and $mu_2$ uniquely exists and denoted by $mu_1 times mu_2$.
+#proposition[Existence and Uniqueness of Product Measure][
+  Let $(Omega_1 , cal(F)_1 , mu_1)$ and $(Omega_2 , cal(F)_2 , mu_2)$ be two measure spaces.
+
+  + There exists a unique product measure $mu_1 times_max mu_2$ on $(Omega_1 times Omega_2 , cal(F)_1 times.circle cal(F)_2)$ satisfying the following property: if $(mu_1 times_max mu_2) (A)$ is finite for some measurable set $A in cal(F)_1 times.circle cal(F)_2$, then for any product measure $mu$ on $(Omega_1 times Omega_2 , cal(F)_1 times.circle cal(F)_2)$,
+    $
+      mu (A) = (mu_1 times_max mu_2) (A).
+    $
+    $mu_1 times_max mu_2$ is called the *maximal product measure* of $mu_1$ and $mu_2$.
+
+  + If the measure $mu_1$ and $mu_2$ are $sigma$-finite, then $mu_1 times_max mu_2$ is the unique product measure of $mu_1$ and $mu_2$ and we denote $mu_1 times_max mu_2$ by $mu_1 times mu_2$.
+]
+#proof[
+  + Let
+    $
+              cal(R)_(X , Y) & := {A times B in cal(F)_1 times.circle cal(F)_2 mid(|) A in cal(F)_1 , B in cal(F)_2} , \
+      cal(U)(cal(R)_(X , Y)) & := {union.big_(k=1)^n C_k mid(|) n in ZZ_(>=0), med C_k in cal(R)_(X , Y) } .
+    $
+    Here we use the convention that $limits(union.big)_(k=1)^0 C_k = emptyset$. It is straightforward to check $cal(U)(cal(R)_(X , Y))$ is an #link(<algebra-of-sets-1>)[algebra of sets] defined on $Omega_1 times Omega_2$. Define a #link(<pre-measure>)[pre-measure]
+    $
+              mu_0: cal(U)(cal(R)_(X , Y)) & --> [0 , + oo] \
+      union.plus.big_(k=1)^n A_k times B_k & mapsto.long sum_(k=1)^n mu_1 (A_k) mu_2 (B_k)
+    $
+    Here $union.plus$ means it is a union of pairwise disjoint sets. $mu$ induces an outer measure $mu_0^*$ on $Omega_1 times Omega_2$. Note that $sigma(cal(U)(cal(R)_(X , Y)))=cal(F)_1 times.circle cal(F)_2$. By #link(<caratheodory-extension-theorem>)[Carathéodory's Extension Theorem], it follows that $(Omega , cal(F)_1 times.circle cal(F)_2 , mu_0^*\|_(cal(F)_1 times.circle cal(F)_2))$ is a measure space. Let $mu_1 times_max mu_2:=mu_0^*\|_(cal(F)_1 times.circle cal(F)_2)$. It clear that $mu_1 times_max mu_2$ is a product measure of $mu_1$ and $mu_2$.
+
+  + If $mu_1$ and $mu_2$ are $sigma$-finite, then $mu_0$ is also $sigma$-finite. If $mu'$ is a product measure of $mu_1$ and $mu_2$, then $mu'$ must coincide with $mu_0$ on $cal(U)(cal(R)_(X , Y))$. By #link(<caratheodory-extension-theorem>)[Carathéodory's Extension Theorem], $mu_1 times_max mu_2$ is the unique measure on $(Omega , cal(F)_1 times.circle cal(F)_2)$ that coincides with $mu_0$ on $cal(U)(cal(R)_(X , Y))$. Thus, we have $mu'=mu_1 times_max mu_2$.
 ]
 #definition[Product Probability Measure][
   Let ${ (Omega_i , cal(F)_i , upright(P)_i) }_(i in T)$ be a collection of probability measure spaces. The map
@@ -499,7 +521,7 @@ Clearly we see every measure is a pre-measure, since every $sigma$-algebra is a 
         g: Omega_1 & --> CC, \
            omega_1 & arrow.bar.long integral_(Omega_2) f (omega_1 , omega_2) dif mu_2 (omega_2)
       $
-      is well-defined  for $mu_1$-almost every $omega_1 in Omega_1$.
+      is well-defined for $mu_1$-almost every $omega_1 in Omega_1$.
 
     - $f(dot.c, omega_2) in L^1(mu_1)$ for $mu_2$-almost every $omega_2 in Omega_2$. So the function
       $
@@ -515,7 +537,7 @@ Clearly we see every measure is a pre-measure, since every $sigma$-algebra is a 
         integral_(Omega_1 times Omega_2) f dif mu & = integral_(Omega_1) (integral_(Omega_2) f (omega_1 , omega_2) dif mu_2 (omega_2)) dif mu_1 (omega_1)\
         & = integral_(Omega_2) (integral_(Omega_1) f (omega_1 , omega_2) dif mu_1 (omega_1)) dif mu_2 (omega_2) .
       $
-]
+]<fubini-tonelli-theorem>
 #definition[Measurable Semigroup][
   Let $G$ be a semigroup and $(G , cal(F))$ be a measurable space. We say that $(G , cal(F))$ is a #strong[measurable semigroup] if the multiplication map $ m : G times G & arrow.r G , \
     (g_1 , g_2) & arrow.r.bar g_1 g_2 $ is $cal(F) times.circle cal(F)$-measurable, i.e., $m^(- 1) (B) in cal(F) times.circle cal(F)$ for all $B in cal(F)$.
@@ -538,7 +560,7 @@ Clearly we see every measure is a pre-measure, since every $sigma$-algebra is a 
     mu_F ( (a , b \]) & = F (b +) - F (a +) , \
       mu_F ((a , oo)) & = F (oo) - F (a +) .
   $
-  The measure space $(bb(R) , cal(M)_(mu_F^(\*)) , mu_F^(\*))$ is called a #strong[Lebesgue-Stieltjes measure space] and $mu_F^(\*)$ is the #strong[Lebesgue-Stieltjes measure] generated by $F$.
+  The measure space $(bb(R) , cal(M)_(mu_F^(*)) , mu_F^(*))$ is called a #strong[Lebesgue-Stieltjes measure space] and $mu_F^(*)$ is the #strong[Lebesgue-Stieltjes measure] generated by $F$.
 ]
 
 
@@ -597,8 +619,10 @@ If $m$ is locally finite, then it follows that $m$ is finite on compact sets, an
   $
 ]
 
+
+
 #lemma[
-  Let $(G , cal(B) (G))$ be a locally compact Hausdorff topological group and $M_("Rad")(X; CC)$ be the set of complex Radon measures on $G$. Given two complex measures $mu_1 , mu_2 in M_("Rad")(X; CC)$, define
+  Let $G$ be a locally compact Hausdorff topological group and $M_("Rad")(X; CC)$ be the set of complex Radon measures on $(G,cal(B)(G))$. Given two complex measures $mu_1 , mu_2 in M_("Rad")(X; CC)$, define
   $
     I: C_0(G; CC) & --> CC \
                 f & arrow.long.bar integral_G integral_G f(x y) dif mu_1(x) dif mu_2(y)
@@ -607,26 +631,225 @@ If $m$ is locally finite, then it follows that $m$ is finite on compact sets, an
   $
     abs(I(f)) <= norm(f)_oo norm(mu_1) norm(mu_2).
   $
-]
+]<bounded-linear-functional-from-convolution-of-measure>
 
-#definition[Convolution of Radon Measures][
+#definition[Convolution of Complex Radon Measures][
   Let $(G , cal(B) (G))$ be a locally compact Hausdorff topological group and $M_("Rad")(X; CC)$ be the set of complex Radon measures on $G$. Given two complex measures $mu_1 , mu_2 in M_("Rad")(X; CC)$, define
   $
     I: C_0(G; CC) & --> CC \
                 f & arrow.long.bar integral_G integral_G f(x y) dif mu_1(x) dif mu_2(y)
   $
+  and we see $I in C_0(G; CC)'$ according to @bounded-linear-functional-from-convolution-of-measure. By #link(<riesz-markov-kakutani-representation-theorem-for-complex-radon-measure>)[Riesz-Markov-Kakutani representation theorem], there exists a unique complex Radon measure on $(G , cal(B) (G))$, which we denote by $mu_1 * mu_2$, such that
+  $
+    I(f) = integral_G f dif (mu_1 * mu_2), quad forall f in C_0(G; CC).
+  $
+  $mu_1 * mu_2$ is called the *convolution* of $mu_1$ and $mu_2$.
+]
+If $g in C_c ( X )$ and $h in C_c ( Y )$, define
+$
+  g times.circle h: X times Y & --> CC \
+                        (x,y) & mapsto.long g(x) h(y)
+$
+
+#proposition[
+  Suppose $X$ and $Y$ are locally compact Hausdorff spaces.
+
+  + $cal(B) (X) times.circle cal(B) (Y) subset.eq cal(B) (X times Y)$.
+
+  + If $X$ and $Y$ are second countable, then
+
+    - $cal(B) (X) times.circle cal(B) (Y) = cal(B) (X times Y)$.
+
+    - Given any Radon measure $mu$ on $X$ and any Radon measure $nu$ on $Y$, the maximal product measure $mu times_max nu$ is a Radon measure on $X times Y$.
 ]
 
-#definition[Measure Algebra][
-  Let $G$ be a locally compact Hausdorff topological group and $cal(B) (G)$ be the Borel $sigma$-algebra on $(G,cal(B))$. Let $M(G)$ be the set of complex Radon measures on $G$.
-  The #strong[measure algebra] of $G$ is defined as
+If $X$ or $Y$ is not second countable, it is likely that $cal(B) (X) times.circle cal(B) (Y) subset.neq cal(B) (X times Y)$. So generally $mu times_max nu$ is not a Radon measure on $X times Y$. However, there exists a natural way to extend $mu times_max nu$ to a Radon measure on $X times Y$.
+
+#lemma[][
+  Let
+  $
+    cal(P):=op("span"){ g times.circle h in C_c ( X times.circle Y )mid(|) g in C_c ( X ) \, h in C_c ( Y ) }
+  $
+  be the vector space spanned by the functions $g times.circle h$ with $g in C_c ( X )$, $h in C_c ( Y )$. Then $cal(P)$ is dense in $C_c ( X times.circle Y )$ in the uniform norm. More precisely, given any $f in C_c ( X times Y )$, any $epsilon.alt > 0$, and any precompact open sets $U subset.eq X$ and $V subset.eq Y$ containing $pi_X ( op("supp") ( f ) )$ and $pi_Y ( op("supp") ( f ) )$, there exists $F in cal(P)$ such that $norm(F - f)_("sup") < epsilon.alt$ and
+  $op("supp") ( F ) subset.eq U times V$.
+
+]<uniform-approximation-for-functions-on-product-spaces-with-compact-support>
+#proof[
+  $macron(U) times macron(V)$ is a compact Hausdorff space. It
+  follows easily from the Stone-Weierstrass theorem that
+  $
+    cal(Q):=op("span"){ g times.circle h mid(|) g in C ( macron(U) ) \, h in C ( macron(V) ) }
+  $
+  is dense in $C ( macron(U) times macron(V) )$. In particular, since $f in C ( macron(U) times macron(V) )$, there is
+  an element
+  $
+    G =sum_(k=1)^n g_k times.circle h_k in cal(Q),quad g_k in C ( macron(U) ) \, h_k in C ( macron(V) )
+  $
+  such that
+  $
+    sup_((x,y) in macron(U) times macron(V)) abs(G(x,y) - f(x,y)) < epsilon.alt.
+  $
+  Also, by Urysohn's lemma there exist $phi.alt in C_c (U, [0,1])$ and
+  $psi in C_c (V, [0,1])$ such that $phi.alt = 1$ on
+  $pi_X ( op("supp") ( f ) )$ and $psi = 1$ on
+  $pi_Y ( op("supp") ( f ) )$. Thus if we define
+  $
+    F(x,y) = cases(
+      phi.alt(x)psi(y)G(x,y)=display(limits(sum))_(k=1)^k g_k (x)phi.alt(x) h_k (y)psi(y) \, & quad z in macron(U) times macron(V)\,, ,
+      0 \, & quad "otherwise"\,
+    )
+  $
+  we have $F in cal(P)$ and
+  $
+    op("supp") ( F ) subset.eq op("supp")(phi.alt) times op("supp") (psi) subset.eq U times V.
+  $
+  To show $norm(F - f)_("sup") < epsilon.alt$, first note that
+  $
+    op("supp")(f) subset.eq pi_X ( op("supp") ( f ) ) times pi_Y ( op("supp") ( f ) ) subset.eq U times V.
+  $
+  From $phi.alt|_(pi_X ( op("supp") ( f ) ))=1$ and $psi|_(pi_Y ( op("supp") ( f ) ))=1$ we see $(phi.alt times.circle psi)|_(op("supp")(f))=1$. If $(x, y) in op("supp")(f)$, then we have
+  $
+    abs(F(x,y) - f(x,y)) = abs(G(x,y) - f(x,y))< epsilon.alt.
+  $
+  If $(x, y) in.not op("supp")(f)$, then we have $f(x,y)=0$ and
+  $
+    abs(F(x,y) - f(x,y)) = abs(F(x,y))<=abs(G(x,y))=abs(G(x,y)-f(x,y))< epsilon.alt.
+  $
+  Thus, we conclude that $norm(F - f)_("sup") < epsilon.alt$.
 ]
+
+#proposition[
+  Suppose $X$ and $Y$ are locally compact Hausdorff spaces. The following statements hold:
+
+  + Every $f in C_c ( X times Y )$ is $cal(B)_X times.circle cal(B)_Y$-measurable.
+
+  + If $mu$ and $nu$ are Radon measures on $X$ and $Y$, then $C_c ( X times Y ) subset.eq L^1 ( mu times_max nu )$, and
+
+  $
+    integral_(X times Y) f dif ( mu times_max nu ) = integral_Y integral_X f dif mu dif nu = integral_X integral_Y f dif nu dif mu, quad forall f in C_c ( X times Y )
+  $
+]<fubini-tonelli-for-radon-measures-and-compactly-supported-functions>
+#proof[
+  + Supposef $g in C_c ( X )$ and $h in C_c ( Y )$. We have $g times.circle h := (g compose pi_X) (h compose pi_Y)$, where
+    $
+      pi_X: X times Y & --> X, \
+                (x,y) & mapsto.long x
+    $
+    is $(cal(B)_X times.circle cal(B)_Y)\/cal(B)_X$-measurable, and
+    $
+      pi_Y: X times Y & --> Y, \
+                (x,y) & mapsto.long y
+    $
+    is $(cal(B)_X times.circle cal(B)_Y)\/cal(B)_Y$-measurable. Since $g$ and $h$ are continuous, $g compose pi_X$ and $h compose pi_Y$ are $cal(B)_X times.circle cal(B)_Y$-measurable, which implies $g times.circle h$ is $cal(B)_X times.circle cal(B)_Y$-measurable. Thus any function in
+    $
+      cal(P):=op("span"){ g times.circle h in C_c ( X times.circle Y )mid(|) g in C_c ( X ) \, h in C_c ( Y ) }
+    $
+    is $cal(B)_X times.circle cal(B)_Y$-measurable. Since pointwise limits of measurable functions are measurable, by @uniform-approximation-for-functions-on-product-spaces-with-compact-support, $f in C_c ( X times Y )$ is $cal(B)_X times.circle cal(B)_Y$-measurable.
+
+  + Every $f in C_c ( X times Y )$ is bounded and supported on a compact set $K subset.eq X times Y$. Since
+    $
+      (mu times_max nu) (K) <= (mu times_max nu)(pi_X (K) times pi_Y (K))= mu (pi_X (K)) nu (pi_Y (K)) < + oo,
+    $
+    we have
+    $
+      integral_(X times Y) |f| dif ( mu times_max nu )<= norm(f)_("sup") (mu times_max nu)(K) < + oo.
+    $
+    which implies $f in L^1 ( mu times_max nu )$. Fubini's theorem holds for such $f$ even if $mu$ and $nu$ are not $sigma$-finite because one can replace $mu$ and $nu$ by the finite measures $mu|_(pi_X ( op("supp")(f)))$ and $nu|_(pi_Y ( op("supp")(f)))$.
+]
+
+
+#definition[Radon Product of Radon Measures][
+  Let $X$ and $Y$ be locally compact Hausdorff spaces, and let $mu$ and $nu$ be Radon measures on $X$ and $Y$ respectively. According to @fubini-tonelli-for-radon-measures-and-compactly-supported-functions,
+  $
+    I: C_c ( X times Y ) & --> CC \
+                       f & mapsto.long integral_(X times Y) f dif ( mu times_max nu )
+  $
+  is a positive linear functional on $C_c ( X times Y )$. By the #link(<riesz-markov-kakutani-representation-theorem-for-radon-measure>)[Riesz-Markov-Kakutani representation theorem], there exists a unique Radon measure $mu hat(times) nu$ on $(X times Y , cal(B) (X times Y))$ such that
+  $
+    I(f) = integral_(X times Y) f dif ( mu times_max nu ) = integral_(X times Y) f dif ( mu hat(times) nu ) , quad forall f in C_c ( X times Y )
+  $
+  $mu hat(times) nu$ is called the *Radon product* of $mu$ and $nu$.
+]
+
+#theorem[Fubini-Tonelli Theorem for Radon Products][
+  Let $mu$ and $nu$ be
+  $sigma$-finite Radon measures on $X$ and $Y$, and let $f:X times Y & --> CC$ be a $cal(B)(X times Y)$-measurable function. Then
+  $
+    f(x,dot):X & --> CC \
+             y & arrow.long.bar f(x,y)
+  $
+  and
+  $
+    f(dot, y):Y & --> CC \
+              x & arrow.long.bar f(x,y)
+  $
+  are Borel
+  measurable for every $x$ and $y$.
+
+  + If $f gt.eq 0$, then
+    $
+      g:X & --> CC \
+        x & mapsto.long integral_Y f(x,y) dif nu(y)
+    $
+    and
+    $
+      h:Y & --> CC \
+        y & mapsto.long integral_X f(x,y) dif mu(x)
+    $
+    are Borel measurable on $X$ and $Y$.
+
+  + If $f in L^1 ( mu hat(times) nu )$, then
+
+    - $f(x,dot) in L^1 ( nu )$ for a.e. $x$,
+
+    - $f(dot, y) in L^1 ( mu )$ for a.e. $y$,
+
+    - $ g:X & --> CC \
+        x & mapsto.long integral_Y f(x,y) dif nu(y) $ is in $L^1 ( mu )$.
+
+    - $ h:Y & --> CC \
+        y & mapsto.long integral_X f(x,y) dif mu(x) $ is in $L^1 ( nu )$.
+
+  In both cases, we have
+  $
+    integral_(X times Y) f dif ( mu hat(times) nu ) =integral_Y integral_X f dif mu dif nu = integral_X integral_Y f dif nu dif mu
+  $
+]<fubini-tonelli-theorem-for-radon-products>
+
+#definition[Measure Algebra][
+  Let $G$ be a locally compact Hausdorff topological group and $cal(B) (G)$ be the Borel $sigma$-algebra on $G$. Let $M_("Rad")(X; CC)$ be the set of complex Radon measures on $G$. Then $M_("Rad")(X; CC)$ is a unital Banach algebra with respect to the convolution operation as multiplication and the total variation norm. $M_("Rad")(X; CC)$ is called the #strong[measure algebra] of $G$. The mulitiplicative identity is the Dirac measure $delta_1$ at the identity element of $G$
+  $
+    delta_1 (A) = upright(bold(1))_A (1) = cases(
+      1\, & quad 1 in A\,, ,
+      0\, & quad 1 in.not A .
+    )
+  $
+]
+#example[
+  Let $G$ be a locally compact Hausdorff topological group and $mu$ be a left Haar measure on $G$. Then through the injection
+  $
+    L^1(G,mu) & --> M_("Rad")(X; CC) \
+            f & arrow.long.bar f d mu
+  $
+  $L^1(G,mu)$ is isometrically isomorphic to a Banach subalgebra of $M_("Rad")(X; CC)$. If $f,g in L^1(G,mu)$, then the convolution of $f dif mu$, $h dif mu$ is again absolutely continuous w.r.t. $mu$, and we have
+  $
+    (f dif mu) * (h dif mu) = (f * h) dif mu ,
+  $
+  where
+  $
+    f * h: G & --> CC, \
+           x & arrow.bar.long integral_G f(y) h(y^(-1) x) dif mu(y).
+  $
+  is the convolution of $f$ and $h$ defined in @L1G-as-cstar-algebra.
+]
+
+
 
 
 
 == Signed Measure <signed-measures>
 #definition[Signed Measure][
-  Given a measurable space $(Omega , cal(F))$, a set function $mu : cal(F) arrow.r ( - oo , + oo \]$ or $mu : cal(F) arrow.r \[ - oo , + oo \)$ is called a #strong[signed measure] if
+  Given a measurable space $(Omega , cal(F))$, a set function $mu : cal(F) arrow.r ( - oo , + oo \]$ or $mu : cal(F) arrow.r \[ - oo , + oo )$ is called a #strong[signed measure] if
 
   + $mu (diameter) = 0$;
 
@@ -716,7 +939,7 @@ One usually writes $mu perp nu$ to indicate that $mu$ and $nu$ are mutually sing
 #theorem[Radon-Nikodym Theorem][
   Let $(Omega , cal(F))$ be a measurable space.
 
-  + Let $mu$ and $nu$ be $sigma$-finite measures on $(Omega , cal(F))$. If $v lt.double mu$, then there is an $cal(F)$-measurable function $g : Omega arrow.r$ $\[ 0 , + oo \)$ such that $nu (A) = integral_A g dif mu$ holds for each $A in cal(F)$. The function $g$ is unique up to $mu$-almost everywhere equality.
+  + Let $mu$ and $nu$ be $sigma$-finite measures on $(Omega , cal(F))$. If $v lt.double mu$, then there is an $cal(F)$-measurable function $g : Omega arrow.r$ $\[ 0 , + oo )$ such that $nu (A) = integral_A g dif mu$ holds for each $A in cal(F)$. The function $g$ is unique up to $mu$-almost everywhere equality.
 
   + Let $mu$ be a $sigma$-finite measure on $(Omega , cal(F))$, and let $nu$ be a finite signed measure on $(Omega , cal(F))$. If $nu lt.double mu$, then there exists unique $g in L^1 (Omega , cal(F) , mu)$ and satisfies $nu (A) = integral_A g dif mu$ for each $A in cal(F)$.
 ]
@@ -792,7 +1015,7 @@ One usually writes $mu perp nu$ to indicate that $mu$ and $nu$ are mutually sing
 
   + For any $f in L^1(abs(mu))$,
     $
-      abs(integral_Omega f dif mu) = abs(integral_Omega f h dif abs(mu))<= integral_Omega abs(f h) dif abs(mu)= integral_Omega abs(f ) dif abs(mu).
+      abs(integral_Omega f dif mu) = abs(integral_Omega f h dif abs(mu))<= integral_Omega abs(f h) dif abs(mu)= integral_Omega abs(f) dif abs(mu).
     $
 
 ]
@@ -1446,7 +1669,7 @@ For any open subsets $U$ of $bb(R)^d$, The inclusion map $iota:C^(oo)_c (U) arro
     $
       - norm(f)_oo T ( phi.alt_K )<= T( f ) <=norm(f)_oo T ( phi.alt_K )
     $
-    so that $abs(T(f))lt.eq T \( phi.alt_K \) norm(f)_oo$. Taking $M_K = T( phi.alt_K )$ gives the desired inequality.
+    so that $abs(T(f))lt.eq T ( phi.alt_K ) norm(f)_oo$. Taking $M_K = T( phi.alt_K )$ gives the desired inequality.
 
   - $bb(k)=CC$. If $f in C_c (X; CC)$ is a complex-valued function with $op("supp") (f)subset.eq K$, then by @complex-number-modulus-lemma we can write
     $
@@ -1467,11 +1690,11 @@ For any open subsets $U$ of $bb(R)^d$, The inclusion map $iota:C^(oo)_c (U) arro
 
 ]
 
-If $mu$ is a Borel measure on $X$ such that $mu \( K \) < oo$ for every
-compact $K subset X$, then clearly $C_c \( X \) subset L^1 \( mu \)$, so
+If $mu$ is a Borel measure on $X$ such that $mu ( K ) < oo$ for every
+compact $K subset X$, then clearly $C_c ( X ) subset L^1 ( mu )$, so
 the map $f mapsto integral f d mu$ is a positive linear functional on
-$C_c \( X \)$. The principal result of this section is that every
-positive linear functional on $C_c \( X \)$ arises in this fashion;
+$C_c ( X )$. The principal result of this section is that every
+positive linear functional on $C_c ( X )$ arises in this fashion;
 moreover, one can impose some additional regularity to ensure the uniqueness of
 the measure $mu$.
 
@@ -1493,7 +1716,7 @@ the measure $mu$.
     $
       mu(K) = inf{ T(f) mid(|) f in C_c (X;bb(k)), f >= bb(1)_K}.
     $
-]
+]<riesz-markov-kakutani-representation-theorem-for-radon-measure>
 #remark[
   Any positive linear functional $T in C_c (RR^d)^'$ can be represented as
   $
@@ -1628,7 +1851,7 @@ If $f$ and $g$ are locally integrable functions on $X$, then $T_f=T_g$ if and on
                        mu & arrow.bar.long I_mu
   $
   is an isometric isomorphism.
-]
+]<riesz-markov-kakutani-representation-theorem-for-complex-radon-measure>
 
 == Space of Distributions
 
@@ -2124,7 +2347,7 @@ $L^p$ spaces $thin lr((1 lt.eq p lt.eq oo))$ are Banach spaces defined on some m
   is a subspace of $cal(L)^p (Omega , cal(F) , mu)$ and
   $ L^p (Omega , cal(F) , mu) := cal(L)^p (Omega , cal(F) , mu) \/ cal(N) $
   is a Banach space with the norm
-  $ bar.v.double dot.op bar.v.double_p : L^p (Omega , cal(F) , mu) & arrow.r \[ 0 , oo \) , \
+  $ bar.v.double dot.op bar.v.double_p : L^p (Omega , cal(F) , mu) & arrow.r \[ 0 , oo ) , \
                                                       f + cal(N) & arrow.r.bar ||f||_p . $ For
   simplicity, we can identify $f$ with its equivalence class $f + cal(N)$.
 
@@ -2764,43 +2987,6 @@ In an involutive ring we have $1^*=1$.
 ]
 
 
-
-#example[$L^1(G)$ for Locally Compact Hausdorff Topological Group $G$][
-  Let $G$ be a locally compact Hausdorff topological group and $mu$ be a Haar measure on $G$. The set of all integrable complex-valued functions on $G$ is denoted by $L^1(G, mu)$. It is a commutative Banach $*$-algebra with respect to the convolution product
-  $
-    (f * h)(x) = integral_G f(y) h(y^(-1) x) dif mu(y).
-  $
-  And we have
-  $
-    L^1(G, mu) "is a unital Banach algebra" <==> G "is discrete".
-  $
-]
-#proof[
-  If $G$ is discrete, then the Haar measure $mu$ is counting measure up to a constant. In this case, define the point-mass $delta_(1_G):G->CC$ as
-  $
-    delta_(1_G) (x) = cases(
-      1 & "if" x = 1_G, \
-      0 & "if" x eq.not 1_G.
-    )
-  $
-  Then for any $f in L^1(G, mu)$ and $x in G$, we have
-  $
-    (f * delta_(1_G))(x) & = integral_G f(y) delta_(1_G)(y^(-1) x) dif mu(y) \
-                         & = sum_(y in G) f(y) delta_(1_G)(y^(-1) x) \
-                         & = sum_(y in G) f(y) bold(1)_(y = x) \
-                         & = f(x)
-  $
-  and
-  $
-    (delta_(1_G) * f)(x) & = integral_G delta_(1_G)(y) f(y^(-1) x) dif mu(y) \
-                         & = sum_(y in G) delta_(1_G)(y) f(y^(-1) x) \
-                         & = sum_(y in G) bold(1)_(y = 1_G) f(y^(-1) x) \
-                         & = f(x).
-  $
-  This means $delta_(1_G)$ is the unity of $L^1(G, mu)$.
-]
-
-
 #definition[$*$-homomorphism][
   Let $A$ and $B$ be $*$-algebras over a involutive ring $R$. A #strong[$*$-homomorphism] from $A$ to $B$ is a $R$-algebra homomorphism $phi:A -> B$ such that
   $
@@ -2843,6 +3029,209 @@ In an involutive ring we have $1^*=1$.
   with respect to the operator norm and the adjoint operation.
 ]
 
+=== Group Algebra $L^1(G)$
+
+
+Define *left translation*
+$
+  L_y: op("Hom")_(sans("Set"))(X,Y) & --> op("Hom")_(sans("Set"))(X,Y) \
+                                  f & mapsto.long (x mapsto.long f(y^(-1)x))
+$
+and *right translation*
+$
+  R_y: op("Hom")_(sans("Set"))(X,Y) & --> op("Hom")_(sans("Set"))(X,Y) \
+                                  f & mapsto.long (x mapsto.long f(x y))
+$
+If $G$ is a group, then
+$
+  L:G & --> op("Aut")_(sans("Set"))(op("Hom")_(sans("Set"))(G,Y)) \
+    y & mapsto.long L_y
+$
+and
+$
+  R:G & --> op("Aut")_(sans("Set"))(op("Hom")_(sans("Set"))(G,Y)) \
+    y & mapsto.long R_y
+$
+are group homomorphisms.
+
+#definition[Left Uniformly Continuous][
+  If $G$ is a topological group, then a function $f:G -> CC$ is called #strong[left uniformly continuous] if
+  $
+    lim_(y->1_G) norm(L_y f - f)_"sup" = 0.
+  $
+  $f:G -> CC$ is called #strong[right uniformly continuous] if
+  $
+    lim_(y->1_G) norm(R_y f - f)_"sup" = 0.
+  $
+]
+#proposition[][
+  If $G$ is a topological group and $f in C_c (G)$, then $f$ is both left and right uniformly continuous.
+]
+#example[$L^1$ Group Algebra $L^1(G)$ for LCH Topological Group $G$][
+  Let $G$ be a locally compact Hausdorff topological group and $mu$ be a Haar measure on $G$. The set of all integrable complex-valued functions on $G$ is denoted by $L^1(G, mu)$. Given $f, h in L^1(G, mu)$, define the *convolution* of $f$ and $h$ as
+  $
+    f * h: G & --> CC \
+           x & arrow.bar.long integral_G f(y) h(y^(-1) x) dif mu(y).
+  $
+
+  Then we have
+
+  + $
+      norm(f * h)_1 <= norm(f)_1 norm(h)_1,quad forall f , h in L^1(G, mu).
+    $
+
+  + $L^1(G, mu)$ is a Banach $*$-algebra, called the *$L^1$ Group Algebra* of $G$, where the multiplication is given by the convolution operation, the norm is the $L^1$ norm, and the involution is given by
+    $
+      f^*(x) = Delta(x^(-1)) overline(f(x^(-1))), quad forall x in G.
+    $
+
+  +
+    $
+      L^1(G, mu) "is a unital Banach algebra" <==> G "is discrete".
+    $
+
+  +
+    $
+      L^1(G, mu) "is commutative" <==> G "is abelian".
+    $
+]<L1G-as-cstar-algebra>
+#proof[
+  First we need to show $f * h$ is well-defined for $mu$-almost every $x in G$. Define a $cal(B)(G times G)$-measurable function
+  $
+    F: G times G & --> [0, +oo] \
+          (x, y) & arrow.bar.long abs(f(y) h(y^(-1) x)).
+  $
+  By #link(<fubini-tonelli-theorem-for-radon-products>)[Tonelli's theorem],
+  $
+    H: G & --> [0, +oo] \
+       x & arrow.bar.long integral_G F(x, y) dif mu(y)
+  $
+  is a $cal(B)(G)$-measurable function and we have
+  $
+    integral_G H(x) dif mu(x) & = integral_G integral_G abs(f(y) h(y^(-1) x)) dif mu(y) dif mu(x) \
+                              & = integral_G integral_G abs(f(y) h(y^(-1) x)) dif mu(x) dif mu(y) \
+                              & = integral_G abs(f(y)) (integral_G abs(h(y^(-1) x)) dif mu(x)) dif mu(y) \
+                              & = integral_G abs(f(y)) (integral_G abs(h(z)) dif mu(z)) dif mu(y) quad (z:= y^(-1) x) \
+                              & = norm(f)_1 norm(h)_1<oo,
+  $
+  which implies $H in L^1(G,mu)$. Therefore, for $mu$-almost every $x in G$, we have
+  $
+    H(x)< oo ==> (f * h)(x) = integral_G f(y) h(y^(-1) x) dif mu(y) < oo.
+  $
+
+  + $
+      norm(f * h)_1 & = integral_G abs((f * h)(x)) dif mu(x) \
+                    & = integral_G abs(integral_G f(y) h(y^(-1) x) dif mu(y)) dif mu(x) \
+                    & <= integral_G integral_G abs(f(y) h(y^(-1) x)) dif mu(y) dif mu(x) \
+                    & = norm(f)_1 norm(h)_1.
+    $
+
+  + Associativity. Given any $f,h,k in L^1(G,mu)$,
+    $
+      ((f * h) * k )(x) & = integral_G (f * h)(y) k(y^(-1) x) dif mu(y) \
+                        & = integral_G (integral_G f(z) h(z^(-1) y) k(y^(-1) x) dif mu(z)) dif mu(y) \
+                        & = integral_G f(z)(integral_G h(z^(-1) y) k(y^(-1) x)dif mu(y)) dif mu(z) \
+                        & =integral_G f(z) (integral_G h(t) k(t^(-1)z^(-1) x) dif mu(t)) dif mu(z) quad (t:=z^(-1)y) \
+                        & = integral_G f(z) (h*k)(y^(-1) x) dif mu(z) \
+                        & = (f*(h*k))(x).
+    $
+
+  + If $G$ is discrete, then the Haar measure $mu$ is counting measure up to a constant. In this case, define the point-mass $delta_(1_G):G->CC$ as
+    $
+      delta_(1_G) (x) = cases(
+        1 & "if" x = 1_G, \
+        0 & "if" x eq.not 1_G.
+      )
+    $
+    Then for any $f in L^1(G, mu)$ and $x in G$, we have
+    $
+      (f * delta_(1_G))(x) & = integral_G f(y) delta_(1_G)(y^(-1) x) dif mu(y) \
+                           & = sum_(y in G) f(y) delta_(1_G)(y^(-1) x) \
+                           & = sum_(y in G) f(y) bold(1)_(y = x) \
+                           & = f(x)
+    $
+    and
+    $
+      (delta_(1_G) * f)(x) & = integral_G delta_(1_G)(y) f(y^(-1) x) dif mu(y) \
+                           & = sum_(y in G) delta_(1_G)(y) f(y^(-1) x) \
+                           & = sum_(y in G) bold(1)_(y = 1_G) f(y^(-1) x) \
+                           & = f(x).
+    $
+    This means $delta_(1_G)$ is the unity of $L^1(G, mu)$.
+]
+
+#proposition[
+  Suppose $1 lt.eq p lt.eq oo \, f in L^1 ( G )$, and
+  $g in L^p ( G )$. Let $mu$ be a Haar measure on $G$. Then
+
+  + The integrals
+    $
+      integral_G f ( y ) g (y^(-1)x) dif mu(y)
+    $
+    converge absolutely for $mu$-almost every $x$, and we have $f * g in L^p ( G )$ and
+    $
+      norm(f * g)_p lt.eq norm(f)_1 norm(g)_p.
+    $
+
+  + If $G$ is unimodular,  we have $g * f in L^p ( G )$ and
+    $
+      norm(g * f)_p lt.eq norm(f)_1 norm(g)_p.
+    $
+
+  + If $f$ has compact support, we have $g * f in L^p ( G )$.
+]
+#proof[
+  + We apply Minkowski's inequality to obtain
+
+    $
+      norm(f * g)_p =norm(integral_G f ( y ) L_y g ( dot.op ) dif mu(y))_p lt.eq integral_G abs(f(y)) norm(L_y g)_p dif mu(y) = norm(f)_1 norm(g)_p
+    $
+
+    since the $L^p$ norm is left-invariant. (The a.e. convergence of the integral for $f * g$ is implicit in this.)
+
+  + If $G$ is unimodular, we apply Minkowski's inequality to 
+    $
+      (g * f)(x) = integral_G g(y) f(y) g(x y^(-1)) dif mu(y)
+    $
+    ,
+
+    $
+      norm(g * f)_p = norm(integral R_(y^(- 1)) g ( dot.op ) f ( y ) dif y)_p lt.eq integral norm(R_(y^(- 1)) g)_p abs(f ( y )) dif y = norm(g)_p norm(f)_1
+    $
+
+    which proves (b). If $K = "supp" f$ is compact, a similar argument works in the non-unimodular case:
+
+    $
+      norm(g * f)_p & = norm(integral R_(y^(- 1)) g ( dot.op ) f ( y ) Delta (y^(- 1)) dif y)_p \
+                    & lt.eq integral_G norm(R_(y^(- 1)) g)_p abs(f ( y )) Delta (y^(- 1)) dif y \
+                    & = norm(g)_p integral_K abs(f ( y )) Delta ( y )^(( 1 \/ p ) - 1) dif y \
+                    & lt.eq C norm(g)_p norm(f)_1
+    $
+
+    where $C = sup_K Delta ( y )^(( 1 \/ p ) - 1)$.
+]
+
+#proposition[
+  Suppose $G$ is unimodular. If $f in L^p ( G )$ and $g in L^q ( G )$
+  where $1 < p \, q < oo$ and $p^(- 1) + q^(- 1) = 1$, then
+  $f * g in C_0 ( G )$ and
+  $norm(f*g)_(upright("sup")) lt.eq norm(f)_p norm(g)_q$.
+]
+#proof[
+  The fact that
+  $abs((f * g) ( x )) lt.eq norm(f)_p norm(g)_q$
+  for all $x in G$ follows from Hölder's inequality and the invariance of
+  Haar integrals under translations and inversions. If
+  $f \, g in C_c ( G )$, it is easy to check that
+  $f * g in C_c ( G )$. But $C_c ( G )$ is dense in $L^p ( G )$,
+  and if
+  $
+    f_n arrow.long^(L^p) f,quad g_n arrow.long^(L^q) g
+  $
+  then
+  $f_n * g_n arrow.r f * g$ and $g_n * f_n arrow.r g * f$ uniformly;
+  the result follows.
+]
 
 == Gelfand Theory
 
@@ -3139,8 +3528,9 @@ In an involutive ring we have $1^*=1$.
 
     is continuous. For any net $(chi_i)_(i in I)$ in $op("Hom")_(Grp)(G,CC^times)$ such that $chi_i --> chi$ in $op("Hom")_(Grp)(G,CC^times)$, we need to show $Phi^(-1)(chi_i) --> Phi^(-1)(chi)$ in $sigma(L^1(G))$. For any $f in L^1(G)$, we have
     $
-      abs(Phi^(-1)(chi_i)(f) - Phi^(-1)(chi)(f)) &= abs(sum_(g in G) f(g) chi_i (g) - sum_(g in G) f(g) chi(g)) \
-      &= abs(sum_(g in G) f(g) (chi_i (g) - chi(g))) <= norm(f) norm(chi_i - chi)_(op("op")) --> 0.
+      abs(Phi^(-1)(chi_i)(f) - Phi^(-1)(chi)(f)) & = abs(sum_(g in G) f(g) chi_i (g) - sum_(g in G) f(g) chi(g)) \
+                                                 & = abs(sum_(g in G) f(g) (chi_i (g) - chi(g))) \
+                                                 & <= norm(f) norm(chi_i - chi)_(op("op")) --> 0.
     $
     This shows $Phi^(-1)$ is continuous.
 ]
